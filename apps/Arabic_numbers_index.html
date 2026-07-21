@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>NoorAI Darib – Sovereign Number Sanctuary</title>
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Cinzel:wght@600&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg1:#ffb56b;
+  --bg2:#f46b45;
+  --panel:#1c1526;
+  --gold:#d9b878;
+  --ink:#fdfaf3;
+  --muted:#b3b3b3;
+  --radius:21px;
+  --shadow:0 18px 72px rgba(0,0,0,0.45);
+}
+
+*{box-sizing:border-box;}
+
+body{
+  font-family:'Poppins',sans-serif;
+  margin:0;
+  background:linear-gradient(135deg,var(--bg1),var(--bg2));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:100vh;
+  color:var(--ink);
+  padding:18px;
+}
+
+.portal{
+  background:rgba(28,21,38,0.9);
+  border-radius:var(--radius);
+  padding:33px;
+  max-width:980px;
+  width:95%;
+  box-shadow:var(--shadow);
+}
+
+/* Header */
+header{text-align:center;margin-bottom:27px;}
+h1{
+  font-family:"Cinzel","Times New Roman",serif;
+  font-size:27px;
+  letter-spacing:0.1em;
+  margin:0 0 6px;
+  text-transform:uppercase;
+}
+header p{
+  font-size:13px;
+  color:var(--gold);
+  margin:0;
+}
+
+/* Number display */
+.number-display{
+  text-align:center;
+  margin-bottom:12px;
+}
+.number-display .arabic{
+  font-family:"Scheherazade New","Amiri",serif;
+  font-size:96px;
+  display:block;
+  line-height:1;
+}
+.number-display .english{
+  font-size:24px;
+  color:var(--gold);
+  margin-top:3px;
+}
+.translit{
+  font-size:14px;
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+  color:var(--muted);
+  margin-top:6px;
+}
+
+/* Pulse animation for sound */
+.number-display .arabic.pulse{
+  animation:pulseGlow 0.4s ease-out;
+}
+@keyframes pulseGlow{
+  0%{transform:scale(1);text-shadow:0 0 0 rgba(255,210,122,0);}
+  50%{transform:scale(1.08);text-shadow:0 0 18px rgba(255,210,122,0.9);}
+  100%{transform:scale(1);text-shadow:0 0 0 rgba(255,210,122,0);}
+}
+
+/* Meta / toggles */
+.trace-meta{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:12px;
+  margin-top:6px;
+  margin-bottom:4px;
+  font-size:13px;
+  color:var(--muted);
+}
+.trace-meta .label-strong{
+  color:var(--gold);
+  font-weight:600;
+}
+.toggle{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  cursor:pointer;
+}
+.toggle input{
+  accent-color:var(--gold);
+}
+
+/* Canvas */
+canvas{
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.2);
+  border-radius:18px;
+  width:100%;
+  max-width:340px;
+  height:220px;
+  display:block;
+  margin:12px auto;
+  cursor:crosshair;
+  touch-action:none; /* better drawing on touch */
+}
+
+/* Controls */
+.controls{
+  text-align:center;
+  margin-top:9px;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:12px;
+}
+button{
+  border:none;
+  border-radius:999px;
+  padding:9px 18px;
+  background:linear-gradient(135deg,var(--gold),#b89252);
+  color:#1c1526;
+  font-weight:bold;
+  cursor:pointer;
+  transition:transform .2s, box-shadow .2s, filter .2s;
+  box-shadow:0 8px 18px rgba(0,0,0,0.45);
+}
+button:hover{
+  transform:scale(1.05) translateY(-1px);
+  box-shadow:0 12px 26px rgba(0,0,0,0.6);
+  filter:brightness(1.03);
+}
+button:active{
+  transform:scale(0.97);
+  box-shadow:0 6px 14px rgba(0,0,0,0.5);
+}
+
+/* Quiz */
+.quiz{
+  margin-top:27px;
+  text-align:center;
+  background:rgba(255,255,255,0.05);
+  border-radius:18px;
+  padding:18px;
+}
+.quiz h2{
+  font-size:15px;
+  margin-bottom:10px;
+  color:var(--gold);
+}
+.quiz-meta{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:10px;
+  font-size:13px;
+  color:var(--muted);
+  margin-bottom:10px;
+}
+.quiz-meta span strong{
+  color:var(--gold);
+}
+.quiz-toggle{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  cursor:pointer;
+}
+.quiz-toggle input{
+  accent-color:var(--gold);
+}
+.quiz-options{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:9px;
+}
+.quiz-options button{
+  background:rgba(255,255,255,0.1);
+  color:var(--ink);
+  padding:6px 14px;
+  border-radius:12px;
+  font-size:18px;
+  box-shadow:none;
+}
+.quiz-options button.correct{
+  background:rgba(111,241,178,0.2);
+}
+.quiz-options button.wrong{
+  background:rgba(245,101,101,0.2);
+}
+
+@media (max-width:600px){
+  .number-display .arabic{font-size:80px;}
+  .number-display .english{font-size:20px;}
+}
+</style>
+</head>
+<body>
+<div class="portal">
+  <header>
+    <h1>NoorAI Darib – Sovereign Number Sanctuary</h1>
+    <p>Learn Arabic numbers with tracing, sound, and a gentle quiz.</p>
+  </header>
+
+  <div class="number-display">
+    <span class="arabic" id="arabicNum">٠</span>
+    <span class="english" id="englishNum">0</span>
+    <div class="translit" id="translitNum">ṣifr (صفر)</div>
+  </div>
+
+  <div class="trace-meta">
+    <span id="numberProgress" class="label-strong">Number 1 of 10</span>
+    <label class="toggle">
+      <input type="checkbox" id="guideToggle" checked>
+      Show tracing guide
+    </label>
+    <label class="toggle">
+      <input type="checkbox" id="autoSoundToggle" checked>
+      Auto pronounce on change
+    </label>
+  </div>
+
+  <canvas id="traceCanvas" width="340" height="220"></canvas>
+
+  <div class="controls">
+    <button id="prevBtn">◀ Prev</button>
+    <button id="soundBtn">🔊 Pronounce</button>
+    <button id="nextBtn">Next ▶</button>
+    <button id="clearBtn">Clear</button>
+  </div>
+
+  <div class="quiz">
+    <h2 id="quizQuestion">Which number is "thalātha" (ثلاثة)?</h2>
+
+    <div class="quiz-meta">
+      <span>Score: <strong id="quizScoreVal">0</strong></span>
+      <span>Streak: <strong id="quizStreakVal">0</strong></span>
+      <span>Best streak: <strong id="quizBestStreakVal">0</strong></span>
+      <label class="quiz-toggle">
+        <input type="checkbox" id="showEnglishToggle">
+        Show English digits
+      </label>
+    </div>
+
+    <div class="quiz-options" id="quizOptions"></div>
+  </div>
+</div>
+
+<script>
+const numbers = [
+  {digit:"٠",english:"0",translit:"ṣifr",arabicWord:"صفر"},
+  {digit:"١",english:"1",translit:"wāḥid",arabicWord:"واحد"},
+  {digit:"٢",english:"2",translit:"ithnān",arabicWord:"اثنان"},
+  {digit:"٣",english:"3",translit:"thalātha",arabicWord:"ثلاثة"},
+  {digit:"٤",english:"4",translit:"arbaʿa",arabicWord:"أربعة"},
+  {digit:"٥",english:"5",translit:"khamsa",arabicWord:"خمسة"},
+  {digit:"٦",english:"6",translit:"sitta",arabicWord:"ستة"},
+  {digit:"٧",english:"7",translit:"sabʿa",arabicWord:"سبعة"},
+  {digit:"٨",english:"8",translit:"thamāniya",arabicWord:"ثمانية"},
+  {digit:"٩",english:"9",translit:"tisʿa",arabicWord:"تسعة"}
+];
+
+let index = 0;
+
+// Quiz scoring
+let quizScore = 0;
+let quizStreak = 0;
+let bestStreak = 0;
+
+// DOM references
+const arabicNum       = document.getElementById("arabicNum");
+const englishNum      = document.getElementById("englishNum");
+const translitNum     = document.getElementById("translitNum");
+const numberProgress  = document.getElementById("numberProgress");
+const guideToggle     = document.getElementById("guideToggle");
+const autoSoundToggle = document.getElementById("autoSoundToggle");
+
+const canvas          = document.getElementById("traceCanvas");
+const ctx             = canvas.getContext("2d");
+
+const nextBtn         = document.getElementById("nextBtn");
+const prevBtn         = document.getElementById("prevBtn");
+const soundBtn        = document.getElementById("soundBtn");
+const clearBtn        = document.getElementById("clearBtn");
+
+const quizQuestion    = document.getElementById("quizQuestion");
+const quizOptions     = document.getElementById("quizOptions");
+
+const quizScoreVal       = document.getElementById("quizScoreVal");
+const quizStreakVal      = document.getElementById("quizStreakVal");
+const quizBestStreakVal  = document.getElementById("quizBestStreakVal");
+const showEnglishToggle  = document.getElementById("showEnglishToggle");
+
+// Update main display
+function updateDisplay(){
+  const n = numbers[index];
+  arabicNum.textContent  = n.digit;
+  englishNum.textContent = n.english;
+  translitNum.textContent = `${n.translit} (${n.arabicWord})`;
+  numberProgress.textContent = `Number ${index + 1} of ${numbers.length}`;
+
+  if(guideToggle.checked){
+    drawGuide();
+  }else{
+    clearCanvas();
+  }
+
+  if(autoSoundToggle.checked){
+    playPronunciation();
+  }
+}
+
+// Pronunciation helper
+function playPronunciation(){
+  const n = numbers[index];
+  const u = new SpeechSynthesisUtterance(n.arabicWord);
+  u.lang = "ar-SA";
+  u.rate = 0.9;
+  speechSynthesis.speak(u);
+
+  arabicNum.classList.add("pulse");
+  setTimeout(()=>arabicNum.classList.remove("pulse"), 400);
+}
+
+// Confetti for quiz success
+function confettiBurst(){
+  for(let i = 0; i < 20; i++){
+    const c = document.createElement("div");
+    c.style.cssText = `
+      position:fixed;
+      width:7px;height:7px;
+      top:${Math.random()*100}vh;
+      left:${Math.random()*100}vw;
+      background:hsl(${Math.random()*360},80%,60%);
+      border-radius:50%;
+      opacity:1;
+      z-index:99;
+      transition:all 1s ease-out;
+      pointer-events:none;
+    `;
+    document.body.appendChild(c);
+    setTimeout(()=>{
+      c.style.transform = `translateY(${72+Math.random()*72}px)`;
+      c.style.opacity = 0;
+    },50);
+    setTimeout(()=>c.remove(),1000);
+  }
+}
+
+/* Tracing Canvas */
+let drawing = false;
+
+function canvasPos(e){
+  const r = canvas.getBoundingClientRect();
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+  return {
+    x: clientX - r.left,
+    y: clientY - r.top
+  };
+}
+
+function startDraw(e){
+  e.preventDefault();
+  drawing = true;
+  ctx.beginPath();
+  const p = canvasPos(e);
+  ctx.moveTo(p.x, p.y);
+}
+
+function draw(e){
+  if(!drawing) return;
+  e.preventDefault();
+  const p = canvasPos(e);
+  ctx.lineTo(p.x, p.y);
+  ctx.strokeStyle = "#d9b878";
+  ctx.lineWidth = 5;
+  ctx.lineCap = "round";
+  ctx.stroke();
+}
+
+function endDraw(e){
+  if(e) e.preventDefault();
+  drawing = false;
+}
+
+function clearCanvas(){
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+// Faint guide digit
+function drawGuide(){
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.save();
+  ctx.globalAlpha = 0.18;
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "120px 'Scheherazade New', 'Amiri', serif";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(numbers[index].digit, canvas.width / 2, canvas.height / 2 + 10);
+  ctx.restore();
+}
+
+// Canvas events
+["mousedown","touchstart"].forEach(ev => canvas.addEventListener(ev, startDraw, {passive:false}));
+["mousemove","touchmove"].forEach(ev => canvas.addEventListener(ev, draw, {passive:false}));
+["mouseup","mouseleave","touchend"].forEach(ev => canvas.addEventListener(ev, endDraw, {passive:false}));
+
+clearBtn.onclick = () => {
+  clearCanvas();
+  if(guideToggle.checked) drawGuide();
+};
+
+guideToggle.addEventListener("change", ()=>{
+  if(guideToggle.checked){
+    drawGuide();
+  }else{
+    clearCanvas();
+  }
+});
+
+/* Navigation & sound buttons */
+nextBtn.onclick = ()=>{
+  index = (index + 1) % numbers.length;
+  updateDisplay();
+};
+prevBtn.onclick = ()=>{
+  index = (index - 1 + numbers.length) % numbers.length;
+  updateDisplay();
+};
+soundBtn.onclick = ()=>{
+  playPronunciation();
+};
+
+/* Quiz score / streak */
+function loadBestStreak(){
+  try{
+    const stored = localStorage.getItem("daribNumberQuizBestStreak");
+    if(stored !== null){
+      bestStreak = parseInt(stored, 10) || 0;
+    }
+  }catch(e){
+    bestStreak = 0;
+  }
+  quizBestStreakVal.textContent = bestStreak;
+}
+
+function saveBestStreak(){
+  if(quizStreak > bestStreak){
+    bestStreak = quizStreak;
+    quizBestStreakVal.textContent = bestStreak;
+    try{
+      localStorage.setItem("daribNumberQuizBestStreak", String(bestStreak));
+    }catch(e){}
+  }
+}
+
+function updateQuizMeta(){
+  quizScoreVal.textContent  = quizScore;
+  quizStreakVal.textContent = quizStreak;
+  quizBestStreakVal.textContent = bestStreak;
+}
+
+/* Quiz */
+function newQuiz(){
+  const qIndex = Math.floor(Math.random() * numbers.length);
+  const q = numbers[qIndex];
+
+  quizQuestion.textContent = `Which number is "${q.translit}" (${q.arabicWord})?`;
+  quizOptions.innerHTML = "";
+
+  const shuffled = [...numbers].sort(()=>Math.random() - 0.5);
+  let choices = shuffled.slice(0,4);
+  if(!choices.includes(q)){
+    choices[Math.floor(Math.random()*4)] = q;
+  }
+
+  const showEnglish = showEnglishToggle.checked;
+
+  choices.forEach(ch=>{
+    const btn = document.createElement("button");
+    btn.textContent = showEnglish ? ch.english : ch.digit;
+    btn.onclick = ()=>{
+      if(ch === q){
+        // Correct
+        btn.classList.add("correct");
+        quizScore += 10;
+        quizStreak += 1;
+        saveBestStreak();
+        updateQuizMeta();
+        confettiBurst();
+        setTimeout(newQuiz, 900);
+      }else{
+        // Wrong
+        btn.classList.add("wrong");
+        quizScore = Math.max(quizScore - 3, 0);
+        quizStreak = 0;
+        updateQuizMeta();
+      }
+    };
+    quizOptions.appendChild(btn);
+  });
+}
+
+showEnglishToggle.addEventListener("change", ()=>{
+  // Regenerate quiz with the current mode (Arabic vs English digits)
+  newQuiz();
+});
+
+/* Init */
+loadBestStreak();
+updateQuizMeta();
+updateDisplay();
+newQuiz();
+</script>
+</body>
+</html>
