@@ -1,0 +1,1950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Noor Pathway – Advanced Qur'an Workshop</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<style>
+  :root{
+    --bg:#020617;
+    --panel:#020617;
+    --ink:#f9fafb;
+    --muted:#9ca3af;
+    --accent:#facc6b;
+    --accent-soft:rgba(250,204,107,0.15);
+    --accent-strong:#fbbf24;
+    --danger:#f97373;
+    --ok:#22c55e;
+    --radius-lg:18px;
+    --radius-md:12px;
+    --radius-pill:999px;
+    --border-subtle:1px solid rgba(148,163,184,0.28);
+    --shadow-soft:0 18px 45px rgba(15,23,42,0.75);
+    --shadow-card:0 12px 32px rgba(15,23,42,0.9);
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0;
+    padding:0;
+    height:100%;
+    font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    background:radial-gradient(circle at 0 0,#111827 0,#020617 45%,#000 100%);
+    color:var(--ink);
+  }
+  body{
+    display:flex;
+    align-items:stretch;
+    justify-content:center;
+  }
+  #app{
+    width:100%;
+    max-width:1200px;
+    margin:16px;
+    border-radius:24px;
+    background:radial-gradient(circle at top,#111827 0,#020617 55%,#000 100%);
+    box-shadow:var(--shadow-soft);
+    border:1px solid rgba(148,163,184,0.4);
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    position:relative;
+  }
+  #app::before{
+    content:"";
+    position:absolute;
+    inset:-20%;
+    background:
+      radial-gradient(circle at 10% 0%,rgba(250,204,21,0.08),transparent 55%),
+      radial-gradient(circle at 90% 20%,rgba(59,130,246,0.10),transparent 60%),
+      radial-gradient(circle at 50% 100%,rgba(244,114,182,0.08),transparent 60%);
+    filter:blur(70px);
+    opacity:0.85;
+    pointer-events:none;
+    z-index:0;
+  }
+  .shell{
+    position:relative;
+    z-index:1;
+    display:flex;
+    flex-direction:column;
+    height:100%;
+  }
+  header{
+    padding:16px 22px 10px;
+    border-bottom:1px solid rgba(148,163,184,0.45);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    backdrop-filter:blur(20px);
+    background:linear-gradient(120deg,rgba(15,23,42,0.9),rgba(17,24,39,0.9));
+  }
+  .brand-block{
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  .brand-orb{
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    background:conic-gradient(from 210deg,#facc6b,#f97316,#e5e7eb,#facc6b);
+    box-shadow:0 0 18px rgba(250,204,107,0.65);
+    position:relative;
+  }
+  .brand-orb::after{
+    content:"";
+    position:absolute;
+    inset:7px;
+    border-radius:inherit;
+    background:radial-gradient(circle at 30% 20%,rgba(255,255,255,0.7),transparent 60%);
+    mix-blend-mode:screen;
+  }
+  .brand-text h1{
+    margin:0;
+    font-family:"Cinzel","Times New Roman",serif;
+    letter-spacing:0.09em;
+    font-size:18px;
+    text-transform:uppercase;
+  }
+  .brand-text span{
+    font-size:11px;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:0.25em;
+  }
+  .header-right{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    font-size:11px;
+    color:var(--muted);
+  }
+  .pill{
+    border-radius:999px;
+    padding:5px 12px;
+    border:1px solid rgba(148,163,184,0.6);
+    background:rgba(15,23,42,0.8);
+  }
+  .pill span{
+    color:var(--accent);
+  }
+
+  .layout{
+    display:grid;
+    grid-template-columns:260px minmax(0,1fr);
+    height:100%;
+    min-height:520px;
+  }
+  @media(max-width:900px){
+    .layout{
+      grid-template-columns:1fr;
+      grid-template-rows:auto auto;
+    }
+  }
+
+  .sidebar{
+    border-right:1px solid rgba(148,163,184,0.35);
+    background:radial-gradient(circle at 0 0,rgba(15,23,42,0.95),rgba(2,6,23,0.9));
+    padding:16px 14px 18px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+  @media(max-width:900px){
+    .sidebar{
+      border-right:none;
+      border-bottom:1px solid rgba(148,163,184,0.35);
+      flex-direction:row;
+      overflow-x:auto;
+      gap:10px;
+    }
+  }
+  .sidebar-head{
+    font-size:11px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .week-list{
+    list-style:none;
+    margin:0;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+  @media(max-width:900px){
+    .week-list{
+      flex-direction:row;
+      gap:8px;
+    }
+  }
+  .week-item{
+    border-radius:var(--radius-md);
+    padding:8px 10px;
+    border:1px solid rgba(55,65,81,0.9);
+    background:radial-gradient(circle at 0 0,rgba(15,23,42,0.98),rgba(15,23,42,0.85));
+    color:var(--muted);
+    font-size:12px;
+    cursor:pointer;
+    display:flex;
+    align-items:flex-start;
+    gap:7px;
+    transition:background .18s,border-color .18s,transform .12s;
+    min-width:0;
+  }
+  .week-item:hover{
+    border-color:rgba(250,204,107,0.85);
+    transform:translateY(-1px);
+  }
+  .week-item.active{
+    border-color:var(--accent);
+    background:radial-gradient(circle at 0 0,rgba(250,204,107,0.18),rgba(15,23,42,0.95));
+    color:var(--ink);
+  }
+  .week-badge{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:rgba(148,163,184,0.6);
+    margin-top:4px;
+  }
+  .week-item.active .week-badge{
+    background:var(--accent);
+    box-shadow:0 0 10px rgba(250,204,107,0.8);
+  }
+  .week-body{
+    flex:1;
+    min-width:0;
+  }
+  .week-title{
+    font-family:"Cinzel","Times New Roman",serif;
+    font-size:12px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+  }
+  .week-theme{
+    font-size:11px;
+    color:var(--muted);
+  }
+  .week-status{
+    font-size:10px;
+    margin-top:4px;
+    color:var(--muted);
+  }
+  .week-status span{
+    color:var(--accent);
+  }
+
+  .final-pill{
+    margin-top:10px;
+    padding:8px 10px;
+    border-radius:var(--radius-md);
+    border:1px dashed rgba(250,204,107,0.75);
+    background:rgba(15,23,42,0.92);
+    font-size:11px;
+    display:flex;
+    align-items:flex-start;
+    gap:8px;
+    cursor:pointer;
+  }
+  .final-pill-title{
+    font-family:"Cinzel","Times New Roman",serif;
+    font-size:11px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+  }
+  .final-pill-status{
+    font-size:10px;
+    color:var(--muted);
+  }
+  .final-pill.completed{
+    border-style:solid;
+    background:radial-gradient(circle at 0 0,rgba(250,204,107,0.2),rgba(15,23,42,0.95));
+  }
+
+  .sidebar-note{
+    margin-top:auto;
+    font-size:10px;
+    color:var(--muted);
+    border-top:1px dashed rgba(75,85,99,0.8);
+    padding-top:8px;
+  }
+
+  .main{
+    padding:18px 20px 18px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+  .week-header{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    gap:10px;
+    align-items:flex-start;
+  }
+  .week-header-left h2{
+    margin:0;
+    font-family:"Cinzel","Times New Roman",serif;
+    font-size:22px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+  }
+  .week-subtitle{
+    font-size:12px;
+    color:var(--muted);
+    margin-top:4px;
+  }
+  .week-badges{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    font-size:10px;
+  }
+  .tag{
+    border-radius:var(--radius-pill);
+    padding:4px 9px;
+    border:1px solid rgba(148,163,184,0.7);
+    background:rgba(15,23,42,0.8);
+    color:var(--muted);
+  }
+  .tag strong{
+    color:var(--accent);
+  }
+
+  .tabs{
+    margin-top:6px;
+    display:flex;
+    gap:8px;
+    border-bottom:1px solid rgba(31,41,55,0.85);
+  }
+  .tab-btn{
+    border:none;
+    background:transparent;
+    padding:8px 14px;
+    border-radius:var(--radius-pill) var(--radius-pill) 0 0;
+    color:var(--muted);
+    font-size:12px;
+    cursor:pointer;
+    border-bottom:2px solid transparent;
+  }
+  .tab-btn.active{
+    color:var(--accent-strong);
+    border-color:var(--accent-strong);
+    background:radial-gradient(circle at 0 0,rgba(250,204,107,0.16),rgba(15,23,42,0.95));
+  }
+  .tab-btn.disabled{
+    opacity:0.45;
+    cursor:not-allowed;
+  }
+
+  .panel-area{
+    margin-top:10px;
+    flex:1;
+    min-height:260px;
+    display:flex;
+  }
+  .panel-inner{
+    border-radius:var(--radius-lg);
+    border:var(--border-subtle);
+    background:radial-gradient(circle at 15% 0,rgba(30,64,175,0.42),rgba(15,23,42,0.96));
+    box-shadow:var(--shadow-card);
+    padding:18px 18px 16px;
+    width:100%;
+    overflow:auto;
+  }
+
+  .hidden{display:none;}
+
+  .week-curriculum{
+    margin-bottom:10px;
+  }
+  .week-curriculum h3{
+    font-family:"Cinzel","Times New Roman",serif;
+    font-size:16px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    margin:6px 0 8px;
+  }
+  .week-curriculum p{
+    font-size:13px;
+    color:var(--ink);
+    line-height:1.6;
+  }
+  .week-curriculum small{
+    color:var(--muted);
+    font-size:11px;
+  }
+  .session-list{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:10px;
+    margin-top:8px;
+  }
+  .session-card{
+    border-radius:var(--radius-md);
+    border:1px solid rgba(55,65,81,0.9);
+    background:radial-gradient(circle at 0 0,rgba(15,23,42,0.98),rgba(15,23,42,0.9));
+    padding:10px 11px;
+    font-size:12px;
+  }
+  .session-title{
+    font-weight:600;
+    color:var(--accent);
+    margin-bottom:4px;
+  }
+  .session-tag{
+    font-size:11px;
+    color:var(--muted);
+    margin-bottom:5px;
+  }
+  .session-card ul{
+    margin:0;
+    padding-left:16px;
+    font-size:12px;
+    color:var(--ink);
+  }
+  .session-card li{
+    margin-bottom:3px;
+  }
+
+  .mini-note{
+    margin-top:10px;
+    font-size:11px;
+    color:var(--muted);
+    border-top:1px dashed rgba(75,85,99,0.8);
+    padding-top:6px;
+  }
+
+  .quiz-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:10px;
+    margin-bottom:8px;
+  }
+  .quiz-title{
+    font-family:"Cinzel","Times New Roman",serif;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    font-size:13px;
+  }
+  .quiz-meta{
+    font-size:11px;
+    color:var(--muted);
+  }
+  .question-list{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-top:8px;
+  }
+  .question-card{
+    border-radius:var(--radius-md);
+    border:1px solid rgba(55,65,81,0.9);
+    background:radial-gradient(circle at 0 0,rgba(15,23,42,0.98),rgba(15,23,42,0.9));
+    padding:9px 10px;
+    font-size:13px;
+  }
+  .question-text{
+    margin-bottom:6px;
+  }
+  .options{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    margin-bottom:4px;
+  }
+  .option-label{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:12px;
+    cursor:pointer;
+  }
+  .option-label input{
+    accent-color:var(--accent-strong);
+  }
+  .question-feedback{
+    font-size:11px;
+    margin-top:4px;
+  }
+  .question-feedback.ok{
+    color:var(--ok);
+  }
+  .question-feedback.bad{
+    color:var(--danger);
+  }
+  .quiz-actions{
+    margin-top:10px;
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    flex-wrap:wrap;
+    align-items:center;
+  }
+  .btn{
+    border:none;
+    border-radius:var(--radius-pill);
+    padding:7px 14px;
+    font-size:12px;
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+  }
+  .btn-primary{
+    background:linear-gradient(120deg,#facc6b,#f97316);
+    color:#111827;
+    box-shadow:0 0 12px rgba(250,204,107,0.65);
+  }
+  .btn-outline{
+    background:transparent;
+    color:var(--accent);
+    border:1px solid rgba(250,204,107,0.7);
+  }
+  .btn-ghost{
+    background:transparent;
+    color:var(--muted);
+    border:none;
+  }
+  .btn:disabled{
+    opacity:0.5;
+    cursor:not-allowed;
+  }
+  .quiz-score{
+    font-size:12px;
+    color:var(--muted);
+  }
+  .quiz-score span{
+    color:var(--accent-strong);
+  }
+
+  .certificate-wrap{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .certificate-form{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    align-items:center;
+    font-size:12px;
+    color:var(--muted);
+  }
+  .certificate-form input{
+    min-width:160px;
+    max-width:240px;
+    padding:6px 8px;
+    border-radius:8px;
+    border:1px solid rgba(148,163,184,0.9);
+    background:rgba(15,23,42,0.9);
+    color:var(--ink);
+  }
+  .certificate-card{
+    margin-top:4px;
+    border-radius:20px;
+    border:2px solid rgba(250,204,107,0.85);
+    background:radial-gradient(circle at 50% 0,rgba(250,204,107,0.12),rgba(15,23,42,0.98));
+    padding:18px 20px 18px;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .certificate-card::before,
+  .certificate-card::after{
+    content:"";
+    position:absolute;
+    border-radius:50%;
+    border:1px dashed rgba(250,204,107,0.45);
+  }
+  .certificate-card::before{
+    width:180px;
+    height:180px;
+    top:-90px;
+    left:-40px;
+  }
+  .certificate-card::after{
+    width:220px;
+    height:220px;
+    bottom:-120px;
+    right:-30px;
+  }
+  .certificate-inner{
+    position:relative;
+    z-index:1;
+  }
+  .cert-title{
+    font-family:"Cinzel","Times New Roman",serif;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    font-size:13px;
+    color:var(--accent-strong);
+  }
+  .cert-name{
+    margin:10px 0;
+    font-family:"Cinzel","Times New Roman",serif;
+    font-size:20px;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+  }
+  .cert-body{
+    font-size:12px;
+    color:var(--ink);
+  }
+  .cert-footer{
+    margin-top:14px;
+    display:flex;
+    justify-content:space-between;
+    font-size:11px;
+    color:var(--muted);
+  }
+  .cert-seal{
+    border-radius:999px;
+    padding:4px 8px;
+    border:1px solid rgba(250,204,107,0.7);
+    font-size:10px;
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    color:var(--accent);
+  }
+
+  footer{
+    padding:6px 12px 9px;
+    border-top:1px solid rgba(15,23,42,0.9);
+    font-size:10px;
+    color:var(--muted);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:rgba(3,7,18,0.96);
+  }
+
+  @media print{
+    body,#app{
+      margin:0;
+      padding:0;
+      box-shadow:none;
+      background:#fefce8;
+      color:#111827;
+    }
+    header, .layout > .sidebar, footer, .tabs, .week-header, .quiz-actions, .mini-note{
+      display:none !important;
+    }
+    .panel-area, .panel-inner{
+      padding:0;
+      margin:0;
+      border:none;
+      box-shadow:none;
+      background:#fefce8;
+    }
+    .certificate-card{
+      border-color:#a16207;
+      background:#fefce8;
+    }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="shell">
+    <header>
+      <div class="brand-block">
+        <div class="brand-orb"></div>
+        <div class="brand-text">
+          <h1>Noor Pathway</h1>
+          <span>QURAN DEEPENING · ADVANCED 6 WEEKS</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="pill">
+          Mode: <span>&nbsp;Sandbox · Offline</span>
+        </div>
+        <div class="pill">
+          Track: <span>&nbsp;Advanced Workshop</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <div>
+          <div class="sidebar-head">Weeks</div>
+          <ul class="week-list" id="weekList">
+            <li class="week-item active" data-week="week1">
+              <div class="week-badge"></div>
+              <div class="week-body">
+                <div class="week-title">Week 1</div>
+                <div class="week-theme">Arabic Text & Recitation Craft</div>
+                <div class="week-status" data-week-status="week1">Status: <span>Not started</span></div>
+              </div>
+            </li>
+            <li class="week-item" data-week="week2">
+              <div class="week-badge"></div>
+              <div class="week-body">
+                <div class="week-title">Week 2</div>
+                <div class="week-theme">Thematic Reading & Mapping</div>
+                <div class="week-status" data-week-status="week2">Status: <span>Not started</span></div>
+              </div>
+            </li>
+            <li class="week-item" data-week="week3">
+              <div class="week-badge"></div>
+              <div class="week-body">
+                <div class="week-title">Week 3</div>
+                <div class="week-theme">Makki · Madani & Context</div>
+                <div class="week-status" data-week-status="week3">Status: <span>Not started</span></div>
+              </div>
+            </li>
+            <li class="week-item" data-week="week4">
+              <div class="week-badge"></div>
+              <div class="week-body">
+                <div class="week-title">Week 4</div>
+                <div class="week-theme">Inner States & Tazkiyah</div>
+                <div class="week-status" data-week-status="week4">Status: <span>Not started</span></div>
+              </div>
+            </li>
+            <li class="week-item" data-week="week5">
+              <div class="week-badge"></div>
+              <div class="week-body">
+                <div class="week-title">Week 5</div>
+                <div class="week-theme">Justice, Care & Society</div>
+                <div class="week-status" data-week-status="week5">Status: <span>Not started</span></div>
+              </div>
+            </li>
+            <li class="week-item" data-week="week6">
+              <div class="week-badge"></div>
+              <div class="week-body">
+                <div class="week-title">Week 6</div>
+                <div class="week-theme">Lifelong Qur'an Projects</div>
+                <div class="week-status" data-week-status="week6">Status: <span>Not started</span></div>
+              </div>
+            </li>
+          </ul>
+
+          <div class="final-pill" id="finalNav" data-week="final">
+            <div class="week-badge"></div>
+            <div>
+              <div class="final-pill-title">Final Review & Mastery Check</div>
+              <div class="final-pill-status" id="finalStatus">Locked until final quiz is passed</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-note">
+          Progress and scores are stored only in this browser (localStorage). Clear your
+          cache or use a private window to reset the workshop.
+        </div>
+      </aside>
+
+      <main class="main">
+        <div class="week-header">
+          <div class="week-header-left">
+            <h2 id="weekTitle">Week 1 · Arabic Text & Recitation Craft</h2>
+            <div class="week-subtitle" id="weekSubtitle">
+              Deepening your relationship with the Arabic script, tajwīd basics and how you
+              approach the mushaf itself.
+            </div>
+          </div>
+          <div class="week-badges">
+            <div class="tag">Level: <strong>Advanced beginner / intermediate</strong></div>
+            <div class="tag">Format: <strong>6 weeks · self-guided</strong></div>
+          </div>
+        </div>
+
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="curriculum">Curriculum</button>
+          <button class="tab-btn" data-tab="quiz">Weekly Quiz</button>
+          <button class="tab-btn disabled" data-tab="certificate" id="certTab">Certificate</button>
+        </div>
+
+        <div class="panel-area">
+          <div class="panel-inner">
+            <!-- Curriculum View -->
+            <div id="curriculumView">
+              <!-- Week 1 -->
+              <section class="week-curriculum" data-week-section="week1">
+                <h3>Week 1 · Arabic Text & Recitation Craft</h3>
+                <p>
+                  This week you move from simply “seeing Arabic letters” to treating the
+                  Qur'anic script as a living map: letters, vowels, tajwīd symbols and the
+                  etiquette of handling the mushaf with intention.
+                </p>
+                <small>Focus: tajwīd vocabulary, makhārij awareness, and building a recitation routine.</small>
+                <div class="session-list">
+                  <div class="session-card">
+                    <div class="session-title">Session 1: Script as Sacred Geometry</div>
+                    <div class="session-tag">Alif to yā · dots · shapes</div>
+                    <ul>
+                      <li>Review all 28 letters, paying attention to where each is written and spoken.</li>
+                      <li>Circle any letters you still mix up (for example ث / س / ص).</li>
+                      <li>Write a short note on how it feels to see Allah's words in their original form.</li>
+                    </ul>
+                  </div>
+                  <div class="session-card">
+                    <div class="session-title">Session 2: Tajwīd Map – Key Terms</div>
+                    <div class="session-tag">Makhārij · ṣifāt · ghunnah · qalqalah</div>
+                    <ul>
+                      <li>Create a tiny glossary for 5–7 tajwīd terms with simple meanings.</li>
+                      <li>Listen to a reciter and try to “spot” these features in a short sūrah.</li>
+                      <li>Highlight one term you want to focus on this week.</li>
+                    </ul>
+                  </div>
+                  <div class="session-card">
+                    <div class="session-title">Session 3: Your Recitation Baseline</div>
+                    <div class="session-tag">Gentle self-audit</div>
+                    <ul>
+                      <li>Record yourself reciting al-Fātiḥah and one short sūrah.</li>
+                      <li>Listen back once with kindness, noting strength and growth areas.</li>
+                      <li>Write down 2 small improvements to work on (for example elongation, clarity).</li>
+                    </ul>
+                  </div>
+                  <div class="session-card">
+                    <div class="session-title">Session 4: Mushaf Etiquette</div>
+                    <div class="session-tag">Adab with the Book</div>
+                    <ul>
+                      <li>Review etiquette: cleanliness, intention, posture, distractions.</li>
+                      <li>Design a “Qur'an corner” or small space that feels dignified and calm.</li>
+                      <li>Commit to a fixed recitation time for this 6-week workshop.</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="mini-note">
+                  Advanced does not mean harsh: your recitation journey is a craft polished
+                  over years, not a performance graded in days.
+                </div>
+              </section>
+
+              <!-- Week 2 -->
+              <section class="week-curriculum hidden" data-week-section="week2">
+                <h3>Week 2 · Thematic Reading & Mapping</h3>
+                <p>
+                  This week you learn to read across sūrahs through themes: mercy, justice,
+                  patience, gratitude, light, and more – building your own “theme maps” in
+                  your journal.
+                </p>
+                <small>Focus: connecting scattered verses into living themes in your life.</small>
+                <div class="session-list">
+                  <div class="session-card">
+                    <div class="session-title">Session 1: Choose Your Theme</div>
+                    <div class="session-tag">Mercy · justice · patience · gratitude · tawakkul</div>
+                    <ul>
+                      <li>Pick one theme that you need most this season.</li>
+                      <li>List 3–5 verses you already know or have heard related to that theme.</li>
+                      <li>Write why this theme calls to you now.</li>
+                    </ul>
+                  </div>
+                  <div class="session-card">
+                    <div class="session-title">Session 2: Verse Clusters</div>
+                    <div class="session-tag">Collecting ayaat</div>
+                    <ul>
+                      <li>Use a Quran index or app to find 3–5 new verses linked to your theme.</li>
+                      <li>Copy key phrases for each verse into your journal.</li>
+                      <li>Note which surahs and contexts they appear in.</li>
+                    </ul>
+                  </div>
+                  <div class="session-card">
+                    <div class="session-title">Session 3: Heart Map</div>
+                    <div class="session-tag">From page to pattern</div>
+                    <ul>
+                      <li>Draw a simple mind map: theme in the middle, verses as branches.</li>
+                      <li>Next to each verse, add one line: “This speaks to…” + a part of your life.</li>
+                      <li>Circle verses that feel like direct personal guidance.</li>
+                    </ul>
+                  </div>
+                  <div class="session-card">
+                    <div class="session-title">Session 4: Walking the Theme</div>
+                    <div class="session-tag">Embodied Qur'an</div>
+                    <ul>
+                      <li>Choose one verse as your “daily companion” for a week.</li>
+                      <li>Recite it at least twice a day (morning and evening).</li>
+                      <li>Write down one moment when it changed your reaction or choice.</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="mini-note">
+                  Over time, you will build a personal atlas of Qur'anic themes – a map of
+                  verses that have walked with you.
+                </div>
+              </section>
+
+              <!-- Week 3 -->
+              <section class="week-curriculum hidden" data-week-section="week3">
+                <h3>Week 3 · Makki · Madani & Context of Revelation</h3>
+                <p>
+                  This week deepens your sense of <em>when</em> verses arrived in history:
+                  Makki and Madani surahs, context of revelation (asbāb al-nuzūl) and how
+                  seerah and Quran mirror each other.
+                </p>
+                <small>Focus: reading verses with their historical sky still around them.</small>
+                <div class="session-list">
+                  <div class="session-card">
+                    <div class="session-title">Session 1: Makki vs. Madani Signatures</div>
+                    <div class="session-tag">Early vs. later revelation</div>
+                    <ul>
+                      <li>List typical features of Makki surahs (for example short, powerful, core beliefs).</li>
+                      <li>List typical features of Madani surahs (for example law, community, detail).</li>
+                      <li>Pick one surah and identify which “signature” it matches.</li>
+                    </ul>
+                  </div>
+                  <div class="session-card">
+                    <div class="session-title">Session 2: Asbāb al-Nuzūl (Reasons of Revelation)</div>
+                    <div class="session-tag">Verses with stories</div>
+                    <ul>
+                      <li>Choose 2–3 well-known verses with known historical contexts.</li>
+                      <li>Write their background in a few simple sentences.</li>
+                      <li>Reflect on how context deepens the verse's meaning for you today.</li>
+                    </ul>
+                  </div>
+                  <div class="session-card">
+                    <div class="session-title">Session 3: Seerah & Surah</div>
+                    <div class="session-tag">Biography + Revelation</div>
+                    <ul>
+                      <li>Pick one seerah moment (for example, Hijrah, Badr, Ta'if).</li>
+                      <li>Identify which surahs or verses connect to that moment.</li>
+                      <li>Write how knowing the story changes how you hear the verses.</li>
+                    </ul>
+                  </div>
+                  <div class="session-card">
+                    <div class="session-title">Session 4: Mushaf Order vs. Chronology</div>
+                    <div class="session-tag">Why this sequence?</div>
+                    <ul>
+                      <li>Read about how the current mushaf order differs from chronological order.</li>
+                      <li>Choose one interesting example of a surah's place in the mushaf.</li>
+                      <li>Journal: what might be the wisdom of this ordering for a reader's heart?</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="mini-note">
+                  Context is like the sky behind the stars: the stars do not disappear without
+                  it, but they shine differently when you see where they hang.
+                </div>
+              </section>
+
+              <!-- Week 4 -->
+              <section class="week-curriculum hidden" data-week-section="week4">
+                <h3>Week 4 · Inner States & Tazkiyah</h3>
+                <p>
+                  This week turns strongly inward: the Qur'anic language of the self
+                  (nafs), the heart (qalb), sincerity (ikhlāṣ) and hidden diseases like
+                  showiness (riyā) or arrogance.
+                </p>
+                <small>Focus: verses that diagnose and heal the inner world.</small>
+                <div class="session-list">
+                  <div class="session-card">
+                    <div class="session-title">Session 1: Three Faces of the Nafs</div>
+                    <div class="session-tag">Ammārah · Lawwāmah · Muṭma'innah</div>
+                    <ul>
+                      <li>Study verses that mention these states of the soul.</li>
+                      <li>Write a simple description and everyday example of each.</li>
+                      <li>Identify where you most often find yourself lately.</li>
+                    </ul>
+                  </div>
+                  <div class="session-card">
+                    <div class="session-title">Session 2: Heart Diseases in the Qur'an</div>
+                    <div class="session-tag">Hardness · hypocrisy · arrogance</div>
+                    <ul>
+                      <li>Collect 3–4 verses where “disease in the heart” or hardness is mentioned.</li>
+                      <li>Note the behaviors or attitudes that accompany these descriptions.</li>
+                      <li>Journal one small sign you want to watch for in yourself without shame.</li>
+                    </ul>
+                  </div>
+                  <div class="session-card">
+                    <div class="session-title">Session 3: Sincerity & Hidden Acts</div>
+                    <div class="session-tag">Ikhlāṣ vs. riyā</div>
+                    <ul>
+                      <li>Read verses about doing deeds “for Allah alone”.</li>
+                      <li>Plan one recurring act of worship that only you and Allah know.</li>
+                      <li>Write how it feels to hold something purely for that private bond.</li>
+                    </ul>
+                  </div>
+                  <div class="session-card">
+                    <div class="session-title">Session 4: Qur'anic Du'as for Tazkiyah</div>
+                    <div class="session-tag">Supplications of purification</div>
+                    <ul>
+                      <li>Choose 2–3 Quranic supplications about forgiveness, guidance, or purification.</li>
+                      <li>Memorize at least one in Arabic or in your language.</li>
+                      <li>Set a daily time to repeat it slowly with full attention.</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="mini-note">
+                  Tazkiyah is not self-hatred – it is Allah-led gardening of the soul: pruning,
+                  watering, and trusting the light.
+                </div>
+              </section>
+
+              <!-- Week 5 -->
+              <section class="week-curriculum hidden" data-week-section="week5">
+                <h3>Week 5 · Justice, Care & Society</h3>
+                <p>
+                  This week widens your gaze: from personal heart work to Qur'anic calls
+                  for justice, care for the vulnerable, fair trade, and stewardship of the
+                  earth.
+                </p>
+                <small>Focus: Qur'an as a charter for ethical society, not just private devotion.</small>
+                <div class="session-list">
+                  <div class="session-card">
+                    <div class="session-title">Session 1: Scales, Contracts & Trusts</div>
+                    <div class="session-tag">Weights, measures, promises</div>
+                    <ul>
+                      <li>Read verses about honest weights and measures, fulfilling trusts and contracts.</li>
+                      <li>Note where these issues appear today (business, online work, promises).</li>
+                      <li>Choose one practical change in how you handle commitments.</li>
+                    </ul>
+                  </div>
+                  <div class="session-card">
+                    <div class="session-title">Session 2: Orphans, Poor & Marginalized</div>
+                    <div class="session-tag">Who the Qur'an defends</div>
+                    <ul>
+                      <li>Collect verses about orphans, the poor and those without protection.</li>
+                      <li>Write how your community includes or overlooks these groups.</li>
+                      <li>Plan one small act of support you can realistically offer.</li>
+                    </ul>
+                  </div>
+                  <div class="session-card">
+                    <div class="session-title">Session 3: Speaking for Justice</div>
+                    <div class="session-tag">Standing even against ourselves</div>
+                    <ul>
+                      <li>Read verses that command standing firmly for justice.</li>
+                      <li>Think of one situation where speaking up felt hard.</li>
+                      <li>Journal what “Qur'anic courage” would have looked like in that moment.</li>
+                    </ul>
+                  </div>
+                  <div class="session-card">
+                    <div class="session-title">Session 4: Earth as Amānah</div>
+                    <div class="session-tag">Creation as trust</div>
+                    <ul>
+                      <li>Read verses describing the earth, rain, animals and balance.</li>
+                      <li>Reflect on your lifestyle's impact on that balance.</li>
+                      <li>Choose one concrete stewardship action (for example waste, water, kindness to creatures).</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="mini-note">
+                  The Qur'an does not only ask “Who are you becoming?” but also “What kind of
+                  world are you helping to build?”.
+                </div>
+              </section>
+
+              <!-- Week 6 -->
+              <section class="week-curriculum hidden" data-week-section="week6">
+                <h3>Week 6 · Lifelong Qur'an Projects</h3>
+                <p>
+                  The final week is about designing your personal “Qur'an project”: memorization
+                  goals, Arabic study, teaching, service, or a blend of all, at a pace that
+                  honors your life.
+                </p>
+                <small>Focus: realistic planning, gentle ambition and long-term companionship.</small>
+                <div class="session-list">
+                  <div class="session-card">
+                    <div class="session-title">Session 1: Your Qur'an Story So Far</div>
+                    <div class="session-tag">Seeing the path behind you</div>
+                    <ul>
+                      <li>Write a one-page reflection on your history with the Qur'an.</li>
+                      <li>Highlight three turning points: people, moments, or verses.</li>
+                      <li>Thank Allah for each turning point in your own words.</li>
+                    </ul>
+                  </div>
+                  <div class="session-card">
+                    <div class="session-title">Session 2: Choosing a Primary Project</div>
+                    <div class="session-tag">Hifdh · Arabic · teaching · service</div>
+                    <ul>
+                      <li>List all the directions that attract you (memorizing, studying Arabic, teaching kids, etc.).</li>
+                      <li>Rank them by: “most needed for my heart” and “most realistic right now”.</li>
+                      <li>Pick one main project for the next 6–12 months.</li>
+                    </ul>
+                  </div>
+                  <div class="session-card">
+                    <div class="session-title">Session 3: Designing a Gentle Plan</div>
+                    <div class="session-tag">Minimum & ideal days</div>
+                    <ul>
+                      <li>Create two versions of your routine: “hard day minimum” and “good day ideal”.</li>
+                      <li>Include time for recitation, understanding and reflection.</li>
+                      <li>Write how you will reset kindly when you fall behind.</li>
+                    </ul>
+                  </div>
+                  <div class="session-card">
+                    <div class="session-title">Session 4: Accountability & Du'a</div>
+                    <div class="session-tag">Not walking alone</div>
+                    <ul>
+                      <li>Decide who or what will gently hold you accountable (friend, teacher, journal, app).</li>
+                      <li>Write a “Qur'an covenant du'a” asking Allah to keep you close to His book.</li>
+                      <li>Choose a date 6 months from now to re-read this covenant.</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="mini-note">
+                  Advanced does not mean rushing ahead of life – it means weaving the Qur'an
+                  into who you are becoming, year after year.
+                </div>
+              </section>
+
+              <!-- Final -->
+              <section class="week-curriculum hidden" data-week-section="final">
+                <h3>Final Review & Mastery Check</h3>
+                <p>
+                  When you feel ready, take the final review quiz to check how much of this
+                  advanced journey has settled into your understanding. Passing it unlocks a
+                  printable Noor Pathway Advanced Completion Certificate.
+                </p>
+                <small>
+                  This is not a test of worth – it is a mirror of what has landed and what
+                  simply needs more time.
+                </small>
+                <div class="mini-note">
+                  Recommended: space out the final quiz from your last study session. Let your
+                  heart rest a little, then return with a clear mind.
+                </div>
+              </section>
+            </div>
+
+            <!-- Quiz View -->
+            <div id="quizView" class="hidden"></div>
+
+            <!-- Certificate View -->
+            <div id="certificateView" class="hidden">
+              <div class="certificate-wrap">
+                <div class="certificate-form">
+                  <span>Type your name for the advanced certificate:</span>
+                  <input id="certName" placeholder="Your name">
+                  <button class="btn btn-outline" id="printBtn">Print Certificate</button>
+                </div>
+                <div class="certificate-card">
+                  <div class="certificate-inner">
+                    <div class="cert-title">Noor Pathway · Advanced</div>
+                    <div class="cert-body" style="margin-top:4px;font-size:11px;color:#e5e7eb;">
+                      Qur'an Deepening Workshop – Six Week Track
+                    </div>
+                    <div class="cert-name" id="certNameDisplay">[ Your Name ]</div>
+                    <div class="cert-body">
+                      has completed the Noor Pathway Advanced Qur'an Workshop, including
+                      thematic study, context exploration, inner work and a final review
+                      assessment.
+                    </div>
+                    <div class="cert-footer">
+                      <div>
+                        Issued on:<br>
+                        <span id="certDate">__________</span>
+                      </div>
+                      <div>
+                        <span class="cert-seal">
+                          ✨ Noor Seal · Advanced Lighted Path
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="mini-note">
+                  Printing works best from a laptop or desktop browser. In print preview,
+                  you can choose landscape and adjust margins if you want a framed look.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <footer>
+      <div>Temple of Letters · Noor Pathway Advanced Sandbox</div>
+      <div>Study companion · Not a legal ruling source</div>
+    </footer>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const qs = (sel,root=document) => root.querySelector(sel);
+  const qsa = (sel,root=document) => Array.from(root.querySelectorAll(sel));
+
+  const STORAGE_KEY = "noor_quran_advanced_v1";
+
+  // ========== QUIZ DATA ==========
+  // 6 questions per week + 10-question final
+  const QUIZZES = {
+    week1: [
+      {
+        q:"In this advanced track, Arabic script is treated as:",
+        options:[
+          "A random set of shapes",
+          "Sacred geometry carrying Allah's words",
+          "Only a puzzle game",
+          "A modern invention"
+        ],
+        answer:1,
+        explanation:"You learn to see the Qur'anic script as a living, sacred geometry."
+      },
+      {
+        q:"Makhārij in tajwīd refers to:",
+        options:[
+          "The written shape of letters",
+          "The points of articulation where letters are pronounced",
+          "Only vowels",
+          "Page numbers in the mushaf"
+        ],
+        answer:1,
+        explanation:"Makhārij are the places in the mouth/throat where letters originate."
+      },
+      {
+        q:"In a gentle self-audit of recitation, the course encourages you to:",
+        options:[
+          "Criticize yourself harshly",
+          "Never listen to your own recitation",
+          "Listen back kindly and note strengths and growth areas",
+          "Compare your voice to everyone else"
+        ],
+        answer:2,
+        explanation:"Advanced growth needs kindness and honest observation, not self-attack."
+      },
+      {
+        q:"Designing a small “Qur'an corner” in your space is meant to:",
+        options:[
+          "Replace the mushaf",
+          "Show off to guests",
+          "Signal dignity, focus and respect when you read",
+          "Serve only as decoration"
+        ],
+        answer:2,
+        explanation:"Creating a dedicated space helps your heart shift into Qur'an mode."
+      },
+      {
+        q:"Tajwīd terms like ghunnah and qalqalah are best approached in this course by:",
+        options:[
+          "Memorising their names only",
+          "Ignoring them completely",
+          "Building a simple glossary and spotting them as you listen",
+          "Arguing about them online"
+        ],
+        answer:2,
+        explanation:"You create a gentle working map of tajwīd that grows with practice."
+      },
+      {
+        q:"Week 1's core message about recitation craft is that:",
+        options:[
+          "You must be perfect before you recite",
+          "You should give up if you make mistakes",
+          "Advanced means committing to a long, kind craft journey",
+          "Only experts are allowed to read"
+        ],
+        answer:2,
+        explanation:"This track honours recitation as a craft polished over years."
+      }
+    ],
+    week2: [
+      {
+        q:"Thematic reading in Week 2 means:",
+        options:[
+          "Reading only one surah repeatedly",
+          "Collecting verses from across the Quran on a shared theme",
+          "Ignoring context and meaning",
+          "Only memorising page numbers"
+        ],
+        answer:1,
+        explanation:"You gather verses wherever they appear and see the theme as a whole."
+      },
+      {
+        q:"A “heart map” exercise asks you to:",
+        options:[
+          "Draw complex art with no meaning",
+          "Map verses to random facts",
+          "Connect each verse in a theme to a part of your life",
+          "Only copy text without thinking"
+        ],
+        answer:2,
+        explanation:"Each verse branch on your map links directly to lived experience."
+      },
+      {
+        q:"Choosing one “daily companion” verse for a week is intended to:",
+        options:[
+          "Limit you to one ayah forever",
+          "Make the Quran feel smaller",
+          "Let one verse shape your reactions and choices",
+          "Replace all other reading"
+        ],
+        answer:2,
+        explanation:"Walking with one verse allows it to sink deeper into your daily life."
+      },
+      {
+        q:"A theme like mercy, justice or patience is chosen based on:",
+        options:[
+          "Random selection only",
+          "What you think is fashionable",
+          "What your heart most needs in this season",
+          "What others tell you to pick"
+        ],
+        answer:2,
+        explanation:"The course invites you to choose the theme your heart needs now."
+      },
+      {
+        q:"Verses in a theme map can come from:",
+        options:[
+          "Only one Makki surah",
+          "Only one Madani surah",
+          "Many different surahs and contexts",
+          "Only the last juz'"
+        ],
+        answer:2,
+        explanation:"Thematic reading crosses surah boundaries to see Allah's patterns."
+      },
+      {
+        q:"Advanced thematic work begins to build:",
+        options:[
+          "A random notebook",
+          "A personal atlas of Qur'anic themes that walked with you",
+          "Only a list of rules",
+          "A brief summary to forget later"
+        ],
+        answer:1,
+        explanation:"Your journal becomes an atlas of the themes that shaped your journey."
+      }
+    ],
+    week3: [
+      {
+        q:"Makki surahs are often characterised by:",
+        options:[
+          "Detailed legal rulings",
+          "Short, powerful verses on belief and the unseen",
+          "Descriptions of Medina's market",
+          "Focus only on inheritance"
+        ],
+        answer:1,
+        explanation:"Makki surahs often emphasise core beliefs and vivid reminders."
+      },
+      {
+        q:"Madani surahs often deal with:",
+        options:[
+          "Only early persecution",
+          "Mainly travel stories",
+          "Community life, law and detailed guidance",
+          "Astronomical calculations only"
+        ],
+        answer:2,
+        explanation:"Madani revelation came when a Muslim community was being built."
+      },
+      {
+        q:"Asbāb al-nuzūl refers to:",
+        options:[
+          "The rules of tajwīd",
+          "The chain of narrators",
+          "The specific contexts or reasons a verse was revealed",
+          "The names of the scribes"
+        ],
+        answer:2,
+        explanation:"Asbāb al-nuzūl are the circumstances of revelation."
+      },
+      {
+        q:"Linking seerah moments (like Badr or Hijrah) with surahs helps you:",
+        options:[
+          "Ignore history",
+          "See verses as abstract",
+          "Hear revelation in the middle of real human struggle",
+          "Replace hadith with stories"
+        ],
+        answer:2,
+        explanation:"You sense how the Quran came into concrete human events."
+      },
+      {
+        q:"Mushaf order compared to chronological order teaches that:",
+        options:[
+          "The Quran was random",
+          "Companions were careless",
+          "There is wisdom in the final reading order for hearts",
+          "Order didn't matter at all"
+        ],
+        answer:2,
+        explanation:"Advanced study reflects on the spiritual wisdom of the compiled order."
+      },
+      {
+        q:"Week 3's main shift is from seeing verses as:",
+        options:[
+          "Floating quotes to anchored revelations in time and place",
+          "History to fiction",
+          "Too difficult to read",
+          "Isolated laws only"
+        ],
+        answer:0,
+        explanation:"Verses become anchored in a living historical sky."
+      }
+    ],
+    week4: [
+      {
+        q:"The nafs al-ammārah is the self that:",
+        options:[
+          "Is completely at peace",
+          "Blames itself frequently",
+          "Inclines strongly toward lower desires",
+          "No longer exists"
+        ],
+        answer:2,
+        explanation:"Ammārah is the commanding self that pushes toward base desires."
+      },
+      {
+        q:"The nafs al-muṭma'innah is associated with:",
+        options:[
+          "Constant agitation",
+          "Deep serenity with Allah",
+          "Arrogance",
+          "Denial of the Hereafter"
+        ],
+        answer:1,
+        explanation:"Muṭma'innah is the tranquil soul addressed at the end of Sūrah al-Fajr."
+      },
+      {
+        q:"Verses describing “disease in the heart” invite you to:",
+        options:[
+          "Diagnose everyone else",
+          "Despair",
+          "Gently notice unhealthy patterns in yourself",
+          "Stop reading those verses"
+        ],
+        answer:2,
+        explanation:"Advanced tazkiyah is honest but compassionate self-observation."
+      },
+      {
+        q:"Riyā (showiness) turns worship into something done:",
+        options:[
+          "For Allah alone",
+          "Only in private",
+          "For people’s eyes and approval",
+          "Without intention"
+        ],
+        answer:2,
+        explanation:"Riyā is showing off; the course invites secret acts to protect sincerity."
+      },
+      {
+        q:"Planning a recurring secret act of worship in Week 4 is meant to:",
+        options:[
+          "Hide good from Allah",
+          "Boost social status",
+          "Build a private bond of ikhlāṣ between you and Allah",
+          "Replace all public worship"
+        ],
+        answer:2,
+        explanation:"Hidden deeds are a shield for sincerity."
+      },
+      {
+        q:"Qur'anic du'as for tazkiyah are used here as:",
+        options:[
+          "Decorative calligraphy only",
+          "Arguments online",
+          "Daily medicine, repeated with presence",
+          "Historical artifacts"
+        ],
+        answer:2,
+        explanation:"They become daily medicine for the heart, not just quotes."
+      }
+    ],
+    week5: [
+      {
+        q:"Verses about honest weights and measures emphasise:",
+        options:[
+          "Only ancient markets",
+          "Ethical trade and fairness in dealings",
+          "How to build scales",
+          "That money is evil"
+        ],
+        answer:1,
+        explanation:"They call for fairness, honesty and trustworthiness in transactions."
+      },
+      {
+        q:"The Quran's repeated mention of orphans and the poor shows:",
+        options:[
+          "They are unimportant",
+          "Concern only for rulers",
+          "Allah's strong care for the vulnerable",
+          "Purely historical interest"
+        ],
+        answer:2,
+        explanation:"The Quran consistently defends those without protectors."
+      },
+      {
+        q:"Standing firmly for justice “even if against yourselves” means:",
+        options:[
+          "Ignoring family errors",
+          "Covering up injustice",
+          "Being honest even when it costs you or your group",
+          "Judging everyone harshly"
+        ],
+        answer:2,
+        explanation:"Justice in the Quran is not tribal; it is a principle before Allah."
+      },
+      {
+        q:"Seeing the earth as amānah (trust) leads to:",
+        options:[
+          "Unlimited exploitation",
+          "Purely symbolic readings",
+          "Concrete stewardship choices in your lifestyle",
+          "Avoiding nature"
+        ],
+        answer:2,
+        explanation:"The earth is a trust, so believers act as caretakers, not owners."
+      },
+      {
+        q:"Week 5 widens your lens from:",
+        options:[
+          "Society to only individual worship",
+          "Only inner states to also social ethics",
+          "Justice to only ritual",
+          "Earth care to only personal success"
+        ],
+        answer:1,
+        explanation:"It connects Quranic spirituality with public ethics."
+      },
+      {
+        q:"A secret act of charity in this context is primarily:",
+        options:[
+          "Online announcement",
+          "Between you and Allah",
+          "A social media campaign",
+          "A competition"
+        ],
+        answer:1,
+        explanation:"Secrecy protects sincerity while serving those in need."
+      }
+    ],
+    week6: [
+      {
+        q:"Writing your Qur'an story so far helps you:",
+        options:[
+          "Prove how perfect you are",
+          "Forget past blessings",
+          "See the turning points where Allah drew you closer",
+          "Replace Quran with diary"
+        ],
+        answer:2,
+        explanation:"You honour the ways Allah already brought you toward His book."
+      },
+      {
+        q:"Choosing a primary project (hifdh, Arabic, teaching, etc.) is based on:",
+        options:[
+          "Random mood each day",
+          "Whatever others demand only",
+          "What your heart needs and what is realistic",
+          "Avoiding commitment"
+        ],
+        answer:2,
+        explanation:"Advanced planning balances need and realism."
+      },
+      {
+        q:"A “hard day minimum” plan is meant to:",
+        options:[
+          "Lower your standards permanently",
+          "Help you keep a tiny connection even when life is heavy",
+          "Cancel Quran entirely on busy days",
+          "Punish you for being tired"
+        ],
+        answer:1,
+        explanation:"A gentle minimum protects continuity when capacity is low."
+      },
+      {
+        q:"A “good day ideal” plan describes:",
+        options:[
+          "An impossible schedule",
+          "A realistic stretch routine for days with more energy",
+          "Goals only for others",
+          "What you did years ago"
+        ],
+        answer:1,
+        explanation:"It outlines your aspirational but doable practice on better days."
+      },
+      {
+        q:"Accountability in Week 6 is framed as:",
+        options:[
+          "Policing and shaming",
+          "A gentle support (friend, teacher, journal, app)",
+          "Public pressure",
+          "Leaderboard competition"
+        ],
+        answer:1,
+        explanation:"You choose supports that honour your dignity and sincerity."
+      },
+      {
+        q:"The six-week advanced track ultimately aims to:",
+        options:[
+          "Finish the entire Quran quickly once",
+          "Replace scholars",
+          "Launch you into a realistic lifelong Qur'an project",
+          "Judge others' progress"
+        ],
+        answer:2,
+        explanation:"This course is a launchpad for a life of companionship with the Qur'an."
+      }
+    ],
+    final: [
+      {
+        q:"Across the advanced workshop, Arabic text is treated as:",
+        options:[
+          "Decorative art only",
+          "A burden to avoid",
+          "Sacred geometry carrying revelation into sound",
+          "An optional extra"
+        ],
+        answer:2,
+        explanation:"You are invited to see script, sound and meaning as one sacred fabric."
+      },
+      {
+        q:"Thematic mapping of verses trains you to:",
+        options:[
+          "Read every verse in isolation",
+          "Ignore context and emotion",
+          "See how Allah returns to the same themes across the mushaf",
+          "Only memorise surah names"
+        ],
+        answer:2,
+        explanation:"You spot patterns of mercy, justice, patience and more across surahs."
+      },
+      {
+        q:"Understanding Makki and Madani surahs helps you:",
+        options:[
+          "Predict exact historical dates",
+          "See how revelation answered different stages of the Prophet's mission",
+          "Change the mushaf order",
+          "Avoid reading certain surahs"
+        ],
+        answer:1,
+        explanation:"You sense how guidance unfolded alongside the seerah."
+      },
+      {
+        q:"Tazkiyah in this course is framed as:",
+        options:[
+          "Self-hatred",
+          "Harsh perfectionism",
+          "Allah-led gardening of the soul",
+          "Ignoring inner states"
+        ],
+        answer:2,
+        explanation:"You prune and water the heart under Allah's light, not self-cruelty."
+      },
+      {
+        q:"Secret acts of worship and charity are encouraged mainly to:",
+        options:[
+          "Hide from people in fear",
+          "Gain online praise",
+          "Protect sincerity and the private bond with Allah",
+          "Avoid public good"
+        ],
+        answer:2,
+        explanation:"Hidden deeds nurture ikhlāṣ away from human eyes."
+      },
+      {
+        q:"Verses on justice, orphans and fair trade show that the Quran:",
+        options:[
+          "Is only about inner feelings",
+          "Has no concern for society",
+          "Speaks strongly about ethical public life",
+          "Only cares for ritual detail"
+        ],
+        answer:2,
+        explanation:"It shapes markets, families and communities, not just private hearts."
+      },
+      {
+        q:"Designing a “hard day minimum” and “good day ideal” routine teaches that:",
+        options:[
+          "You must either be perfect or quit",
+          "Advanced means all or nothing",
+          "Continuity with the Quran matters more than heroic bursts",
+          "Only long sessions count"
+        ],
+        answer:2,
+        explanation:"Small, steady steps keep your path lit over many seasons."
+      },
+      {
+        q:"Your personal Qur'an project for the next 6–12 months is meant to be:",
+        options:[
+          "A copy of someone else's life",
+          "Unrealistic to impress people",
+          "Tailored to your reality, heart and responsibilities",
+          "Fixed forever with no adjustment"
+        ],
+        answer:2,
+        explanation:"You design a path that honours both your limits and your longing."
+      },
+      {
+        q:"Looking back at your Qur'an story and naming three turning points helps you:",
+        options:[
+          "Regret everything",
+          "Erase the past",
+          "Recognise Allah's care woven through your journey",
+          "Only blame yourself"
+        ],
+        answer:2,
+        explanation:"Gratitude grows when you see how Allah has already guided you."
+      },
+      {
+        q:"The Noor Pathway Advanced Workshop ultimately wants you to:",
+        options:[
+          "Graduate from needing the Quran",
+          "Compare and belittle others",
+          "Carry the Quran as a lifelong companion in script, sound and action",
+          "Keep your relationship theoretical"
+        ],
+        answer:2,
+        explanation:"This course deepens companionship, not completion."
+      }
+    ]
+  };
+
+  function loadProgress(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return {weeks:{}, final:null};
+      const parsed = JSON.parse(raw);
+      if(!parsed || typeof parsed !== "object") return {weeks:{}, final:null};
+      if(!parsed.weeks) parsed.weeks = {};
+      return parsed;
+    }catch(e){
+      return {weeks:{}, final:null};
+    }
+  }
+  let progress = loadProgress();
+  function saveProgress(){
+    try{
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+    }catch(e){}
+  }
+
+  const state = {
+    currentWeek:"week1",
+    currentTab:"curriculum"
+  };
+
+  function setWeekHeader(weekKey){
+    const titleEl = $("weekTitle");
+    const subEl = $("weekSubtitle");
+    if(weekKey === "week1"){
+      titleEl.textContent = "Week 1 · Arabic Text & Recitation Craft";
+      subEl.textContent = "Deepening your connection to script, tajwīd vocabulary and mushaf etiquette.";
+    }else if(weekKey === "week2"){
+      titleEl.textContent = "Week 2 · Thematic Reading & Mapping";
+      subEl.textContent = "Gathering verses into living themes and mapping them into your life.";
+    }else if(weekKey === "week3"){
+      titleEl.textContent = "Week 3 · Makki · Madani & Context of Revelation";
+      subEl.textContent = "Reading verses with their historical sky still around them.";
+    }else if(weekKey === "week4"){
+      titleEl.textContent = "Week 4 · Inner States & Tazkiyah";
+      subEl.textContent = "Exploring the Quran's language of the soul, heart and sincerity.";
+    }else if(weekKey === "week5"){
+      titleEl.textContent = "Week 5 · Justice, Care & Society";
+      subEl.textContent = "Seeing how Quranic guidance shapes public ethics and care.";
+    }else if(weekKey === "week6"){
+      titleEl.textContent = "Week 6 · Lifelong Qur'an Projects";
+      subEl.textContent = "Designing a realistic long-term Qur'an project for your life.";
+    }else if(weekKey === "final"){
+      titleEl.textContent = "Final Review & Completion";
+      subEl.textContent = "A gentle mastery check and advanced completion certificate.";
+    }
+  }
+
+  function setActiveWeek(weekKey){
+    state.currentWeek = weekKey;
+    qsa(".week-item").forEach(li=>{
+      li.classList.toggle("active", li.dataset.week === weekKey);
+    });
+    const finalNav = $("finalNav");
+    if(weekKey === "final"){
+      finalNav.classList.add("completed","active");
+    }else{
+      finalNav.classList.remove("active");
+    }
+    qsa("[data-week-section]").forEach(sec=>{
+      sec.classList.toggle("hidden", sec.dataset.weekSection !== weekKey);
+    });
+    setWeekHeader(weekKey);
+    switchTab("curriculum");
+  }
+
+  function switchTab(tabName){
+    state.currentTab = tabName;
+    qsa(".tab-btn").forEach(btn=>{
+      btn.classList.toggle("active", btn.dataset.tab === tabName);
+    });
+    $("curriculumView").classList.toggle("hidden", tabName !== "curriculum");
+    $("quizView").classList.toggle("hidden", tabName !== "quiz");
+    $("certificateView").classList.toggle("hidden", tabName !== "certificate");
+
+    if(tabName === "quiz"){
+      renderQuiz(state.currentWeek);
+    }else if(tabName === "certificate"){
+      prepareCertificate();
+    }
+  }
+
+  function updateSidebarStatus(){
+    Object.keys(progress.weeks).forEach(key=>{
+      const st = progress.weeks[key];
+      const statusEl = qs('[data-week-status="'+key+'"]');
+      if(statusEl && st && typeof st.score === "number"){
+        const label = st.passed ? "Passed" : "Attempted";
+        statusEl.innerHTML = 'Status: <span>'+label+' ('+st.score+'/'+st.total+')</span>';
+      }
+    });
+    if(progress.final){
+      const fs = progress.final;
+      const finalStatus = $("finalStatus");
+      finalStatus.textContent = "Final "+(fs.passed ? "passed" : "attempted")+": "+fs.score+"/"+fs.total;
+      const finalNav = $("finalNav");
+      finalNav.classList.add("completed");
+    }
+    maybeUnlockCertificate();
+  }
+
+  function renderQuiz(weekKey){
+    const container = $("quizView");
+    const quiz = QUIZZES[weekKey];
+    if(!quiz){
+      container.innerHTML = "<p style='font-size:13px;color:#e5e7eb;'>No quiz is defined for this section yet.</p>";
+      return;
+    }
+    let titleLabel = weekKey === "final" ? "Final Review Quiz" : "Weekly Quiz";
+    let subLabel = weekKey === "final"
+      ? "Covers key ideas from all six advanced weeks. Passing unlocks the certificate."
+      : "Six questions to help you consolidate this week's advanced material.";
+    let html = "";
+    html += "<div class='quiz-header'>";
+    html +=   "<div>";
+    html +=     "<div class='quiz-title'>"+titleLabel+"</div>";
+    html +=     "<div class='quiz-meta'>"+subLabel+"</div>";
+    html +=   "</div>";
+    html +=   "<div class='quiz-meta'>Questions: <strong>"+quiz.length+"</strong></div>";
+    html += "</div>";
+    html += "<div class='question-list'>";
+    quiz.forEach((q,idx)=>{
+      html += "<div class='question-card' data-qindex='"+idx+"'>";
+      html +=   "<div class='question-text'><strong>Q"+(idx+1)+".</strong> "+q.q+"</div>";
+      html +=   "<div class='options'>";
+      q.options.forEach((opt,i)=>{
+        const id = weekKey+"_q"+idx+"_opt"+i;
+        html += "<label class='option-label' for='"+id+"'>";
+        html +=   "<input type='radio' id='"+id+"' name='"+weekKey+"_q"+idx+"' value='"+i+"'>";
+        html +=   "<span>"+opt+"</span>";
+        html += "</label>";
+      });
+      html +=   "</div>";
+      html +=   "<div class='question-feedback' id='"+weekKey+"_feedback_"+idx+"'></div>";
+      html += "</div>";
+    });
+    html += "</div>";
+    html += "<div class='quiz-actions'>";
+    html +=   "<div class='quiz-score' id='quizScoreBox'>Answer the questions, then press <span>Check Answers</span>.</div>";
+    html +=   "<div style='display:flex;gap:6px;flex-wrap:wrap;'>";
+    html +=     "<button class='btn btn-primary' id='submitQuizBtn'>Check Answers</button>";
+    html +=     "<button class='btn btn-ghost' id='resetQuizBtn'>Clear Choices</button>";
+    html +=   "</div>";
+    html += "</div>";
+    container.innerHTML = html;
+
+    $("submitQuizBtn").onclick = ()=> gradeQuiz(weekKey);
+    $("resetQuizBtn").onclick = ()=> renderQuiz(weekKey);
+  }
+
+  function gradeQuiz(weekKey){
+    const quiz = QUIZZES[weekKey];
+    if(!quiz) return;
+    let score = 0;
+    let total = quiz.length;
+    quiz.forEach((q,idx)=>{
+      const selected = qs('input[name="'+weekKey+'_q'+idx+'"]:checked');
+      const fb = $(weekKey+"_feedback_"+idx);
+      if(!selected){
+        fb.textContent = "No choice selected.";
+        fb.className = "question-feedback bad";
+        return;
+      }
+      const val = parseInt(selected.value,10);
+      if(val === q.answer){
+        score++;
+        fb.textContent = "Correct: "+q.explanation;
+        fb.className = "question-feedback ok";
+      }else{
+        fb.textContent = "Not quite. "+q.explanation;
+        fb.className = "question-feedback bad";
+      }
+    });
+    const scoreBox = $("quizScoreBox");
+    const percent = Math.round((score/total)*100);
+    const passThreshold = 70;
+    const passed = percent >= passThreshold;
+    const msg = "You scored "+score+"/"+total+" ("+percent+"%). "
+      +(passed ? "Pass threshold reached." : "You can review and try again.");
+    scoreBox.innerHTML = "<span>"+msg+"</span>";
+
+    if(weekKey === "final"){
+      progress.final = {score:score,total:total,passed:passed,date:new Date().toISOString()};
+    }else{
+      if(!progress.weeks[weekKey]) progress.weeks[weekKey] = {};
+      progress.weeks[weekKey].score = score;
+      progress.weeks[weekKey].total = total;
+      progress.weeks[weekKey].passed = passed;
+      progress.weeks[weekKey].date = new Date().toISOString();
+    }
+    saveProgress();
+    updateSidebarStatus();
+  }
+
+  function maybeUnlockCertificate(){
+    const certTab = $("certTab");
+    if(progress.final && progress.final.passed){
+      certTab.classList.remove("disabled");
+    }
+  }
+
+  function prepareCertificate(){
+    const nameInput = $("certName");
+    const nameDisplay = $("certNameDisplay");
+    const dateEl = $("certDate");
+    const storedName = progress.certificateName || "";
+    if(storedName){
+      nameInput.value = storedName;
+      nameDisplay.textContent = storedName;
+    }else if(nameInput.value.trim()){
+      nameDisplay.textContent = nameInput.value.trim();
+    }
+    const now = new Date();
+    const dateStr = now.toLocaleDateString(undefined,{
+      year:"numeric",month:"long",day:"numeric"
+    });
+    dateEl.textContent = dateStr;
+    nameInput.oninput = ()=>{
+      const v = nameInput.value.trim();
+      nameDisplay.textContent = v || "[ Your Name ]";
+      progress.certificateName = v;
+      saveProgress();
+    };
+    $("printBtn").onclick = ()=> window.print();
+  }
+
+  function initNav(){
+    qsa(".week-item").forEach(li=>{
+      li.addEventListener("click",()=>{
+        const wk = li.dataset.week;
+        setActiveWeek(wk);
+      });
+    });
+    $("finalNav").addEventListener("click",()=>{
+      setActiveWeek("final");
+    });
+    qsa(".tab-btn").forEach(btn=>{
+      btn.addEventListener("click",()=>{
+        const tab = btn.dataset.tab;
+        if(btn.classList.contains("disabled")) return;
+        switchTab(tab);
+      });
+    });
+  }
+
+  function init(){
+    initNav();
+    updateSidebarStatus();
+    setActiveWeek(state.currentWeek);
+  }
+
+  document.addEventListener("DOMContentLoaded", init);
+})();
+</script>
+</body>
+</html>
