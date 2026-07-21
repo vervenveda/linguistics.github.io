@@ -1,0 +1,2165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Temple of Letters™ — NoorAI Darib (Full Edition)</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Scheherazade+New:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+  /* === Global Sacred Palette === */
+  :root{
+    /* Midnight Temple */
+    --midnight:#0b1020;
+    --midnight-soft:#14182a;
+    --panel:#101424;
+    --panel-soft:#15192b;
+
+    /* Gold / parchment */
+    --gold:#d9b878;
+    --gold-deep:#b89252;
+    --ink:#FFFDF5;
+    --ink-soft:#f0e9dc;
+
+    /* Accents */
+    --accent:#e8d5a4;
+    --accent-soft:#7a5a28;
+
+    /* Noor gradient for games */
+    --noor1:#ffb56b;
+    --noor2:#f46b45;
+
+    /* Extras */
+    --radius-main:21px;
+    --radius-soft:14px;
+    --shadow-main:0 18px 72px rgba(0,0,0,0.45);
+    --shadow-soft:0 8px 30px rgba(0,0,0,0.35);
+    --muted:#8a8fa3; /* added so sanctuary-translit has a color */
+  }
+
+  *{box-sizing:border-box;}
+
+  body{
+    margin:0;
+    min-height:100vh;
+    background:radial-gradient(circle at top,#151a32 0%,var(--midnight) 52%,#050713 100%);
+    color:var(--ink);
+    font-family:'Poppins',system-ui,-apple-system,'Segoe UI',sans-serif;
+    text-align:center;
+  }
+
+  h1,h2,h3{
+    font-family:'Cinzel','Times New Roman',serif;
+    margin:0;
+  }
+
+  h1{
+    font-size:36px;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    margin-top:40px;
+    margin-bottom:8px;
+  }
+
+  h2{
+    font-size:24px;
+    margin-top:18px;
+    margin-bottom:10px;
+  }
+
+  h3{
+    font-size:19px;
+    margin-top:14px;
+    margin-bottom:8px;
+  }
+
+  p{margin:0;}
+
+  .container{
+    max-width:1080px;
+    margin:0 auto;
+    padding:24px 18px 40px;
+  }
+
+  .guide-tag{
+    font-size:14px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-top:4px;
+    margin-bottom:24px;
+  }
+  .guide-tag span{font-weight:600;}
+
+  /* 365-Day Planner Panel */
+  .planner-section{
+    background:rgba(12,18,40,0.96);
+    border-radius:var(--radius-main);
+    border:1px solid var(--gold-deep);
+    padding:21px 18px 24px;
+    text-align:left;
+  }
+
+  .planner-section h2{text-align:center;}
+
+  .planner-sub{
+    max-width:720px;
+    margin:10px auto 18px;
+    line-height:1.7;
+    font-size:14px;
+    color:var(--ink-soft);
+    text-align:center;
+  }
+
+  .planner-control-row{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:center;
+    gap:18px;
+    margin-top:6px;
+  }
+
+  .planner-control-row label{
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    font-size:13px;
+    color:var(--accent);
+  }
+
+  #daySlider{width:260px;}
+  input[type="range"]{accent-color:var(--gold);}
+
+  .plan-summary-card{
+    margin-top:21px;
+    padding:18px 18px 21px;
+    border-radius:var(--radius-main);
+    background:radial-gradient(circle at top left,#1c2238 0%,#080b16 72%);
+  }
+
+  .plan-summary-meta{
+    font-size:13px;
+    opacity:0.88;
+    margin-bottom:8px;
+    color:var(--ink-soft);
+  }
+
+  .plan-badges{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin:8px 0 14px;
+  }
+
+  .plan-badge{
+    border-radius:11px;
+    border:1px solid rgba(217,184,120,0.8);
+    padding:4px 10px;
+    font-size:11px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+
+  .plan-lists{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:18px;
+    font-size:14px;
+  }
+
+  .plan-lists h4{
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:0.12em;
+    margin:0 0 6px;
+    color:var(--accent);
+  }
+
+  .plan-lists ul{
+    list-style:none;
+    padding:0;
+    margin:0;
+  }
+
+  .plan-lists li{
+    margin-bottom:4px;
+    color:var(--ink-soft);
+  }
+
+  /* Chambers navigation */
+  .section{margin:30px 0;}
+
+  .chambers{margin-top:30px;}
+
+  .chamber-buttons{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:8px;
+    margin-top:8px;
+  }
+
+  .chamber-buttons button{
+    font-size:14px;
+    padding:8px 14px;
+    border-radius:11px;
+    border:none;
+    background:linear-gradient(135deg,var(--gold-deep),var(--gold));
+    color:#0b1020;
+    cursor:pointer;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    transition:transform 0.15s, box-shadow 0.15s, background 0.2s;
+  }
+
+  .chamber-buttons button:hover{
+    transform:translateY(-1px);
+    box-shadow:0 6px 12px rgba(0,0,0,0.4);
+    background:linear-gradient(135deg,var(--gold),var(--gold-deep));
+  }
+
+  #appSection{
+    margin-top:26px;
+    text-align:left;
+  }
+
+  /* Shared small controls */
+  button,input,select{font-family:inherit;}
+
+  .btn-soft{
+    background:transparent;
+    border:1px solid rgba(255,255,255,0.16);
+    color:var(--ink);
+  }
+  .btn-soft:hover{background:rgba(255,255,255,0.08);}
+
+  .field{
+    padding:9px 11px;
+    border-radius:11px;
+    border:1px solid rgba(255,255,255,0.16);
+    background:#050812;
+    color:var(--ink);
+    font-size:14px;
+  }
+
+  /* Lexicon words */
+  .lexicon-word{
+    display:inline-block;
+    background:linear-gradient(135deg,#7a5a28,#d9b878);
+    border-radius:11px;
+    color:#0b1020;
+    padding:7px 14px;
+    margin:3px;
+    cursor:pointer;
+    transition:transform 0.2s, box-shadow 0.2s;
+    font-size:18px;
+    font-family:'Scheherazade New','Amiri',serif;
+  }
+
+  .lexicon-word:hover{
+    transform:scale(1.06);
+    box-shadow:0 8px 18px rgba(0,0,0,0.45);
+  }
+
+  .lexicon-detail{
+    margin-top:16px;
+    padding:12px 14px;
+    border-radius:var(--radius-soft);
+    background:rgba(10,14,28,0.9);
+    border:1px solid rgba(217,184,120,0.4);
+    font-size:14px;
+    color:var(--ink-soft);
+  }
+
+  /* Generic inner panel */
+  .inner-panel{
+    background:var(--panel-soft);
+    border-radius:var(--radius-main);
+    border:1px solid rgba(255,255,255,0.1);
+    padding:18px 16px 20px;
+    box-shadow:var(--shadow-soft);
+  }
+
+  .inner-panel h2,
+  .inner-panel h3{text-align:left;}
+
+  .inner-panel p{
+    font-size:14px;
+    line-height:1.6;
+    color:var(--ink-soft);
+  }
+
+  /* Tracing canvas generic */
+  canvas.basic-canvas{
+    border:3px solid var(--gold-deep);
+    border-radius:11px;
+    background-color:var(--ink);
+    margin:14px 0;
+    max-width:100%;
+    display:block;
+  }
+
+  /* Qur’an Reader */
+  .quran-layout{
+    margin-top:18px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:18px;
+    justify-content:center;
+    align-items:flex-start;
+  }
+
+  .quran-surah-list{
+    min-width:216px;
+    max-width:288px;
+    text-align:left;
+  }
+
+  .quran-surah-button{
+    display:block;
+    width:100%;
+    margin:0 0 8px;
+    text-align:left;
+    background:rgba(15,25,48,0.92);
+    color:var(--ink);
+    border:1px solid rgba(184,146,82,0.7);
+    border-radius:11px;
+    padding:8px 12px;
+    font-size:14px;
+    cursor:pointer;
+  }
+
+  .quran-surah-button.active{
+    background:linear-gradient(135deg,var(--gold-deep),var(--accent-soft));
+    color:#0b1020;
+  }
+
+  .quran-surah-button small{
+    display:block;
+    font-size:12px;
+    opacity:0.85;
+  }
+
+  .quran-surah-detail{
+    flex:1 1 360px;
+    max-width:640px;
+    text-align:left;
+    background:rgba(16,22,41,0.96);
+    border-radius:var(--radius-main);
+    border:1px solid rgba(247,243,234,0.16);
+    padding:18px 18px 21px;
+    font-size:14px;
+  }
+
+  .quran-surah-detail-header{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    gap:8px;
+    align-items:baseline;
+    margin-bottom:12px;
+  }
+
+  .quran-surah-meta{
+    font-size:13px;
+    opacity:0.9;
+    color:var(--ink-soft);
+  }
+
+  .ayah{
+    margin-bottom:12px;
+    padding-bottom:8px;
+    border-bottom:1px dashed rgba(247,243,234,0.16);
+  }
+
+  .ayah:last-child{border-bottom:none;}
+
+  .ayah-ar{
+    font-size:22px;
+    direction:rtl;
+    text-align:right;
+    margin-bottom:4px;
+    font-family:'Scheherazade New','Amiri',serif;
+  }
+
+  .ayah-tr{
+    font-size:15px;
+    font-style:italic;
+    color:var(--accent);
+    margin-bottom:4px;
+  }
+
+  .ayah-en{
+    font-size:14px;
+    color:var(--ink-soft);
+  }
+
+  /* Root Lab */
+  .rootlab-wrap{
+    background:var(--panel-soft);
+    border-radius:var(--radius-main);
+    border:1px solid rgba(255,255,255,0.12);
+    padding:18px 16px 20px;
+  }
+
+  .rootlab-header{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:12px;
+    margin-bottom:14px;
+  }
+
+  .rootlab-sigil{
+    width:60px;height:60px;
+    border-radius:14px;
+    background:linear-gradient(135deg,#7a4b2f,#8b5e3c);
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-family:'Cinzel',serif;font-size:24px;
+    box-shadow:0 8px 18px rgba(0,0,0,0.6);
+  }
+
+  .rootlab-lead{
+    font-size:13px;
+    color:var(--ink-soft);
+  }
+
+  .rootlab-main{
+    display:grid;
+    grid-template-columns:minmax(0,1.2fr) minmax(260px,0.9fr);
+    gap:16px;
+    margin-top:10px;
+  }
+
+  .rootlab-panel{
+    background:rgba(255,255,255,0.02);
+    padding:14px;
+    border-radius:var(--radius-soft);
+  }
+
+  .rootTitle{
+    font-size:15px;
+    color:var(--gold);
+    margin-bottom:6px;
+  }
+
+  .root-big{
+    font-family:'Scheherazade New','Amiri',serif;
+    font-size:40px;
+    color:var(--gold);
+  }
+
+  .root-translit{
+    font-size:16px;
+    color:var(--accent);
+    margin-top:4px;
+  }
+
+  .root-meaning{
+    font-size:15px;
+    margin-top:8px;
+    color:var(--ink-soft);
+  }
+
+  .root-notes{
+    font-size:12px;
+    margin-top:6px;
+    color:var(--ink-soft);
+    opacity:0.9;
+  }
+
+  .root-ayah{
+    margin-top:8px;
+    padding:8px;
+    border-radius:11px;
+    background:rgba(0,0,0,0.18);
+    font-size:13px;
+  }
+
+  .root-ayah b{color:var(--accent);}
+
+  .root-forms{
+    margin-top:8px;
+    font-size:13px;
+  }
+
+  .root-status{
+    font-size:12px;
+    color:var(--ink-soft);
+  }
+
+  /* Numerology Quest */
+  .noor-card{
+    background:rgba(28,21,38,0.94);
+    padding:24px;
+    border-radius:var(--radius-main);
+    box-shadow:var(--shadow-main);
+    max-width:720px;
+    margin:0 auto;
+    text-align:center;
+  }
+
+  .noor-title{
+    font-size:22px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    margin-bottom:6px;
+  }
+
+  .noor-sub{
+    font-size:12px;
+    color:var(--gold);
+    margin-bottom:12px;
+  }
+
+  .noor-question{
+    font-size:15px;
+    color:var(--gold);
+    margin-bottom:14px;
+  }
+
+  .noor-grid{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:12px;
+  }
+
+  .noor-cell{
+    width:72px;height:72px;
+    border-radius:18px;
+    background:rgba(255,255,255,0.05);
+    display:flex;align-items:center;justify-content:center;
+    font-family:"Scheherazade New","Amiri",serif;
+    font-size:36px;
+    cursor:pointer;
+    transition:background .2s,transform .2s;
+  }
+
+  .noor-cell:hover{
+    background:rgba(255,255,255,0.1);
+    transform:translateY(-2px);
+  }
+
+  .noor-cell.correct{background:rgba(111,241,178,0.25)!important;}
+  .noor-cell.wrong{background:rgba(245,101,101,0.25)!important;}
+
+  .noor-meaning-box{
+    margin-top:14px;
+    padding:14px;
+    border-radius:var(--radius-soft);
+    background:rgba(255,255,255,0.04);
+    display:none;
+    text-align:left;
+  }
+
+  .noor-meaning-box h3{
+    margin:0 0 6px;
+    color:var(--gold);
+  }
+
+  .noor-meaning-box p{
+    font-size:13px;
+  }
+
+  .noor-score{
+    margin-top:10px;
+    font-size:14px;
+    color:var(--gold);
+  }
+
+  .noor-btn-wrap{margin-top:14px;}
+
+  .btn-pill{
+    border:none;
+    border-radius:999px;
+    padding:9px 18px;
+    background:linear-gradient(135deg,var(--gold),var(--gold-deep));
+    color:#1c1526;
+    font-weight:bold;
+    cursor:pointer;
+    transition:transform .2s;
+  }
+  .btn-pill:hover{transform:scale(1.05);}
+
+  /* Memory Path */
+  .memory-card{
+    background:rgba(28,21,38,0.94);
+    padding:24px;
+    border-radius:var(--radius-main);
+    box-shadow:var(--shadow-main);
+    max-width:720px;
+    margin:0 auto;
+    text-align:center;
+  }
+
+  .memory-grid{
+    display:grid;
+    gap:12px;
+    justify-content:center;
+  }
+
+  .memory-cell{
+    width:72px;height:72px;
+    border-radius:18px;
+    background:rgba(255,255,255,0.05);
+    display:flex;align-items:center;justify-content:center;
+    font-family:"Scheherazade New","Amiri",serif;
+    font-size:36px;
+    cursor:pointer;
+    transition:background .2s,transform .2s,color .15s;
+  }
+
+  .memory-cell.hidden{color:transparent;}
+  .memory-cell.correct{background:rgba(111,241,178,0.25)!important;}
+  .memory-cell.wrong{background:rgba(245,101,101,0.25)!important;}
+
+  .memory-level{
+    font-size:13px;
+    color:var(--gold);
+    margin-bottom:12px;
+  }
+
+  .memory-score{
+    margin-top:8px;
+    font-size:14px;
+    color:var(--gold);
+  }
+
+  /* Number Sanctuary */
+  .sanctuary-card{
+    background:rgba(28,21,38,0.94);
+    padding:24px;
+    border-radius:var(--radius-main);
+    box-shadow:var(--shadow-main);
+    max-width:720px;
+    margin:0 auto;
+    text-align:center;
+  }
+
+  .sanctuary-arabic{
+    font-family:"Scheherazade New","Amiri",serif;
+    font-size:88px;
+    display:block;
+  }
+
+  .sanctuary-english{
+    font-size:24px;
+    color:var(--gold);
+  }
+
+  .sanctuary-translit{
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:0.12em;
+    color:var(--muted);
+  }
+
+  .sanctuary-controls{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:14px;
+    margin-top:10px;
+  }
+
+  .sanctuary-quiz{
+    margin-top:24px;
+    text-align:center;
+    background:rgba(255,255,255,0.05);
+    border-radius:18px;
+    padding:16px;
+  }
+
+  .sanctuary-quiz h3{
+    text-align:center;
+    font-size:15px;
+    margin-bottom:8px;
+    color:var(--gold);
+  }
+
+  .sanctuary-quiz-options{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:8px;
+  }
+
+  .sanctuary-quiz-options button{
+    background:rgba(255,255,255,0.1);
+    color:var(--ink);
+    padding:6px 12px;
+    border-radius:12px;
+    border:none;
+    cursor:pointer;
+  }
+
+  .sanctuary-quiz-options button.correct{background:rgba(111,241,178,0.2);}
+  .sanctuary-quiz-options button.wrong{background:rgba(245,101,101,0.2);}
+
+  /* Alphabet & Numbers hall */
+  .chip-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:10px;
+  }
+
+  .chip{
+    padding:8px 12px;
+    border-radius:999px;
+    background:rgba(255,255,255,0.03);
+    border:1px solid rgba(255,255,255,0.14);
+    cursor:pointer;
+    font-size:18px;
+    font-family:'Scheherazade New','Amiri',serif;
+  }
+
+  .chip:hover{background:rgba(255,255,255,0.1);}
+
+  .numbers-chip{
+    font-family:inherit;
+    font-size:14px;
+  }
+
+  .numbers-chip span{display:block;}
+
+  .numbers-chip .n-num{
+    font-weight:600;
+    color:var(--accent);
+  }
+
+  .numbers-chip .n-label{
+    font-size:11px;
+    color:var(--ink-soft);
+  }
+
+  /* Responsive tweaks */
+  @media (max-width:720px){
+    h1{font-size:28px;letter-spacing:0.12em;}
+    .plan-lists{grid-template-columns:minmax(0,1fr);}
+    .rootlab-main{grid-template-columns:minmax(0,1fr);}
+  }
+
+  @media (max-width:540px){
+    .planner-section{padding:16px 12px 18px;}
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Temple of Letters™</h1>
+  <p class="guide-tag">
+    Guided by <span>NoorAI Darib</span> — Qur’an · Arabic · Number Sanctuary.
+  </p>
+
+  <!-- === 365-DAY CURRICULUM PANEL === -->
+  <div class="section planner-section">
+    <h2>365-Day Pathway</h2>
+    <p class="planner-sub">
+      Move the slider to see today’s focus. Each stage weaves Qur’an recitation, Arabic roots,
+      gentle grammar, and reflection. You can slow down, repeat weeks, or pause whenever your heart needs.
+    </p>
+
+    <div class="planner-control-row">
+      <label for="daySlider">
+        Day <span id="dayNumber">1</span> of 365
+      </label>
+      <input type="range" id="daySlider" min="1" max="365" value="1" />
+    </div>
+
+    <div id="planSummary" class="plan-summary-card"></div>
+  </div>
+
+  <!-- === CHAMBERS === -->
+  <div class="section chambers">
+    <h2>Choose a Chamber</h2>
+    <div class="chamber-buttons">
+      <button data-chamber="alphabet">Alphabet Chamber</button>
+      <button data-chamber="numbers">Numbers Hall</button>
+      <button data-chamber="lexicon">Great Lexicon</button>
+      <button data-chamber="sentence">Sentence Forge</button>
+      <button data-chamber="tracing">Tracing Tablet Room</button>
+      <button data-chamber="quiz">Ritual Quizzes</button>
+      <button data-chamber="quran">Qur’an Reading Circle</button>
+      <button data-chamber="rootlab">Qur’anic Root Lab</button>
+      <button data-chamber="numQuest">Numerology Quest</button>
+      <button data-chamber="memoryPath">Memory Path</button>
+      <button data-chamber="numberSanctuary">Number Sanctuary</button>
+    </div>
+    <div id="appSection" class="section"></div>
+  </div>
+</div>
+
+<script>
+/* ==========================================================
+   Shared Data: Alphabet, Numbers, Lexicon, Qur’an
+   ========================================================== */
+
+const alphabet = [
+  'ا','ب','ت','ث','ج','ح','خ','د','ذ','ر','ز',
+  'س','ش','ص','ض','ط','ظ','ع','غ','ف','ق','ك',
+  'ل','م','ن','ه','و','ي'
+];
+
+// Simple 0–40 numbers for Numbers Hall
+const simpleNumbers = Array.from({length:41}, (_,i)=>i);
+
+// Qur’anic Lexicon (seed set)
+const lexicon = [
+  {ar:'اللّٰه',    tr:'allāh',      en:'Allah, the One worthy of all worship'},
+  {ar:'رَبّ',      tr:'rabb',       en:'Lord, caretaker, nurturer'},
+  {ar:'الرَّحْمٰن', tr:'ar-raḥmān', en:'The Extremely Merciful'},
+  {ar:'الرَّحِيم', tr:'ar-raḥīm',   en:'The Especially Merciful'},
+  {ar:'هُدًى',     tr:'hudā',       en:'guidance'},
+  {ar:'نُور',      tr:'nūr',        en:'light'},
+  {ar:'إِيمَان',   tr:'īmān',       en:'faith, deep trust'},
+  {ar:'جَنَّة',    tr:'jannah',     en:'garden, Paradise'},
+  {ar:'نَار',      tr:'nār',        en:'fire, Hellfire'},
+  {ar:'دُنْيَا',   tr:'dunyā',      en:'this near life, the worldly realm'},
+  {ar:'آخِرَة',    tr:'ākhirah',    en:'the next life, the Hereafter'},
+  {ar:'رَحْمَة',   tr:'raḥmah',     en:'mercy, loving care'},
+  {ar:'عِلْم',     tr:'ʿilm',       en:'knowledge'},
+  {ar:'قَلْب',     tr:'qalb',       en:'heart, inner self'},
+  {ar:'صَلَاة',    tr:'ṣalāh',      en:'prayer, connection'},
+  {ar:'قُرْآن',    tr:'qurʾān',     en:'the recited scripture'},
+  {ar:'آيَة',      tr:'āyah',       en:'sign, verse'},
+  {ar:'صَبْر',     tr:'ṣabr',       en:'patience, steadfastness'},
+  {ar:'تَقْوَى',   tr:'taqwā',      en:'mindful God-consciousness'},
+  {ar:'سَلَام',    tr:'salām',      en:'peace, wholeness'}
+];
+
+// Short sūrahs (sample)
+const quranSurahs = [
+  {
+    id:'fatiha',
+    number:1,
+    name:'Al-Fātiḥah',
+    englishName:'The Opening',
+    verses:[
+      {ar:'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ',tr:'bismillāhir-raḥmānir-raḥīm',en:'In the name of Allah, the One who is perfectly merciful and constantly merciful.'},
+      {ar:'الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ',tr:'al-ḥamdu lillāhi rabbil-ʿālamīn',en:'All praise belongs to Allah, the Lord who cares for every world.'},
+      {ar:'الرَّحْمَٰنِ الرَّحِيمِ',tr:'ar-raḥmāni r-raḥīm',en:'He is the Extremely Merciful, the Especially Merciful.'},
+      {ar:'مَالِكِ يَوْمِ الدِّينِ',tr:'māliki yawmi d-dīn',en:'Master of the Day when all accounts are settled.'},
+      {ar:'إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ',tr:'iyyāka naʿbudu wa iyyāka nastaʿīn',en:'You alone we worship, and You alone we ask for help.'},
+      {ar:'اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ',tr:'ihdinā ṣ-ṣirāṭa l-mustaqīm',en:'Guide us to the straight, balanced path.'},
+      {ar:'صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ',tr:'ṣirāṭa l-ladhīna anʿamta ʿalayhim ghayri l-maghḍūbi ʿalayhim walā ḍ-ḍāllīn',en:'The path of those You have blessed — not those under anger, nor those who have lost their way.'}
+    ]
+  },
+  {
+    id:'ikhlas',
+    number:112,
+    name:'Al-Ikhlāṣ',
+    englishName:'Sincerity',
+    verses:[
+      {ar:'قُلْ هُوَ اللَّهُ أَحَدٌ',tr:'qul huwa llāhu aḥad',en:'Say: He is Allah — absolutely One.'},
+      {ar:'اللَّهُ الصَّمَدُ',tr:'allāhu ṣ-ṣamad',en:'Allah is the One all creation turns to and depends on.'},
+      {ar:'لَمْ يَلِدْ وَلَمْ يُولَدْ',tr:'lam yalid walam yūlad',en:'He has no children and was never born.'},
+      {ar:'وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ',tr:'walam yakun lahu kufuwan aḥad',en:'There is nothing and no one equal to Him.'}
+    ]
+  }
+  ,
+  {
+    id:'falaq',
+    number:113,
+    name:'Al-Falaq',
+    englishName:'Daybreak',
+    verses:[
+      {ar:'قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ',tr:'qul aʿūdhu birabbi l-falaq',en:'Say: I seek shelter with the Lord of daybreak.'},
+      {ar:'مِن شَرِّ مَا خَلَقَ',tr:'min sharri mā khalaq',en:'From the harm of whatever He has created.'},
+      {ar:'وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ',tr:'wa min sharri ghāsiqin idhā waqab',en:'From the harm of the dark night when it becomes deep.'},
+      {ar:'وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ',tr:'wa min sharri n-naffāthāti fi l-ʿuqad',en:'From the harm of those who blow into knots.'},
+      {ar:'وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ',tr:'wa min sharri ḥāsidin idhā ḥasad',en:'And from the harm of any envier when they envy.'}
+    ]
+  },
+  {
+    id:'nas',
+    number:114,
+    name:'An-Nās',
+    englishName:'Mankind',
+    verses:[
+      {ar:'قُلْ أَعُوذُ بِرَبِّ النَّاسِ',tr:'qul aʿūdhu birabbi n-nās',en:'Say: I seek shelter with the Lord of humankind.'},
+      {ar:'مَلِكِ النَّاسِ',tr:'maliki n-nās',en:'The King of humankind.'},
+      {ar:'إِلَٰهِ النَّاسِ',tr:'ilāhi n-nās',en:'The true God of humankind.'},
+      {ar:'مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ',tr:'min sharri l-waswāsi l-khannās',en:'From the harm of the sneaking whisperer.'},
+      {ar:'الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ',tr:'alladhī yuwaswisu fī ṣudūri n-nās',en:'Who whispers into the chests of humankind.'},
+      {ar:'مِنَ الْجِنَّةِ وَالنَّاسِ',tr:'mina l-jinnati wa n-nās',en:'From among the unseen beings and among people.'}
+    ]
+  }
+];
+
+/* ==========================================================
+   365-Day Planner Stages
+   ========================================================== */
+
+const studyStages = [
+  {
+    id:1,
+    name:'Stage 1 — Sounds of Praise',
+    weeksStart:1,
+    weeksEnd:4,
+    quranFocus:[
+      'Al-Fātiḥah (1)',
+      'Opening duʿā’ phrases'
+    ],
+    grammarFocus:[
+      'Arabic alphabet & letter forms',
+      'Short vowels (ḥarakāt)',
+      'Reading right-to-left with confidence'
+    ],
+    vocabRoots:[
+      'ح م د — ḥ-m-d (praise)',
+      'ر ح م — r-ḥ-m (mercy)',
+      'ر ب ب — r-b-b (Lordship)'
+    ]
+  },
+  {
+    id:2,
+    name:'Stage 2 — Tawḥīd & Protection',
+    weeksStart:5,
+    weeksEnd:8,
+    quranFocus:['Al-Ikhlāṣ (112)','Al-Falaq (113)','An-Nās (114)'],
+    grammarFocus:[
+      'Personal pronouns (أنا، نحن، هو، هي)',
+      'Basics of definite “الـ”',
+      'Prepositions like في، على، إلى'
+    ],
+    vocabRoots:[
+      'أ م ن — ʾ-m-n (faith, safety)',
+      'غ ف ر — gh-f-r (forgiveness)',
+      'ه د ي — h-d-y (guidance)'
+    ]
+  },
+  {
+    id:3,
+    name:'Stage 3 — Time, Help & Abundance',
+    weeksStart:9,
+    weeksEnd:12,
+    quranFocus:['Al-ʿAṣr (103)','An-Naṣr (110)','Al-Kawthar (108)'],
+    grammarFocus:[
+      'Nominal vs verbal sentences',
+      'Plural endings (ـون، ـات)',
+      'Particles of emphasis (إِنَّ، قَدْ)'
+    ],
+    vocabRoots:[
+      'ن ص ر — n-ṣ-r (help, victory)',
+      'كَثَر — k-th-r (abundance)',
+      'ص ب ر — ṣ-b-r (patience)'
+    ]
+  },
+  {
+    id:4,
+    name:'Stage 4 — Community & Character',
+    weeksStart:13,
+    weeksEnd:18,
+    quranFocus:['Quraysh (106)','Al-Māʿūn (107)','Al-Fīl (105)','Al-Humazah (104)'],
+    grammarFocus:[
+      'Idāfah (possessive) phrases',
+      'Masculine / feminine agreement',
+      'Question words (مَن، مَا، أَيْنَ)'
+    ],
+    vocabRoots:[
+      'ص ل ى — ṣ-l-y (prayer)',
+      'ط ع م — ṭ-ʿ-m (food, kindness)',
+      'ظ ل م — ẓ-l-m (wrongdoing)'
+    ]
+  },
+  {
+    id:5,
+    name:'Stage 5 — Night, Destiny, Awakening',
+    weeksStart:19,
+    weeksEnd:24,
+    quranFocus:['Al-Qadr (97)','Az-Zalzalah (99)','At-Takāthur (102)'],
+    grammarFocus:[
+      'Past vs present verb patterns',
+      'Strong & weak roots',
+      'Words of time (لَيْل، نَهَار، يَوْم)'
+    ],
+    vocabRoots:[
+      'ق د ر — q-d-r (measure, decree)',
+      'ز ل ز ل — z-l-z-l (shake, quake)',
+      'ح س ب — ḥ-s-b (reckoning)'
+    ]
+  },
+  {
+    id:6,
+    name:'Stage 6 — Roots & Patterns',
+    weeksStart:25,
+    weeksEnd:32,
+    quranFocus:[
+      'Selected āyāt on mercy & knowledge',
+      'Short review sūrahs from Juz ʿAmma'
+    ],
+    grammarFocus:[
+      'Form I–IV verb patterns (basic overview)',
+      'Active participles (فاعل)',
+      'Verbal nouns (مصدر)'
+    ],
+    vocabRoots:[
+      'ع ل م — ʿ-l-m (knowledge)',
+      'ر ح م — r-ḥ-m (mercy)',
+      'غ ف ر — gh-f-r (forgiveness)'
+    ]
+  },
+  {
+    id:7,
+    name:'Stage 7 — Stories & Parables',
+    weeksStart:33,
+    weeksEnd:40,
+    quranFocus:[
+      'Selected passages from Sūrat Luqmān',
+      'Short narrative sections for reading'
+    ],
+    grammarFocus:[
+      'Direct speech & quotation patterns',
+      'Conditional particles (إِن، إِذَا)',
+      'Contrast words (لَكِن، بَل)'
+    ],
+    vocabRoots:[
+      'ق و ل — q-w-l (to say)',
+      'و ل د — w-l-d (family, children)',
+      'ه د ي — h-d-y (to guide)'
+    ]
+  },
+  {
+    id:8,
+    name:'Stage 8 — Flow & Recitation',
+    weeksStart:41,
+    weeksEnd:48,
+    quranFocus:[
+      'Personal “favorite” short sūrahs',
+      'Smoother recitation of Juz ʿAmma'
+    ],
+    grammarFocus:[
+      'Revision of all earlier patterns',
+      'Light exposure to tajwīd rules',
+      'Context-based vocabulary guessing'
+    ],
+    vocabRoots:[
+      'س ل م — s-l-m (peace)',
+      'ه د ي — h-d-y (guidance)',
+      'ذ ك ر — dh-k-r (remembrance)'
+    ]
+  },
+  {
+    id:9,
+    name:'Stage 9 — Reflection & Teaching Back',
+    weeksStart:49,
+    weeksEnd:52,
+    quranFocus:[
+      'Student-chosen sūrahs to revisit',
+      'Passages tied to personal themes'
+    ],
+    grammarFocus:[
+      'Explaining verses in your own words',
+      'Summarising sūrah themes in Arabic + English',
+      'Preparing to teach small pieces to others'
+    ],
+    vocabRoots:[
+      'ش ك ر — sh-k-r (gratitude)',
+      'ف ك ر — f-k-r (reflection)',
+      'ب ص ر — b-ṣ-r (seeing clearly)'
+    ]
+  }
+];
+
+/* ==========================================================
+   Additional Data for Chambers
+   ========================================================== */
+
+const appSection = document.getElementById('appSection');
+
+/* Alphabet info */
+const alphabetInfo = [
+  {ch:'ا', name:'alif',   keyword:'Opening, beginning, “A” sound.'},
+  {ch:'ب', name:'bā’',   keyword:'House (bayt), door (bāb).'},
+  {ch:'ت', name:'tā’',   keyword:'Soft “t” as in “two”.'},
+  {ch:'ث', name:'thā’',  keyword:'“Th” as in “three”.'},
+  {ch:'ج', name:'jīm',   keyword:'“j” as in “gentle”.'},
+  {ch:'ح', name:'ḥā’',   keyword:'Deep breathy “h” from the throat.'},
+  {ch:'خ', name:'khā’',  keyword:'“kh” like in “Khalid”.'},
+  {ch:'د', name:'dāl',   keyword:'Clear “d” sound.'},
+  {ch:'ذ', name:'dhāl',  keyword:'“th” as in “this”.'},
+  {ch:'ر', name:'rā’',   keyword:'Rolled “r” sound.'},
+  {ch:'ز', name:'zāy',   keyword:'“z” as in “zuh”.'},
+  {ch:'س', name:'sīn',   keyword:'Soft “s” sound.'},
+  {ch:'ش', name:'shīn',  keyword:'“sh” as in “shine”.'},
+  {ch:'ص', name:'ṣād',   keyword:'Heavy emphatic “s”.'},
+  {ch:'ض', name:'ḍād',   keyword:'The unique heavy “ḍ” of Arabic.'},
+  {ch:'ط', name:'ṭā’',   keyword:'Heavy emphatic “t”.'},
+  {ch:'ظ', name:'ẓā’',   keyword:'Heavy “z/th” sound.'},
+  {ch:'ع', name:'ʿayn',  keyword:'Deep throat letter, like a gentle squeeze.'},
+  {ch:'غ', name:'ghayn', keyword:'“gh” like a soft gargle.'},
+  {ch:'ف', name:'fā’',   keyword:'“f” as in “faith”.'},
+  {ch:'ق', name:'qāf',   keyword:'Deep “q” from the back of the tongue.'},
+  {ch:'ك', name:'kāf',   keyword:'“k” as in “kind”.'},
+  {ch:'ل', name:'lām',   keyword:'“l” as in “light”.'},
+  {ch:'م', name:'mīm',   keyword:'“m” as in “mercy”.'},
+  {ch:'ن', name:'nūn',   keyword:'“n” as in “nūr” (light).'},
+  {ch:'ه', name:'hā’',   keyword:'Soft “h” breath.'},
+  {ch:'و', name:'wāw',   keyword:'“w” as in “wonder”.'},
+  {ch:'ي', name:'yā’',   keyword:'“y” as in “you”.'}
+];
+
+/* Numbers for Number Sanctuary & quizzes (0–9) */
+const sanctuaryNumbers = [
+  {digit:"٠",english:"0",translit:"ṣifr",    arabicWord:"صفر"},
+  {digit:"١",english:"1",translit:"wāḥid",  arabicWord:"واحد"},
+  {digit:"٢",english:"2",translit:"ithnān", arabicWord:"اثنان"},
+  {digit:"٣",english:"3",translit:"thalātha",arabicWord:"ثلاثة"},
+  {digit:"٤",english:"4",translit:"arbaʿa", arabicWord:"أربعة"},
+  {digit:"٥",english:"5",translit:"khamsa", arabicWord:"خمسة"},
+  {digit:"٦",english:"6",translit:"sitta",  arabicWord:"ستة"},
+  {digit:"٧",english:"7",translit:"sabʿa",  arabicWord:"سبعة"},
+  {digit:"٨",english:"8",translit:"thamāniya",arabicWord:"ثمانية"},
+  {digit:"٩",english:"9",translit:"tisʿa",  arabicWord:"تسعة"}
+];
+
+/* Numerology Quest data (Lore) */
+const numQuestData = [
+  {num:"١",name:"One",  meaning:"Unity, Source, Oneness of All",        realm:"Creation"},
+  {num:"٢",name:"Two",  meaning:"Duality, Reflection, Relationship",     realm:"Balance"},
+  {num:"٣",name:"Three",meaning:"Creation, Expression, Triunity",        realm:"Expansion"},
+  {num:"٤",name:"Four", meaning:"Foundation, Law, Structure",            realm:"Stability"},
+  {num:"٥",name:"Five", meaning:"Movement, Freedom, Life Breath",        realm:"Transformation"},
+  {num:"٦",name:"Six",  meaning:"Harmony, Love, Service",                realm:"Union"},
+  {num:"٧",name:"Seven",meaning:"Completion, Perfection, Cosmic Rhythm", realm:"Harmony"},
+  {num:"٨",name:"Eight",meaning:"Infinity, Power, Manifestation",        realm:"Abundance"},
+  {num:"٩",name:"Nine", meaning:"Truth, Fulfilment, Return to Source",   realm:"Wisdom"},
+  {num:"٠",name:"Zero", meaning:"Void, Eternal Potential",               realm:"Origin"}
+];
+
+/* Memory Path digits */
+const memoryDigits = [
+  {digit:"٠",word:"صفر"},
+  {digit:"١",word:"واحد"},
+  {digit:"٢",word:"اثنان"},
+  {digit:"٣",word:"ثلاثة"},
+  {digit:"٤",word:"أربعة"},
+  {digit:"٥",word:"خمسة"},
+  {digit:"٦",word:"ستة"},
+  {digit:"٧",word:"سبعة"},
+  {digit:"٨",word:"ثمانية"},
+  {digit:"٩",word:"تسعة"}
+];
+
+/* Root Lab sample dataset */
+let rootDataset = [
+  {
+    root:'كتب',
+    tr:'k-t-b',
+    meaning:'to write / book family',
+    notes:'Classic writing root; appears in many Qur’anic words like kitāb and maktūb.',
+    derived:[
+      {form:'kataba',meaning:'he wrote'},
+      {form:'yaktubu',meaning:'he writes'},
+      {form:'kitāb',meaning:'book'},
+      {form:'maktūb',meaning:'written'}
+    ],
+    ayahs:[
+      {ref:'2:2',text:'ذَٰلِكَ الْكِتَابُ لَا رَيْبَ ۛ فِيهِ'},
+      {ref:'96:4',text:'الَّذِي عَلَّمَ بِالْقَلَمِ'}
+    ]
+  },
+  {
+    root:'علم',
+    tr:'ʿ-l-m',
+    meaning:'to know, to have knowledge',
+    notes:'Core concept of knowledge, learning, awareness.',
+    derived:[
+      {form:'ʿalima',meaning:'he knew'},
+      {form:'yaʿlamu',meaning:'he knows'},
+      {form:'ʿilm',meaning:'knowledge'},
+      {form:'ʿallama',meaning:'he taught'}
+    ],
+    ayahs:[
+      {ref:'2:32',text:'سُبْحَانَكَ لَا عِلْمَ لَنَا'},
+      {ref:'96:5',text:'عَلَّمَ الْإِنسَانَ مَا لَمْ يَعْلَمْ'}
+    ]
+  },
+  {
+    root:'رحم',
+    tr:'r-ḥ-m',
+    meaning:'mercy, tenderness, womb-like care',
+    notes:'Family of “raḥmah” and the Names ar-Raḥmān and ar-Raḥīm.',
+    derived:[
+      {form:'raḥmah',meaning:'mercy'},
+      {form:'raḥmān',meaning:'Most Merciful'},
+      {form:'raḥīm',meaning:'Especially Merciful'}
+    ],
+    ayahs:[
+      {ref:'1:3',text:'الرَّحْمَٰنِ الرَّحِيمِ'}
+    ]
+  }
+];
+
+/* Sentence Forge pieces */
+const forgeSubjects = [
+  {ar:'أنا',   tr:'anā',    en:'I'},
+  {ar:'نحن',  tr:'naḥnu',  en:'we'},
+  {ar:'هو',   tr:'huwa',   en:'he'},
+  {ar:'هي',   tr:'hiya',   en:'she'}
+];
+
+const forgeVerbs = [
+  {ar:'أُحِبُّ',    tr:'uḥibbu',   en:'love'},
+  {ar:'أَذْكُرُ',   tr:'adhkuru',  en:'remember'},
+  {ar:'أَدْرُسُ',   tr:'adrusu',   en:'study'},
+  {ar:'أُسَبِّحُ',  tr:'usabbiḥu', en:'glorify'}
+];
+
+const forgeObjects = [
+  {ar:'اللّٰهَ',   tr:'allāha',    en:'Allah'},
+  {ar:'القُرْآنَ', tr:'al-qurʾāna',en:'the Qur’an'},
+  {ar:'العِلْمَ',  tr:'al-ʿilma',  en:'knowledge'},
+  {ar:'الصَّلاةَ', tr:'aṣ-ṣalāta', en:'the prayer'}
+];
+
+/* Arabic numeral helpers */
+const arabicDigits = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+
+function toArabicNumber(n){
+  const s = String(n);
+  return s.split('').map(d=>{
+    const idx = parseInt(d,10);
+    return Number.isNaN(idx)?'':arabicDigits[idx];
+  }).join('') || '٠';
+}
+
+/* Speech helper */
+function speakArabic(text){
+  if(!('speechSynthesis' in window)) return;
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'ar-SA';
+  u.rate = 0.9;
+  window.speechSynthesis.speak(u);
+}
+
+/* Simple confetti burst */
+function burstConfetti(count=27){
+  for(let i=0;i<count;i++){
+    const d = document.createElement('div');
+    d.style.cssText = `
+      position:fixed;
+      width:7px;height:7px;
+      top:${Math.random()*100}vh;
+      left:${Math.random()*100}vw;
+      background:hsl(${Math.random()*360},80%,60%);
+      border-radius:50%;
+      opacity:1;
+      z-index:9999;
+      transition:transform 1s ease-out,opacity 1s ease-out;
+    `;
+    document.body.appendChild(d);
+    requestAnimationFrame(()=>{
+      d.style.transform = `translateY(${72+Math.random()*72}px)`;
+      d.style.opacity = '0';
+    });
+    setTimeout(()=>d.remove(),1100);
+  }
+}
+
+/* Generic tracing canvas hook */
+function initTracingCanvas(canvasId){
+  const canvas = document.getElementById(canvasId);
+  if(!canvas || !canvas.getContext) return null;
+  const ctx = canvas.getContext('2d');
+  let drawing = false;
+
+  function pos(e){
+    const r = canvas.getBoundingClientRect();
+    const t = e.touches ? e.touches[0] : e;
+    return {x:t.clientX - r.left, y:t.clientY - r.top};
+  }
+
+  function start(e){
+    drawing = true;
+    const p = pos(e);
+    ctx.beginPath();
+    ctx.moveTo(p.x,p.y);
+    e.preventDefault();
+  }
+  function move(e){
+    if(!drawing) return;
+    const p = pos(e);
+    ctx.lineTo(p.x,p.y);
+    ctx.strokeStyle = '#d9b878';
+    ctx.lineWidth = 5;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+    e.preventDefault();
+  }
+  function end(){ drawing=false; }
+
+  canvas.addEventListener('mousedown',start);
+  canvas.addEventListener('mousemove',move);
+  window.addEventListener('mouseup',end);
+  canvas.addEventListener('touchstart',start,{passive:false});
+  canvas.addEventListener('touchmove',move,{passive:false});
+  window.addEventListener('touchend',end);
+
+  return ()=>ctx.clearRect(0,0,canvas.width,canvas.height);
+}
+/* ======= END OF HALF 1 ======= */
+  
+  /* ==========================================================
+   365-Day Planner Wiring
+   ========================================================== */
+
+const daySlider = document.getElementById('daySlider');
+const dayNumber = document.getElementById('dayNumber');
+const planSummary = document.getElementById('planSummary');
+
+function stageForDay(day){
+  const week = Math.ceil(day/7);
+  return studyStages.find(s => week>=s.weeksStart && week<=s.weeksEnd) || studyStages[studyStages.length-1];
+}
+
+function updatePlan(day){
+  const d = Number(day)||1;
+  const week = Math.ceil(d/7);
+  const stage = stageForDay(d);
+  const stageWeek = week - stage.weeksStart + 1;
+  const dayOfWeek = ((d-1)%7)+1;
+
+  dayNumber.textContent = d;
+
+  const listHtml = arr => arr.map(item=>`<li>${item}</li>`).join('');
+
+  planSummary.innerHTML = `
+    <div class="plan-summary-meta">
+      Week ${week} · Day ${dayOfWeek} · ${stage.name}
+    </div>
+    <div class="plan-badges">
+      <span class="plan-badge">Stage ${stage.id}</span>
+      <span class="plan-badge">Weeks ${stage.weeksStart}–${stage.weeksEnd}</span>
+      <span class="plan-badge">Stage Week ${stageWeek}</span>
+    </div>
+    <div class="plan-lists">
+      <div>
+        <h4>Qur’an Focus</h4>
+        <ul>${listHtml(stage.quranFocus)}</ul>
+      </div>
+      <div>
+        <h4>Arabic / Grammar</h4>
+        <ul>${listHtml(stage.grammarFocus)}</ul>
+      </div>
+      <div>
+        <h4>Roots & Vocab</h4>
+        <ul>${listHtml(stage.vocabRoots)}</ul>
+      </div>
+    </div>
+    <p style="margin-top:10px;font-size:13px;color:var(--ink-soft);">
+      You can always pause, repeat, or linger. This pathway is a gentle spiral, not a race.
+    </p>
+  `;
+}
+
+daySlider.addEventListener('input', e => updatePlan(e.target.value));
+updatePlan(daySlider.value);
+
+/* ==========================================================
+   Chambers — Render Functions
+   ========================================================== */
+
+/* Alphabet Chamber */
+function renderAlphabetChamber(){
+  appSection.innerHTML = `
+    <div class="inner-panel">
+      <h2>Alphabet Chamber</h2>
+      <p>Tap a letter to see its name, hear its sound, and trace it on the glowing tablet.</p>
+      <div id="alphabetDisplay" style="margin-top:14px;text-align:center;">
+        <div id="alphaBig" style="font-size:72px;font-family:'Scheherazade New','Amiri',serif;color:var(--gold);">ا</div>
+        <div id="alphaName" style="font-size:16px;color:var(--accent);margin-top:4px;">alif</div>
+        <div id="alphaKeyword" style="font-size:13px;color:var(--ink-soft);margin-top:4px;">Opening, beginning.</div>
+      </div>
+      <canvas id="alphabetCanvas" class="basic-canvas" width="320" height="160"></canvas>
+      <button id="alphabetClear" class="btn-pill btn-soft" style="margin-top:6px;">Clear Tracing</button>
+      <div class="chip-row" id="alphabetRow" style="margin-top:10px;"></div>
+    </div>
+  `;
+
+  const row = document.getElementById('alphabetRow');
+
+  alphabetInfo.forEach((item, idx)=>{
+    const btn = document.createElement('button');
+    btn.className = 'chip';
+    btn.textContent = item.ch;
+    btn.addEventListener('click', ()=>selectLetter(idx));
+    row.appendChild(btn);
+  });
+
+  function selectLetter(index){
+    const item = alphabetInfo[index];
+    document.getElementById('alphaBig').textContent = item.ch;
+    document.getElementById('alphaName').textContent = `${item.name}`;
+    document.getElementById('alphaKeyword').textContent = item.keyword;
+    speakArabic(item.ch);
+  }
+
+  const clearTrace = initTracingCanvas('alphabetCanvas');
+  document.getElementById('alphabetClear').addEventListener('click', ()=>clearTrace && clearTrace());
+  selectLetter(0);
+}
+
+/* Numbers Hall */
+function renderNumbersHall(){
+  appSection.innerHTML = `
+    <div class="inner-panel">
+      <h2>Numbers Hall</h2>
+      <p>Explore numbers from 0 to 40 in Arabic and English. Tap a tile to hear it.</p>
+      <div style="margin-top:12px;text-align:center;">
+        <label style="font-size:13px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);">
+          Number <span id="numHallValue">0</span> / 40
+        </label>
+        <input type="range" id="numHallSlider" min="0" max="40" value="0" style="width:260px;margin-top:8px;">
+        <div id="numHallArabic" style="margin-top:10px;font-size:32px;font-family:'Scheherazade New','Amiri',serif;color:var(--gold);"></div>
+        <div id="numHallEnglish" style="font-size:18px;color:var(--ink-soft);"></div>
+      </div>
+      <div class="chip-row" id="numHallGrid" style="margin-top:16px;"></div>
+    </div>
+  `;
+
+  const slider = document.getElementById('numHallSlider');
+  const valSpan = document.getElementById('numHallValue');
+  const arSpan = document.getElementById('numHallArabic');
+  const enSpan = document.getElementById('numHallEnglish');
+
+  function show(n){
+    valSpan.textContent = n;
+    arSpan.textContent = toArabicNumber(n);
+    enSpan.textContent = `Number ${n}`;
+  }
+
+  slider.addEventListener('input', ()=>show(parseInt(slider.value,10)));
+  show(0);
+
+  const grid = document.getElementById('numHallGrid');
+  simpleNumbers.forEach(n=>{
+    const card = document.createElement('div');
+    card.className = 'chip numbers-chip';
+    card.innerHTML = `
+      <span class="n-num">${toArabicNumber(n)}</span>
+      <span class="n-label">${n}</span>
+    `;
+    card.addEventListener('click', ()=>{
+      show(n);
+      speakArabic(toArabicNumber(n));
+    });
+    grid.appendChild(card);
+  });
+}
+
+/* Great Lexicon */
+function renderLexiconChamber(){
+  appSection.innerHTML = `
+    <div class="inner-panel">
+      <h2>Great Lexicon</h2>
+      <p>Tap a word or search to see its meaning and hear it aloud.</p>
+      <input id="lexSearch" class="field" placeholder="Search Arabic, transliteration, or English…" style="width:100%;margin-top:10px;">
+      <div id="lexWords" style="margin-top:12px;"></div>
+      <div id="lexDetail" class="lexicon-detail" style="display:none;"></div>
+    </div>
+  `;
+
+  const wordsDiv = document.getElementById('lexWords');
+  const detailDiv = document.getElementById('lexDetail');
+
+  function showWords(list){
+    wordsDiv.innerHTML = '';
+    list.forEach(entry=>{
+      const chip = document.createElement('span');
+      chip.className = 'lexicon-word';
+      chip.textContent = entry.ar;
+      chip.title = entry.tr;
+      chip.addEventListener('click', ()=>{
+        detailDiv.style.display = 'block';
+        detailDiv.innerHTML = `
+          <div style="font-size:26px;font-family:'Scheherazade New','Amiri',serif;color:var(--gold);">${entry.ar}</div>
+          <div style="margin-top:4px;color:var(--accent);">${entry.tr}</div>
+          <div style="margin-top:8px;">${entry.en}</div>
+        `;
+        speakArabic(entry.ar);
+      });
+      wordsDiv.appendChild(chip);
+    });
+  }
+
+  showWords(lexicon);
+
+  document.getElementById('lexSearch').addEventListener('input', e=>{
+    const q = e.target.value.trim().toLowerCase();
+    if(!q){
+      showWords(lexicon);
+      detailDiv.style.display = 'none';
+      return;
+    }
+    const filtered = lexicon.filter(entry =>
+      entry.ar.includes(q) ||
+      entry.tr.toLowerCase().includes(q) ||
+      entry.en.toLowerCase().includes(q)
+    );
+    showWords(filtered.length ? filtered : lexicon);
+  });
+}
+
+/* Sentence Forge */
+function renderSentenceForge(){
+  appSection.innerHTML = `
+    <div class="inner-panel">
+      <h2>Sentence Forge</h2>
+      <p>Choose who, what, and what they’re doing – then forge a simple Arabic sentence.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:14px;">
+        <div style="flex:1 1 160px;">
+          <label>Who?</label>
+          <select id="forgeSubject" class="field" style="width:100%;margin-top:4px;"></select>
+        </div>
+        <div style="flex:1 1 160px;">
+          <label>Verb</label>
+          <select id="forgeVerb" class="field" style="width:100%;margin-top:4px;"></select>
+        </div>
+        <div style="flex:1 1 160px;">
+          <label>Object</label>
+          <select id="forgeObject" class="field" style="width:100%;margin-top:4px;"></select>
+        </div>
+      </div>
+      <button id="forgeBuild" class="btn-pill" style="margin-top:14px;">Forge Sentence</button>
+      <div id="forgeResult" style="margin-top:16px;padding:12px;border-radius:14px;background:rgba(0,0,0,0.35);display:none;">
+        <div id="forgeAr" style="font-size:24px;font-family:'Scheherazade New','Amiri',serif;color:var(--gold);margin-bottom:4px;"></div>
+        <div id="forgeTr" style="font-size:14px;color:var(--accent);margin-bottom:4px;"></div>
+        <div id="forgeEn" style="font-size:13px;color:var(--ink-soft);"></div>
+        <button id="forgeSpeak" class="btn-pill" style="margin-top:10px;">🔊 Recite</button>
+      </div>
+    </div>
+  `;
+
+  const subjectSel = document.getElementById('forgeSubject');
+  forgeSubjects.forEach((s,idx)=>{
+    const opt = document.createElement('option');
+    opt.value = idx;
+    opt.textContent = `${s.ar} — ${s.en}`;
+    subjectSel.appendChild(opt);
+  });
+
+  const verbSel = document.getElementById('forgeVerb');
+  forgeVerbs.forEach((v,idx)=>{
+    const opt = document.createElement('option');
+    opt.value = idx;
+    opt.textContent = `${v.ar} — ${v.en}`;
+    verbSel.appendChild(opt);
+  });
+
+  const objSel = document.getElementById('forgeObject');
+  forgeObjects.forEach((o,idx)=>{
+    const opt = document.createElement('option');
+    opt.value = idx;
+    opt.textContent = `${o.ar} — ${o.en}`;
+    objSel.appendChild(opt);
+  });
+
+  document.getElementById('forgeBuild').addEventListener('click', ()=>{
+    const s = forgeSubjects[subjectSel.value];
+    const v = forgeVerbs[verbSel.value];
+    const o = forgeObjects[objSel.value];
+
+    const ar = `${s.ar} ${v.ar} ${o.ar}`;
+    const tr = `${s.tr} ${v.tr} ${o.tr}`;
+    const en = `${s.en} ${v.en} ${o.en}.`;
+
+    document.getElementById('forgeAr').textContent = ar;
+    document.getElementById('forgeTr').textContent = tr;
+    document.getElementById('forgeEn').textContent = en;
+    const result = document.getElementById('forgeResult');
+    result.style.display = 'block';
+
+    document.getElementById('forgeSpeak').onclick = ()=>speakArabic(ar);
+  });
+}
+
+/* Tracing Tablet Room */
+function renderTracingRoom(){
+  appSection.innerHTML = `
+    <div class="inner-panel">
+      <h2>Tracing Tablet Room</h2>
+      <p>Use the glowing tablet to trace any letter, word, or āyah you are practising.</p>
+      <canvas id="traceCanvas" class="basic-canvas" width="320" height="180"></canvas>
+      <button id="traceClear" class="btn-pill" style="margin-top:8px;">Clear Tablet</button>
+    </div>
+  `;
+  const clear = initTracingCanvas('traceCanvas');
+  document.getElementById('traceClear').addEventListener('click', ()=>clear && clear());
+}
+
+/* Ritual Quizzes */
+function renderQuizRoom(){
+  appSection.innerHTML = `
+    <div class="inner-panel">
+      <h2>Ritual Quizzes</h2>
+      <p>Short review questions mixing letters and numbers. Perfect for a 3-minute check-in.</p>
+      <div id="quizCard" style="margin-top:16px;padding:14px;border-radius:14px;background:rgba(0,0,0,0.35);">
+        <div id="quizPrompt" style="margin-bottom:10px;font-size:15px;color:var(--gold);"></div>
+        <div id="quizOptions" class="sanctuary-quiz-options"></div>
+        <div id="quizFeedback" style="margin-top:10px;font-size:13px;color:var(--ink-soft);"></div>
+      </div>
+      <button id="quizNext" class="btn-pill" style="margin-top:14px;">Next Question ▶</button>
+    </div>
+  `;
+
+  const promptEl = document.getElementById('quizPrompt');
+  const optsEl = document.getElementById('quizOptions');
+  const fbEl = document.getElementById('quizFeedback');
+
+  function newQuestion(){
+    fbEl.textContent = '';
+    optsEl.innerHTML = '';
+    const type = Math.random() < 0.5 ? 'letter' : 'number';
+
+    if(type === 'letter'){
+      const correct = alphabetInfo[Math.floor(Math.random()*alphabetInfo.length)];
+      const choices = [...alphabetInfo].sort(()=>Math.random()-0.5).slice(0,4);
+      if(!choices.includes(correct)) choices[Math.floor(Math.random()*choices.length)] = correct;
+
+      promptEl.textContent = `Which letter is called “${correct.name}”?`;
+      choices.forEach(item=>{
+        const btn = document.createElement('button');
+        btn.textContent = item.ch;
+        btn.addEventListener('click', ()=>{
+          if(btn.dataset.done) return;
+          btn.dataset.done = '1';
+          if(item === correct){
+            btn.classList.add('correct');
+            fbEl.textContent = 'Beautiful. Trace the letter lightly in the air.';
+            burstConfetti(20);
+            speakArabic(item.ch);
+          }else{
+            btn.classList.add('wrong');
+            fbEl.textContent = 'Not this one. Notice the shape and try again.';
+          }
+        });
+        optsEl.appendChild(btn);
+      });
+    }else{
+      const correct = sanctuaryNumbers[Math.floor(Math.random()*sanctuaryNumbers.length)];
+      const choices = [...sanctuaryNumbers].sort(()=>Math.random()-0.5).slice(0,4);
+      if(!choices.includes(correct)) choices[Math.floor(Math.random()*choices.length)] = correct;
+
+      promptEl.textContent = `Which Arabic numeral is the number ${correct.english}?`;
+      choices.forEach(item=>{
+        const btn = document.createElement('button');
+        btn.textContent = item.digit;
+        btn.addEventListener('click', ()=>{
+          if(btn.dataset.done) return;
+          btn.dataset.done = '1';
+          if(item === correct){
+            btn.classList.add('correct');
+            fbEl.textContent = 'Yes. Let this number settle into memory.';
+            burstConfetti(20);
+            speakArabic(item.arabicWord);
+          }else{
+            btn.classList.add('wrong');
+            fbEl.textContent = 'Not quite. Look carefully at each curve.';
+          }
+        });
+        optsEl.appendChild(btn);
+      });
+    }
+  }
+
+  document.getElementById('quizNext').addEventListener('click', newQuestion);
+  newQuestion();
+}
+
+/* Qur’an Reading Circle */
+function renderQuranCircle(){
+  appSection.innerHTML = `
+    <div class="inner-panel">
+      <h2>Qur’an Reading Circle</h2>
+      <p>Choose a short sūrah, then move line by line with Arabic, transliteration, and a gentle translation.</p>
+      <div class="quran-layout">
+        <div class="quran-surah-list" id="surahList"></div>
+        <div class="quran-surah-detail" id="surahDetail"></div>
+      </div>
+    </div>
+  `;
+
+  const listEl = document.getElementById('surahList');
+  const detailEl = document.getElementById('surahDetail');
+
+  function renderSurah(surah){
+    detailEl.innerHTML = `
+      <div class="quran-surah-detail-header">
+        <div>
+          <h3 style="margin:0;font-size:18px;">${surah.name}</h3>
+          <div class="quran-surah-meta">Sūrah ${surah.number} · ${surah.englishName}</div>
+        </div>
+        <button id="surahPlay" class="btn-pill">🔊 Read aloud</button>
+      </div>
+      <div id="surahAyahs"></div>
+    `;
+    const ayahWrap = document.getElementById('surahAyahs');
+    surah.verses.forEach(v=>{
+      const block = document.createElement('div');
+      block.className = 'ayah';
+      block.innerHTML = `
+        <div class="ayah-ar">${v.ar}</div>
+        <div class="ayah-tr">${v.tr}</div>
+        <div class="ayah-en">${v.en}</div>
+      `;
+      block.addEventListener('click', ()=>speakArabic(v.ar));
+      ayahWrap.appendChild(block);
+    });
+    document.getElementById('surahPlay').addEventListener('click', ()=>{
+      const full = surah.verses.map(v=>v.ar).join(' . ');
+      speakArabic(full);
+    });
+  }
+
+  quranSurahs.forEach(surah=>{
+    const btn = document.createElement('button');
+    btn.className = 'quran-surah-button';
+    btn.innerHTML = `${surah.name}<small>${surah.englishName}</small>`;
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.quran-surah-button').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      renderSurah(surah);
+    });
+    listEl.appendChild(btn);
+  });
+
+  if(quranSurahs.length){
+    listEl.querySelector('.quran-surah-button').classList.add('active');
+    renderSurah(quranSurahs[0]);
+  }
+}
+
+/* Root Lab */
+function renderRootLab(){
+  appSection.innerHTML = `
+    <div class="rootlab-wrap">
+      <div class="rootlab-header">
+        <div class="rootlab-sigil">قلم</div>
+        <div>
+          <h2 style="margin:0;font-size:20px;">Qur’anic Root Lab</h2>
+          <p class="rootlab-lead">
+            Search a triliteral root (like كتب or k-t-b) to see meanings, examples, and sample forms.
+          </p>
+        </div>
+      </div>
+      <div class="rootlab-main">
+        <div class="rootlab-panel">
+          <div class="rootTitle">Search Root</div>
+          <input id="rootSearch" class="field" placeholder="كتب · ك ت ب · k-t-b · write" style="width:100%;margin-bottom:10px;">
+          <button id="rootSearchBtn" class="btn-pill">Search</button>
+          <p class="root-status" id="rootStatus" style="margin-top:10px;">
+            Sample dataset loaded (you can expand this later with a full JSON file).
+          </p>
+        </div>
+        <div class="rootlab-panel" id="rootResultPanel">
+          <div class="root-status">No root selected yet.</div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  const statusEl = document.getElementById('rootStatus');
+  const resultEl = document.getElementById('rootResultPanel');
+
+  function renderRoot(entry){
+    resultEl.innerHTML = `
+      <div class="root-big">${entry.root}</div>
+      <div class="root-translit">${entry.tr || ''}</div>
+      <div class="root-meaning">${entry.meaning || ''}</div>
+      <div class="root-notes">${entry.notes || ''}</div>
+      <div class="root-forms">
+        <strong>Derived forms:</strong>
+        ${(entry.derived||[]).map(d=>`<div>${d.form} — <i>${d.meaning}</i></div>`).join('') || '<div>Sample patterns only.</div>'}
+      </div>
+      <div style="margin-top:8px;">
+        <strong>Example āyāt:</strong>
+        ${(entry.ayahs||[]).map(a=>`<div class="root-ayah"><b>${a.ref}</b> — ${a.text}</div>`).join('') || '<div class="root-ayah">No examples in sample dataset.</div>'}
+      </div>
+    `;
+    speakArabic(entry.root);
+  }
+
+  function doSearch(){
+    const q = document.getElementById('rootSearch').value.trim();
+    if(!q){
+      statusEl.textContent = 'Type a root in Arabic or transliteration to begin.';
+      return;
+    }
+    const norm = q.replace(/\s+/g,'').toLowerCase();
+    const hit = rootDataset.find(r =>
+      r.root.replace(/\s+/g,'').toLowerCase() === norm ||
+      (r.tr||'').toLowerCase().includes(norm) ||
+      (r.meaning||'').toLowerCase().includes(norm)
+    );
+    if(hit){
+      renderRoot(hit);
+      statusEl.textContent = `Root “${hit.root}” found in sample dataset.`;
+    }else{
+      resultEl.innerHTML = '<div class="root-status">No match in sample dataset. Try another spelling.</div>';
+      statusEl.textContent = 'No match found in sample dataset.';
+    }
+  }
+
+  document.getElementById('rootSearchBtn').addEventListener('click', doSearch);
+  document.getElementById('rootSearch').addEventListener('keyup', e=>{
+    if(e.key === 'Enter') doSearch();
+  });
+}
+
+/* Numerology Quest */
+function renderNumerologyQuest(){
+  appSection.innerHTML = `
+    <div class="noor-card">
+      <div class="noor-title">Numerology Quest</div>
+      <div id="noorLevel" class="noor-sub">Level 1 — Creation</div>
+      <div id="noorQuestion" class="noor-question"></div>
+      <div id="noorGrid" class="noor-grid"></div>
+      <div id="noorMeaningBox" class="noor-meaning-box">
+        <h3 id="noorMeaningTitle"></h3>
+        <p id="noorMeaningText"></p>
+      </div>
+      <div class="noor-score">Score: <span id="noorScoreVal">0</span></div>
+      <div class="noor-btn-wrap">
+        <button id="noorNext" class="btn-pill">Next Question ▶</button>
+      </div>
+      <audio id="noorChime" src="https://cdn.pixabay.com/download/audio/2023/03/02/audio_0d3db1c992.mp3?filename=celestial-chime-143163.mp3"></audio>
+    </div>
+  `;
+
+  let level = 1;
+  let score = 0;
+  let current = null;
+
+  const levelLabel = document.getElementById('noorLevel');
+  const qEl = document.getElementById('noorQuestion');
+  const grid = document.getElementById('noorGrid');
+  const box = document.getElementById('noorMeaningBox');
+  const title = document.getElementById('noorMeaningTitle');
+  const text = document.getElementById('noorMeaningText');
+  const scoreEl = document.getElementById('noorScoreVal');
+  const chime = document.getElementById('noorChime');
+
+  function shuffle(arr){ return arr.slice().sort(()=>Math.random()-0.5); }
+
+  function askQuestion(){
+    box.style.display = 'none';
+    grid.innerHTML = '';
+    const choices = shuffle(numQuestData).slice(0,4);
+    current = choices[Math.floor(Math.random()*choices.length)];
+    const qType = Math.random() < 0.5 ? 'meaning' : 'realm';
+
+    qEl.textContent = qType === 'meaning'
+      ? `Which number symbolizes ${current.meaning.split(',')[0].toLowerCase()}?`
+      : `Which number belongs to the realm of ${current.realm}?`;
+
+    choices.forEach(opt=>{
+      const cell = document.createElement('div');
+      cell.className = 'noor-cell';
+      cell.textContent = opt.num;
+      cell.addEventListener('click', ()=>{
+        if(cell.dataset.done) return;
+        cell.dataset.done = '1';
+        if(opt === current){
+          cell.classList.add('correct');
+          try{ chime.currentTime = 0; chime.play(); }catch(e){}
+          burstConfetti(27);
+          box.style.display = 'block';
+          title.textContent = `${current.name} (${current.num})`;
+          text.textContent = `${current.meaning} — Realm: ${current.realm}.`;
+          score += 10;
+          scoreEl.textContent = score;
+        }else{
+          cell.classList.add('wrong');
+          score = Math.max(score-5,0);
+          scoreEl.textContent = score;
+        }
+      });
+      grid.appendChild(cell);
+    });
+  }
+
+  document.getElementById('noorNext').addEventListener('click', ()=>{
+    level = Math.min(level+1,9);
+    levelLabel.textContent = `Level ${level} — ${numQuestData[level-1] ? numQuestData[level-1].realm : 'Journey'}`;
+    askQuestion();
+  });
+
+  askQuestion();
+}
+
+/* Memory Path */
+function renderMemoryPath(){
+  appSection.innerHTML = `
+    <div class="memory-card">
+      <h2>Memory Path</h2>
+      <div id="memoryLevel" class="memory-level">Level 1 – Beginner</div>
+      <div id="memoryGrid" class="memory-grid"></div>
+      <div class="memory-score">Score: <span id="memoryScoreVal">0</span></div>
+      <button id="memoryNext" class="btn-pill" style="margin-top:10px;">Next Level ▶</button>
+    </div>
+  `;
+
+  let level = 1;
+  let score = 0;
+  let sequence = [];
+
+  const levelLabel = document.getElementById('memoryLevel');
+  const grid = document.getElementById('memoryGrid');
+  const scoreSpan = document.getElementById('memoryScoreVal');
+  const titles = ['Beginner','Apprentice','Adept','Scholar','Master','Sage','Ascendant'];
+
+  function gridSize(){ return level<3 ? 3 : level<5 ? 4 : 5; }
+  function revealTime(){ return 1500 - Math.min(level*200,900); }
+
+  function buildGrid(){
+    grid.innerHTML = '';
+    sequence = [];
+    const size = gridSize();
+    grid.style.gridTemplateColumns = `repeat(${size},1fr)`;
+    const cells = size*size;
+    const pool = [...memoryDigits].sort(()=>Math.random()-0.5).slice(0,cells);
+
+    pool.forEach(n=>{
+      const d = document.createElement('div');
+      d.className = 'memory-cell';
+      d.textContent = n.digit;
+      grid.appendChild(d);
+    });
+
+    const targets = pool.sort(()=>Math.random()-0.5).slice(0,Math.min(3,level+1));
+    sequence = targets.map(t=>t.digit);
+
+    sequence.forEach(s=>{
+      const item = memoryDigits.find(n=>n.digit===s);
+      if(item) speakArabic(item.word);
+    });
+
+    setTimeout(()=>revealSequence(),500);
+  }
+
+  function revealSequence(){
+    const cells = [...document.querySelectorAll('.memory-cell')];
+    let i = 0;
+    const interval = setInterval(()=>{
+      if(i < sequence.length){
+        const target = cells.find(c=>c.textContent===sequence[i]);
+        if(target){
+          target.classList.add('correct');
+          setTimeout(()=>target.classList.remove('correct'),400);
+        }
+        i++;
+      }else{
+        clearInterval(interval);
+      }
+    },600);
+
+    setTimeout(()=>{
+      cells.forEach(c=>c.classList.add('hidden'));
+      enableGuess();
+    }, revealTime());
+  }
+
+  function enableGuess(){
+    const cells = [...document.querySelectorAll('.memory-cell')];
+    let progress = 0;
+    cells.forEach(c=>{
+      c.onclick = ()=>{
+        if(!c.classList.contains('hidden')) return;
+        const expected = sequence[progress];
+        if(c.textContent === expected){
+          c.classList.remove('hidden');
+          c.classList.add('correct');
+          progress++;
+          score += 5;
+          scoreSpan.textContent = score;
+          if(progress === sequence.length){
+            burstConfetti(25);
+            setTimeout(buildGrid,900);
+          }
+        }else{
+          c.classList.add('wrong');
+          score = Math.max(score-3,0);
+          scoreSpan.textContent = score;
+        }
+      };
+    });
+  }
+
+  document.getElementById('memoryNext').addEventListener('click', ()=>{
+    level = Math.min(level+1,7);
+    levelLabel.textContent = `Level ${level} – ${titles[level-1]}`;
+    buildGrid();
+  });
+
+  buildGrid();
+}
+
+/* Number Sanctuary — with Lore Mode + Western digit toggle */
+function renderNumberSanctuary(){
+  appSection.innerHTML = `
+    <div class="sanctuary-card">
+      <h2>NoorAI Darib – Sovereign Number Sanctuary</h2>
+      <p>Gently trace, hear, and quiz yourself on the Arabic numerals 0–9. You can also switch to Western digits and explore their symbolic lore.</p>
+      <div style="margin-top:10px;" id="sanctuaryDisplay">
+        <span id="sanctuaryArabic" class="sanctuary-arabic">٠</span>
+        <div id="sanctuaryEnglish" class="sanctuary-english">0</div>
+        <div id="sanctuaryTranslit" class="sanctuary-translit">ṣifr (صفر)</div>
+      </div>
+      <canvas id="sanctuaryCanvas" class="basic-canvas" width="320" height="180"></canvas>
+      <div class="sanctuary-controls">
+        <button id="sanctuaryPrev" class="btn-pill">◀ Prev</button>
+        <button id="sanctuarySpeak" class="btn-pill">🔊 Pronounce</button>
+        <button id="sanctuaryNext" class="btn-pill">Next ▶</button>
+        <button id="sanctuaryDigitMode" class="btn-pill btn-soft">Show 0–9</button>
+        <button id="sanctuaryLoreMode" class="btn-pill btn-soft">Lore Mode: Off</button>
+        <button id="sanctuaryClear" class="btn-pill btn-soft">Clear</button>
+      </div>
+      <div class="sanctuary-quiz">
+        <h3 id="sanctuaryQuizQ">Which number is "thalātha" (ثلاثة)?</h3>
+        <div id="sanctuaryQuizOptions" class="sanctuary-quiz-options"></div>
+      </div>
+    </div>
+  `;
+
+  let index = 0;
+  let arabicMode = true; // true = show ٠١٢..., false = show 0-9 as primary
+  let loreMode = false;
+
+  const arabicEl = document.getElementById('sanctuaryArabic');
+  const engEl = document.getElementById('sanctuaryEnglish');
+  const trEl = document.getElementById('sanctuaryTranslit');
+  const digitBtn = document.getElementById('sanctuaryDigitMode');
+  const loreBtn = document.getElementById('sanctuaryLoreMode');
+
+  function currentNumber(){
+    return sanctuaryNumbers[index];
+  }
+
+  function currentLore(){
+    const n = currentNumber();
+    return numQuestData.find(entry => entry.num === n.digit) || null;
+  }
+
+  function updateDisplay(){
+    const n = currentNumber();
+    const lore = currentLore();
+
+    if(arabicMode){
+      arabicEl.textContent = n.digit;
+      engEl.textContent = n.english;
+      digitBtn.textContent = 'Show 0–9';
+    }else{
+      arabicEl.textContent = n.english;
+      engEl.textContent = `${n.digit} (Arabic glyph)`;
+      digitBtn.textContent = 'Show ٠–٩';
+    }
+
+    if(lore && loreMode){
+      trEl.textContent = `${lore.name} — ${lore.meaning} · Realm: ${lore.realm}`;
+    }else{
+      trEl.textContent = `${n.translit} (${n.arabicWord})`;
+    }
+
+    loreBtn.textContent = `Lore Mode: ${loreMode ? 'On' : 'Off'}`;
+  }
+
+  document.getElementById('sanctuaryPrev').addEventListener('click', ()=>{
+    index = (index - 1 + sanctuaryNumbers.length) % sanctuaryNumbers.length;
+    updateDisplay();
+  });
+
+  document.getElementById('sanctuaryNext').addEventListener('click', ()=>{
+    index = (index + 1) % sanctuaryNumbers.length;
+    updateDisplay();
+  });
+
+  document.getElementById('sanctuarySpeak').addEventListener('click', ()=>{
+    speakArabic(currentNumber().arabicWord);
+  });
+
+  digitBtn.addEventListener('click', ()=>{
+    arabicMode = !arabicMode;
+    updateDisplay();
+  });
+
+  loreBtn.addEventListener('click', ()=>{
+    loreMode = !loreMode;
+    updateDisplay();
+  });
+
+  const clear = initTracingCanvas('sanctuaryCanvas');
+  document.getElementById('sanctuaryClear').addEventListener('click', ()=>{
+    clear && clear();
+  });
+
+  function newQuiz(){
+    const qIndex = Math.floor(Math.random()*sanctuaryNumbers.length);
+    const q = sanctuaryNumbers[qIndex];
+    document.getElementById('sanctuaryQuizQ').textContent =
+      `Which number is "${q.translit}" (${q.arabicWord})?`;
+
+    const area = document.getElementById('sanctuaryQuizOptions');
+    area.innerHTML = '';
+    const choices = sanctuaryNumbers.slice().sort(()=>Math.random()-0.5).slice(0,4);
+    if(!choices.includes(q)) choices[Math.floor(Math.random()*choices.length)] = q;
+
+    choices.forEach(ch=>{
+      const btn = document.createElement('button');
+      btn.textContent = ch.digit;
+      btn.addEventListener('click', ()=>{
+        if(btn.dataset.done) return;
+        btn.dataset.done = '1';
+        if(ch === q){
+          btn.classList.add('correct');
+          burstConfetti(20);
+          speakArabic(ch.arabicWord);
+          setTimeout(newQuiz,900);
+        }else{
+          btn.classList.add('wrong');
+        }
+      });
+      area.appendChild(btn);
+    });
+  }
+
+  updateDisplay();
+  newQuiz();
+}
+
+/* ==========================================================
+   Chamber Router & Initial View
+   ========================================================== */
+
+function showChamber(name){
+  switch(name){
+    case 'alphabet':        return renderAlphabetChamber();
+    case 'numbers':         return renderNumbersHall();
+    case 'lexicon':         return renderLexiconChamber();
+    case 'sentence':        return renderSentenceForge();
+    case 'tracing':         return renderTracingRoom();
+    case 'quiz':            return renderQuizRoom();
+    case 'quran':           return renderQuranCircle();
+    case 'rootlab':         return renderRootLab();
+    case 'numQuest':        return renderNumerologyQuest();
+    case 'memoryPath':      return renderMemoryPath();
+    case 'numberSanctuary': return renderNumberSanctuary();
+  }
+}
+
+document.querySelectorAll('.chamber-buttons button').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const chamber = btn.dataset.chamber;
+    showChamber(chamber);
+  });
+});
+
+/* Default chamber on load */
+showChamber('alphabet');
+</script>
+</body>
+</html>
