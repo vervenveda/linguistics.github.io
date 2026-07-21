@@ -1,0 +1,1070 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Khaemenes Kids — ESL English Playground</title>
+<style>
+  :root{
+    --bg1:#0f172a;
+    --bg2:#020617;
+    --card:#0b1220;
+    --card-soft:#111827;
+    --accent:#38bdf8;
+    --accent-soft:#7dd3fc;
+    --accent2:#a855f7;
+    --ink:#e5e7eb;
+    --muted:#9ca3af;
+    --radius:20px;
+  }
+  *{box-sizing:border-box;}
+
+  body{
+    margin:0;
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    background:radial-gradient(circle at top, #1e293b, #020617 65%);
+    color:var(--ink);
+    padding:12px;
+  }
+
+  .wrap{
+    max-width:1100px;
+    margin:0 auto;
+    border-radius:var(--radius);
+    border:1px solid rgba(148,163,184,0.5);
+    background:linear-gradient(160deg, rgba(15,23,42,0.96), rgba(15,23,42,0.98));
+    box-shadow:0 20px 60px rgba(0,0,0,0.7);
+    overflow:hidden;
+  }
+
+  header{
+    padding:16px 18px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    align-items:center;
+    justify-content:space-between;
+    background:radial-gradient(circle at top left, #0ea5e9 0, #0f172a 40%, #020617 100%);
+    border-bottom:1px solid rgba(15,23,42,0.6);
+  }
+
+  .title-box{
+    max-width:640px;
+  }
+
+  h1{
+    margin:0;
+    font-size:28px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+  }
+
+  .badge{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size:12px;
+    padding:4px 10px;
+    border-radius:999px;
+    background:rgba(15,23,42,0.85);
+    border:1px solid rgba(148,163,184,0.7);
+    margin-top:6px;
+  }
+
+  .sub{
+    margin-top:6px;
+    font-size:14px;
+    color:var(--ink);
+    max-width:560px;
+  }
+
+  .controls{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    align-items:center;
+    justify-content:flex-end;
+  }
+
+  select, button{
+    font:inherit;
+  }
+
+  select{
+    border-radius:14px;
+    border:1px solid rgba(148,163,184,0.8);
+    background:rgba(15,23,42,0.92);
+    color:var(--ink);
+    padding:7px 11px;
+    font-size:14px;
+    cursor:pointer;
+  }
+
+  .pill-btn{
+    border-radius:999px;
+    border:1px solid rgba(148,163,184,0.8);
+    padding:7px 11px;
+    font-size:13px;
+    background:rgba(15,23,42,0.85);
+    color:var(--ink);
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    cursor:pointer;
+    transition:background .1s, transform .05s, box-shadow .1s;
+  }
+  .pill-btn:hover{
+    background:rgba(30,64,175,0.9);
+    box-shadow:0 8px 16px rgba(0,0,0,0.5);
+    transform:translateY(-1px);
+  }
+  .pill-btn:active{transform:translateY(1px);box-shadow:none;}
+
+  .pill-btn.active{
+    background:linear-gradient(90deg, var(--accent), var(--accent2));
+    color:#020617;
+    border-color:rgba(15,23,42,0.8);
+  }
+
+  main{
+    padding:14px 16px 16px;
+  }
+
+  .top-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    align-items:flex-start;
+    justify-content:space-between;
+    margin-bottom:10px;
+  }
+
+  .practice-box{
+    flex:1 1 260px;
+    border-radius:16px;
+    background:var(--card-soft);
+    border:1px solid rgba(148,163,184,0.7);
+    padding:10px 12px;
+  }
+
+  .practice-label{
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:var(--muted);
+    margin-bottom:4px;
+  }
+
+  .practice-text{
+    min-height:30px;
+    font-size:18px;
+    margin-bottom:4px;
+    word-wrap:break-word;
+  }
+
+  .practice-sub{
+    font-size:15px;
+    color:var(--muted);
+  }
+
+  .practice-buttons{
+    margin-top:8px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+
+  .status{
+    min-height:18px;
+    font-size:12px;
+    color:var(--accent-soft);
+    margin-top:6px;
+  }
+
+  .side-note{
+    flex:1 1 220px;
+    border-radius:16px;
+    background:var(--card);
+    border:1px solid rgba(148,163,184,0.7);
+    padding:10px 12px;
+    font-size:13px;
+    color:var(--muted);
+  }
+
+  .side-note-title{
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    margin-bottom:4px;
+    color:var(--ink);
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:10px;
+    margin-top:10px;
+  }
+  @media(max-width:900px){
+    .grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+  }
+  @media(max-width:640px){
+    .grid{grid-template-columns:minmax(0,1fr);}
+  }
+
+  .card{
+    border-radius:16px;
+    background:var(--card);
+    border:1px solid rgba(148,163,184,0.65);
+    padding:10px 12px;
+    cursor:pointer;
+    position:relative;
+    overflow:hidden;
+    transition:transform .08s, box-shadow .1s, border-color .1s, background .12s;
+  }
+
+  .card:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 22px rgba(0,0,0,0.7);
+    border-color:var(--accent-soft);
+    background:radial-gradient(circle at top, rgba(56,189,248,0.18), var(--card));
+  }
+
+  .card-main{
+    font-size:20px;
+    font-weight:800;
+    margin-bottom:4px;
+  }
+
+  .card-sub{
+    font-size:14px;
+    color:var(--muted);
+  }
+
+  .card-emoji{
+    font-size:26px;
+    margin-bottom:4px;
+  }
+
+  .card-tag{
+    position:absolute;
+    top:6px;
+    right:8px;
+    font-size:11px;
+    padding:3px 7px;
+    border-radius:999px;
+    background:rgba(15,23,42,0.92);
+    color:var(--muted);
+    border:1px solid rgba(148,163,184,0.6);
+  }
+
+  .card-buttons{
+    margin-top:8px;
+    display:flex;
+    gap:6px;
+  }
+
+  .card-btn{
+    flex:0 0 auto;
+    border-radius:999px;
+    border:1px solid rgba(148,163,184,0.7);
+    background:rgba(15,23,42,0.95);
+    color:var(--ink);
+    font-size:12px;
+    padding:4px 9px;
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    cursor:pointer;
+    transition:background .1s, transform .05s, box-shadow .1s;
+  }
+
+  .card-btn:hover{
+    background:rgba(37,99,235,0.9);
+    box-shadow:0 6px 14px rgba(0,0,0,0.6);
+    transform:translateY(-1px);
+  }
+
+  .card-btn:active{transform:translateY(1px);box-shadow:none;}
+
+  .section-hidden{display:none!important;}
+
+  /* Quiz section */
+  .quiz-section{
+    margin-top:14px;
+  }
+
+  .quiz-card{
+    border-radius:18px;
+    background:var(--card-soft);
+    border:1px solid rgba(148,163,184,0.8);
+    padding:12px 14px 14px;
+  }
+
+  .quiz-prompt{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    margin-bottom:10px;
+  }
+
+  .quiz-emoji{
+    font-size:34px;
+    line-height:1;
+  }
+
+  .quiz-text{
+    flex:1;
+  }
+
+  .quiz-label{
+    font-size:14px;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:var(--muted);
+    margin-bottom:4px;
+  }
+
+  .quiz-native{
+    font-size:16px;
+  }
+
+  .quiz-choices{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:8px;
+  }
+
+  .quiz-btn{
+    border-radius:999px;
+    border:1px solid rgba(148,163,184,0.8);
+    background:rgba(15,23,42,0.96);
+    color:var(--ink);
+    padding:7px 12px;
+    font-size:15px;
+    cursor:pointer;
+    transition:background .1s, transform .05s, box-shadow .1s;
+  }
+
+  .quiz-btn:hover{
+    background:rgba(37,99,235,0.9);
+    box-shadow:0 6px 14px rgba(0,0,0,0.6);
+    transform:translateY(-1px);
+  }
+
+  .quiz-btn:active{transform:translateY(1px);box-shadow:none;}
+
+  .quiz-footer{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:4px;
+  }
+
+  .quiz-score{
+    font-size:14px;
+    color:var(--muted);
+  }
+
+  .quiz-feedback{
+    margin-top:8px;
+    font-size:14px;
+    color:var(--accent-soft);
+  }
+
+  footer{
+    padding:10px 16px 12px;
+    border-top:1px solid rgba(148,163,184,0.6);
+    font-size:12px;
+    color:var(--muted);
+    background:rgba(15,23,42,0.97);
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    justify-content:space-between;
+    align-items:center;
+  }
+
+  .tiny-pill{
+    padding:3px 8px;
+    border-radius:999px;
+    border:1px solid rgba(148,163,184,0.7);
+    font-size:11px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="title-box">
+      <h1>Khaemenes Kids — ESL English Playground</h1>
+      <div class="badge">
+        🧒🏽 English words • 🎧 Listen • 🎮 Quiz • Local-only
+      </div>
+      <div class="sub">
+        Tap a card to practice English words with your home language.
+        Switch to quiz mode to guess the English word from the emoji and translation.
+      </div>
+    </div>
+    <div class="controls">
+      <label for="langSelect" style="font-size:13px;color:#e5e7eb;">Home language</label>
+      <select id="langSelect" aria-label="Home language">
+        <option value="ar">العربية (Arabic)</option>
+        <option value="es">Español (Spanish)</option>
+        <option value="fr">Français (French)</option>
+        <option value="de">Deutsch (German)</option>
+        <option value="ru">Русский (Russian)</option>
+        <option value="zh">中文 (Chinese)</option>
+      </select>
+
+      <label for="levelSelect" style="font-size:13px;color:#e5e7eb;">Level</label>
+      <select id="levelSelect" aria-label="Level">
+        <option value="1">Level 1 – First words</option>
+        <option value="2">Level 2 – School &amp; help</option>
+        <option value="3">Level 3 – Sentences</option>
+      </select>
+
+      <button class="pill-btn" id="toggleNativeBtn">
+        🌐 Show translation
+      </button>
+      <button class="pill-btn" id="quizModeBtn">
+        🎮 Quiz Mode
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <div class="top-row">
+      <div class="practice-box">
+        <div class="practice-label">Practice box</div>
+        <div class="practice-text" id="practiceMain">
+          Tap a word card to load it here.
+        </div>
+        <div class="practice-sub" id="practiceSub"></div>
+        <div class="practice-buttons">
+          <button class="pill-btn" id="speakBtn">🔊 Say it in English</button>
+          <button class="pill-btn" id="copyBtn">📋 Copy English sentence</button>
+        </div>
+        <div class="status" id="status"></div>
+      </div>
+
+      <div class="side-note">
+        <div class="side-note-title">How to use</div>
+        <ul style="margin:4px 0 0 18px;padding:0;font-size:13px;">
+          <li>Choose your home language at the top.</li>
+          <li>Choose a level: Level 1 (first words), Level 2 (school &amp; help), Level 3 (longer sentences).</li>
+          <li>Tap a card to see the English sentence and translation.</li>
+          <li>Press “Say it in English” to hear it (if your device supports it).</li>
+          <li>Turn on Quiz Mode to guess the English word from the emoji + translation.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Explore Section -->
+    <div id="exploreSection">
+      <div class="grid" id="cardGrid"></div>
+    </div>
+
+    <!-- Quiz Section -->
+    <div id="quizSection" class="quiz-section section-hidden">
+      <div class="quiz-card">
+        <div id="quizPrompt" class="quiz-prompt"></div>
+        <div id="quizChoices" class="quiz-choices"></div>
+        <div class="quiz-footer">
+          <div class="quiz-score">
+            Score: <span id="quizScore">0</span> / <span id="quizTotal">0</span>
+          </div>
+          <div class="quiz-actions">
+            <button class="pill-btn" id="nextQuestionBtn">Next Question ▶</button>
+            <button class="pill-btn" id="resetScoreBtn">Reset Score</button>
+          </div>
+        </div>
+        <div id="quizFeedback" class="quiz-feedback"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div>Voices use this device’s built-in speech engine (if available). Works offline except for speech voices.</div>
+    <div class="tiny-pill">No accounts • No tracking • Offline-friendly</div>
+  </footer>
+</div>
+
+<script>
+  const LS_KEY = "kha_kids_esl_playground_v1";
+
+  function loadState(){
+    try{
+      return JSON.parse(localStorage.getItem(LS_KEY) || "null");
+    }catch(e){
+      return null;
+    }
+  }
+  function saveState(){
+    localStorage.setItem(LS_KEY, JSON.stringify(state));
+  }
+
+  // State with backwards-compatible defaults
+  let state = loadState() || {};
+  if(typeof state.lang !== "string") state.lang = "es";
+  if(typeof state.showNative !== "boolean") state.showNative = true;
+  if(state.mode !== "quiz" && state.mode !== "explore") state.mode = "explore";
+  if(typeof state.quizScore !== "number") state.quizScore = 0;
+  if(typeof state.quizTotal !== "number") state.quizTotal = 0;
+  if(!state.level) state.level = "1";
+
+  const langSelect = document.getElementById("langSelect");
+  const levelSelect = document.getElementById("levelSelect");
+  const toggleNativeBtn = document.getElementById("toggleNativeBtn");
+  const quizModeBtn = document.getElementById("quizModeBtn");
+  const cardGrid = document.getElementById("cardGrid");
+  const practiceMain = document.getElementById("practiceMain");
+  const practiceSub = document.getElementById("practiceSub");
+  const statusEl = document.getElementById("status");
+  const speakBtn = document.getElementById("speakBtn");
+  const copyBtn = document.getElementById("copyBtn");
+  const exploreSection = document.getElementById("exploreSection");
+  const quizSection = document.getElementById("quizSection");
+  const quizPrompt = document.getElementById("quizPrompt");
+  const quizChoices = document.getElementById("quizChoices");
+  const quizScoreEl = document.getElementById("quizScore");
+  const quizTotalEl = document.getElementById("quizTotal");
+  const quizFeedback = document.getElementById("quizFeedback");
+  const nextQuestionBtn = document.getElementById("nextQuestionBtn");
+  const resetScoreBtn = document.getElementById("resetScoreBtn");
+
+  const LANG_META = {
+    ar:{name:"Arabic",  code:"ar-SA", rtl:true},
+    es:{name:"Spanish", code:"es-ES", rtl:false},
+    fr:{name:"French",  code:"fr-FR", rtl:false},
+    de:{name:"German",  code:"de-DE", rtl:false},
+    ru:{name:"Russian", code:"ru-RU", rtl:false},
+    zh:{name:"Chinese", code:"zh-CN", rtl:false}
+  };
+
+  // ALL_ITEMS with level tags
+  const ALL_ITEMS = [
+    // LEVEL 1 — first greetings & politeness
+    {
+      id:"hello",
+      level:1,
+      category:"Greeting",
+      emoji:"👋",
+      enWord:"Hello",
+      enSentence:"Hello, my name is ______.",
+      native:{
+        ar:"مرحبًا، اسمي ______.",
+        es:"Hola, me llamo ______.",
+        fr:"Bonjour, je m’appelle ______.",
+        de:"Hallo, ich heiße ______.",
+        ru:"Здравствуйте, меня зовут ______.",
+        zh:"你好，我叫______。"
+      }
+    },
+    {
+      id:"good-morning",
+      level:1,
+      category:"Greeting",
+      emoji:"🌞",
+      enWord:"Good morning",
+      enSentence:"Good morning, teacher.",
+      native:{
+        ar:"صباح الخير يا أستاذ.",
+        es:"Buenos días, maestra.",
+        fr:"Bonjour, maîtresse.",
+        de:"Guten Morgen, Frau Lehrerin.",
+        ru:"Доброе утро, учитель.",
+        zh:"老师，早上好。"
+      }
+    },
+    {
+      id:"thank-you",
+      level:1,
+      category:"Politeness",
+      emoji:"🙏",
+      enWord:"Thank you",
+      enSentence:"Thank you for your help.",
+      native:{
+        ar:"شكرًا لمساعدتك.",
+        es:"Gracias por tu ayuda.",
+        fr:"Merci pour ton aide.",
+        de:"Danke für deine Hilfe.",
+        ru:"Спасибо за помощь.",
+        zh:"谢谢你的帮助。"
+      }
+    },
+    {
+      id:"please",
+      level:1,
+      category:"Politeness",
+      emoji:"✨",
+      enWord:"Please",
+      enSentence:"Please speak slowly.",
+      native:{
+        ar:"من فضلك، تكلّم ببطء.",
+        es:"Por favor, hable despacio.",
+        fr:"Parlez lentement, s’il vous plaît.",
+        de:"Bitte sprechen Sie langsam.",
+        ru:"Пожалуйста, говорите медленно.",
+        zh:"请说慢一点。"
+      }
+    },
+    {
+      id:"friend",
+      level:1,
+      category:"Feelings",
+      emoji:"🧑‍🤝‍🧑",
+      enWord:"Friend",
+      enSentence:"This is my friend.",
+      native:{
+        ar:"هذا صديقي / هذه صديقتي.",
+        es:"Este es mi amigo / esta es mi amiga.",
+        fr:"C’est mon ami / mon amie.",
+        de:"Das ist mein Freund / meine Freundin.",
+        ru:"Это мой друг / моя подруга.",
+        zh:"这是我的朋友。"
+      }
+    },
+
+    // LEVEL 2 — classroom & help
+    {
+      id:"pencil",
+      level:2,
+      category:"Classroom",
+      emoji:"✏️",
+      enWord:"Pencil",
+      enSentence:"This is my pencil.",
+      native:{
+        ar:"هذا قلمي.",
+        es:"Este es mi lápiz.",
+        fr:"C’est mon crayon.",
+        de:"Das ist mein Bleistift.",
+        ru:"Это мой карандаш.",
+        zh:"这是我的铅笔。"
+      }
+    },
+    {
+      id:"book",
+      level:2,
+      category:"Classroom",
+      emoji:"📚",
+      enWord:"Book",
+      enSentence:"I put my book in my bag.",
+      native:{
+        ar:"وضعت كتابي في حقيبتي.",
+        es:"Puse mi libro en mi mochila.",
+        fr:"J’ai mis mon livre dans mon sac.",
+        de:"Ich habe mein Buch in meine Tasche gelegt.",
+        ru:"Я положил свою книгу в рюкзак.",
+        zh:"我把书放进书包里。"
+      }
+    },
+    {
+      id:"teacher",
+      level:2,
+      category:"School",
+      emoji:"👩‍🏫",
+      enWord:"Teacher",
+      enSentence:"My teacher helps me learn.",
+      native:{
+        ar:"معلمتي تساعدني على التعلّم.",
+        es:"Mi maestra me ayuda a aprender.",
+        fr:"Ma maîtresse m’aide à apprendre.",
+        de:"Meine Lehrerin hilft mir beim Lernen.",
+        ru:"Моя учительница помогает мне учиться.",
+        zh:"我的老师帮我学习。"
+      }
+    },
+    {
+      id:"bathroom",
+      level:2,
+      category:"Help",
+      emoji:"🚻",
+      enWord:"Bathroom",
+      enSentence:"May I go to the bathroom, please?",
+      native:{
+        ar:"هل يمكنني الذهاب إلى الحمام من فضلك؟",
+        es:"¿Puedo ir al baño, por favor?",
+        fr:"Est-ce que je peux aller aux toilettes, s’il vous plaît ?",
+        de:"Darf ich bitte auf die Toilette gehen?",
+        ru:"Можно мне, пожалуйста, в туалет?",
+        zh:"我可以去洗手间吗？"
+      }
+    },
+    {
+      id:"dont-understand",
+      level:2,
+      category:"Help",
+      emoji:"❓",
+      enWord:"I don’t understand",
+      enSentence:"I don’t understand.",
+      native:{
+        ar:"أنا لا أفهم.",
+        es:"No entiendo.",
+        fr:"Je ne comprends pas.",
+        de:"Ich verstehe nicht.",
+        ru:"Я не понимаю.",
+        zh:"我听不懂。"
+      }
+    },
+
+    // LEVEL 3 — school & homework sentences
+    {
+      id:"quiz-where",
+      level:3,
+      category:"School",
+      emoji:"📝",
+      enWord:"Quiz",
+      enSentence:"Where is the quiz?",
+      native:{
+        ar:"أين الاختبار؟",
+        es:"¿Dónde está el cuestionario?",
+        fr:"Où est le quiz ?",
+        de:"Wo ist das Quiz?",
+        ru:"Где викторина?",
+        zh:"测验在哪里？"
+      }
+    },
+    {
+      id:"homework",
+      level:3,
+      category:"School",
+      emoji:"📒",
+      enWord:"Homework",
+      enSentence:"I finished my homework.",
+      native:{
+        ar:"أنهيت واجبي المنزلي.",
+        es:"Terminé mi tarea.",
+        fr:"J’ai terminé mes devoirs.",
+        de:"Ich habe meine Hausaufgaben fertig.",
+        ru:"Я закончил домашнее задание.",
+        zh:"我做完作业了。"
+      }
+    }
+  ];
+
+  let currentItemId = null;
+  let currentQuestion = null;
+
+  function setStatus(msg){
+    statusEl.textContent = msg || "";
+  }
+
+  function escapeHtml(s){
+    return String(s ?? "")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  function getItemById(id){
+    return ALL_ITEMS.find(it => it.id === id) || null;
+  }
+
+  function activeItems(){
+    const lvl = String(state.level || "1");
+    return ALL_ITEMS.filter(it => String(it.level || "1") === lvl);
+  }
+
+  function render(){
+    langSelect.value = state.lang;
+    levelSelect.value = String(state.level || "1");
+
+    // Toggle translation button
+    toggleNativeBtn.classList.toggle("active", state.showNative);
+    toggleNativeBtn.textContent = state.showNative ? "🌐 Hide translation" : "🌐 Show translation";
+
+    // Mode state for quiz
+    quizModeBtn.classList.toggle("active", state.mode === "quiz");
+    quizModeBtn.textContent = state.mode === "quiz" ? "🎮 Back to Explore" : "🎮 Quiz Mode";
+
+    // Sections visibility
+    if(state.mode === "quiz"){
+      exploreSection.classList.add("section-hidden");
+      quizSection.classList.remove("section-hidden");
+    } else {
+      exploreSection.classList.remove("section-hidden");
+      quizSection.classList.add("section-hidden");
+    }
+
+    const items = activeItems();
+
+    // Render explore cards
+    cardGrid.innerHTML = "";
+    items.forEach((item)=>{
+      const nativeSentence = (item.native && item.native[state.lang]) || "";
+      const card = document.createElement("div");
+      card.className = "card";
+      card.dataset.id = item.id;
+      card.innerHTML = `
+        <div class="card-tag">${escapeHtml(item.category)}</div>
+        <div class="card-emoji">${item.emoji || ""}</div>
+        <div class="card-main">${escapeHtml(item.enWord)}</div>
+        <div class="card-sub">${
+          state.showNative && nativeSentence
+            ? escapeHtml(nativeSentence)
+            : ""
+        }</div>
+        <div class="card-buttons">
+          <button class="card-btn" data-action="speak">🔊 Listen</button>
+          <button class="card-btn" data-action="copy">📋 Copy EN</button>
+        </div>
+      `;
+      card.addEventListener("click", (ev)=>{
+        const btn = ev.target.closest(".card-btn");
+        const id = item.id;
+        if(btn){
+          const action = btn.getAttribute("data-action");
+          if(action === "speak"){
+            speakItemById(id);
+          }else if(action === "copy"){
+            copyItemById(id);
+          }
+        } else {
+          loadPracticeById(id);
+        }
+      });
+      cardGrid.appendChild(card);
+    });
+
+    // Update quiz score
+    quizScoreEl.textContent = String(state.quizScore || 0);
+    quizTotalEl.textContent = String(state.quizTotal || 0);
+
+    // If in quiz mode, ensure question loaded
+    if(state.mode === "quiz"){
+      if(!currentQuestion){
+        buildQuizQuestion();
+      } else {
+        renderQuizQuestion();
+      }
+    }
+
+    saveState();
+  }
+
+  function loadPracticeById(id){
+    const item = getItemById(id);
+    if(!item) return;
+    currentItemId = item.id;
+    practiceMain.textContent = item.enSentence;
+    const nativeSentence = (item.native && item.native[state.lang]) || "";
+    if(state.showNative && nativeSentence){
+      practiceSub.textContent = nativeSentence;
+    }else if(nativeSentence){
+      practiceSub.textContent = "(Translation hidden — tap 🌐 Show translation.)";
+    }else{
+      practiceSub.textContent = "";
+    }
+    setStatus("Loaded phrase: " + item.enWord);
+  }
+
+  function speakItemById(id){
+    if(!("speechSynthesis" in window)){
+      setStatus("Speech is not supported on this device.");
+      return;
+    }
+    const item = getItemById(id);
+    if(!item) return;
+    const u = new SpeechSynthesisUtterance(item.enSentence);
+    const voices = speechSynthesis.getVoices();
+    const match = voices.find(v=> v.lang && v.lang.toLowerCase().startsWith("en"))
+              || voices[0];
+    if(match) u.voice = match;
+    u.rate = 0.98;
+    u.pitch = 1.0;
+    speechSynthesis.cancel();
+    speechSynthesis.speak(u);
+    setStatus("Saying it in English…");
+  }
+
+  async function copyItemById(id){
+    const item = getItemById(id);
+    if(!item) return;
+    const text = item.enSentence;
+    try{
+      await navigator.clipboard.writeText(text);
+      setStatus("Copied English sentence.");
+    }catch(e){
+      setStatus("Clipboard not available in this browser.");
+    }
+  }
+
+  function speakCurrent(){
+    if(currentItemId == null){
+      setStatus("Tap a card first.");
+      return;
+    }
+    speakItemById(currentItemId);
+  }
+
+  async function copyCurrent(){
+    if(currentItemId == null){
+      setStatus("Tap a card first.");
+      return;
+    }
+    await copyItemById(currentItemId);
+  }
+
+  // Quiz logic
+  function buildQuizQuestion(){
+    const items = activeItems();
+    if(items.length === 0){
+      quizPrompt.innerHTML = "<div class='quiz-text'>No words in this level yet.</div>";
+      quizChoices.innerHTML = "";
+      quizFeedback.textContent = "";
+      return;
+    }
+    const correctItem = items[Math.floor(Math.random() * items.length)];
+    const optionIdsSet = new Set([correctItem.id]);
+    while(optionIdsSet.size < Math.min(3, items.length)){
+      const candidate = items[Math.floor(Math.random() * items.length)];
+      optionIdsSet.add(candidate.id);
+    }
+    const optionIds = Array.from(optionIdsSet);
+    optionIds.sort(() => Math.random() - 0.5);
+    currentQuestion = {
+      correctId: correctItem.id,
+      optionIds
+    };
+    renderQuizQuestion();
+  }
+
+  function renderQuizQuestion(){
+    if(!currentQuestion){
+      quizPrompt.innerHTML = "";
+      quizChoices.innerHTML = "";
+      quizFeedback.textContent = "";
+      return;
+    }
+    const items = activeItems();
+    const correctItem = getItemById(currentQuestion.correctId);
+    if(!correctItem || !items.some(it => it.id === correctItem.id)){
+      // Level changed or item not in this level anymore — rebuild
+      buildQuizQuestion();
+      return;
+    }
+    const nativeSentence = (correctItem.native && correctItem.native[state.lang]) || "";
+    quizPrompt.innerHTML = `
+      <div class="quiz-emoji">${correctItem.emoji || ""}</div>
+      <div class="quiz-text">
+        <div class="quiz-label">Which English word matches this?</div>
+        <div class="quiz-native">${escapeHtml(nativeSentence || "(no translation yet)")}</div>
+      </div>
+    `;
+    quizChoices.innerHTML = "";
+    currentQuestion.optionIds.forEach((id, i)=>{
+      const optItem = getItemById(id);
+      if(!optItem) return;
+      const btn = document.createElement("button");
+      btn.className = "quiz-btn";
+      btn.textContent = optItem.enWord;
+      btn.addEventListener("click", ()=> handleQuizAnswer(i));
+      quizChoices.appendChild(btn);
+    });
+    quizFeedback.textContent = "";
+  }
+
+  function handleQuizAnswer(choiceIndex){
+    if(!currentQuestion) return;
+    const chosenId = currentQuestion.optionIds[choiceIndex];
+    state.quizTotal = (state.quizTotal || 0) + 1;
+    if(chosenId === currentQuestion.correctId){
+      state.quizScore = (state.quizScore || 0) + 1;
+      quizFeedback.textContent = "✅ Great job! You chose the right English word.";
+      setStatus("Correct!");
+    }else{
+      const correctItem = getItemById(currentQuestion.correctId);
+      const correctWord = correctItem ? correctItem.enWord : "the right word";
+      quizFeedback.textContent = "❌ Good try. The correct word was: " + correctWord + ".";
+      setStatus("Keep going — you can try another one.");
+    }
+    quizScoreEl.textContent = String(state.quizScore || 0);
+    quizTotalEl.textContent = String(state.quizTotal || 0);
+    saveState();
+  }
+
+  function nextQuestion(){
+    quizFeedback.textContent = "";
+    buildQuizQuestion();
+  }
+
+  function resetScore(){
+    state.quizScore = 0;
+    state.quizTotal = 0;
+    quizScoreEl.textContent = "0";
+    quizTotalEl.textContent = "0";
+    quizFeedback.textContent = "";
+    saveState();
+    setStatus("Quiz score reset.");
+  }
+
+  // Events
+  langSelect.addEventListener("change", ()=>{
+    state.lang = langSelect.value;
+    // Refresh practice text with new language
+    if(currentItemId){
+      loadPracticeById(currentItemId);
+    }
+    render();
+  });
+
+  levelSelect.addEventListener("change", ()=>{
+    state.level = levelSelect.value || "1";
+    currentItemId = null;
+    practiceMain.textContent = "Tap a word card to load it here.";
+    practiceSub.textContent = "";
+    currentQuestion = null;
+    render();
+  });
+
+  toggleNativeBtn.addEventListener("click", ()=>{
+    state.showNative = !state.showNative;
+    // Refresh practice box and cards
+    if(currentItemId){
+      loadPracticeById(currentItemId);
+    }
+    render();
+  });
+
+  quizModeBtn.addEventListener("click", ()=>{
+    state.mode = state.mode === "explore" ? "quiz" : "explore";
+    if(state.mode === "quiz"){
+      currentQuestion = null;
+      buildQuizQuestion();
+      setStatus("Quiz mode ON — choose the correct English word.");
+    }else{
+      setStatus("Back to Explore mode.");
+    }
+    render();
+  });
+
+  speakBtn.addEventListener("click", speakCurrent);
+  copyBtn.addEventListener("click", copyCurrent);
+
+  nextQuestionBtn.addEventListener("click", nextQuestion);
+  resetScoreBtn.addEventListener("click", resetScore);
+
+  // Keyboard helper: space / right arrow -> next quiz question
+  document.addEventListener("keydown", (e)=>{
+    if(state.mode !== "quiz") return;
+    if(e.key === "ArrowRight" || e.key === " "){
+      e.preventDefault();
+      nextQuestion();
+    }
+  });
+
+  // Init
+  (function init(){
+    langSelect.value = state.lang;
+    levelSelect.value = String(state.level || "1");
+    render();
+  })();
+</script>
+</body>
+</html>
