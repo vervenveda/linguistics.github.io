@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Russian Skills Lab — 6-Week Beginner Path</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root{
+  --bg:#05070c;
+  --panel:#0b0e15;
+  --panel-soft:#111520;
+  --accent-blue:#0052a5;
+  --accent-red:#d52b1e;
+  --accent-white:#f5f5f7;
+  --muted:#9ca3af;
+  --ink:#f9fafb;
+  --radius:18px;
+}
+*{box-sizing:border-box;}
+html,body{
+  margin:7px 24px;
+  padding:7px 11px;
+  max-height: 99%;
+  font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+  background:radial-gradient(circle at 10% 0%,#101623 0,#02040a 55%,#000000 100%);
+  color:var(--ink);
+}
+body{
+  min-height:88vh;
+}
+a{color:inherit;text-decoration:none;}
+.app-wrap{
+  max-width:777px;
+  margin:14px auto 14px;
+  padding:7px;
+}
+
+/* HERO */
+.hero{
+  background:linear-gradient(90deg,#000000 0%,#0052a5 45%,#d52b1e 100%);
+  border-radius:24px;
+  padding:24px 24px 24px 24px;
+  box-shadow:0 14px 44px rgba(0,0,0,0.65);
+  position:relative;
+  overflow:hidden;
+}
+.hero::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at 20% -20%,rgba(255,255,255,0.12),transparent 60%);
+  pointer-events:none;
+}
+.hero-title{
+  font-size:24px;
+  font-weight:444;
+  letter-spacing:0.06em;
+  text-transform:uppercase;
+}
+.hero-sub{
+  margin-top:4px;
+  font-size:14px;
+  color:rgba(249,250,251,0.9);
+}
+.hero-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:11px;
+  margin-top:11px;
+  align-items:flex-start;
+}
+.hero-col{
+  flex:1 1 260px;
+}
+.hero-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  font-size:11px;
+  padding:7px 14px;
+  border-radius:7px;
+  background:rgba(15,23,42,0.5);
+  border:1px solid rgba(148,163,184,0.4);
+  margin-right:7px;
+  margin-bottom:7px;
+}
+.hero-list{
+  list-style:none;
+  padding:0;
+  margin:8px 0 0;
+  font-size:13px;
+}
+.hero-list li{
+  margin:4px 0;
+  display:flex;
+  gap:6px;
+  align-items:flex-start;
+}
+.hero-list span.icon{
+  font-size:14px;
+}
+.btn{
+  background:linear-gradient(135deg,var(--accent-white),#ffd9d9);
+  color:#111827;
+  border:none;
+  border-radius:7px;
+  padding:7px 14px;
+  font-size:14px;
+  font-weight:777;
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.5);
+}
+.btn:hover{
+  filter:brightness(1.05);
+  transform:translateY(-1px);
+}
+.btn-ghost{
+  background:transparent;
+  border-radius:7px;
+  padding:8px 14px;
+  border:1px solid rgba(148,163,184,0.5);
+  color:var(--muted);
+  cursor:pointer;
+  font-size:17px;
+}
+.btn-ghost:hover{
+  background:rgba(15,23,42,0.7);
+}
+
+/* LAYOUT */
+.main-grid{
+  margin-top:22px;
+  display:grid;
+  grid-template-columns:222px 1fr;
+  gap:14px;
+}
+@media(max-width:900px){
+  .main-grid{
+    grid-template-columns:1fr;
+  }
+}
+.panel{
+  background:var(--panel);
+  border-radius:var(--radius);
+  padding:14px 14px 16px;
+  box-shadow:0 14px 40px rgba(0,0,0,0.55);
+}
+.panel-title{
+  font-size:14px;
+  font-weight:444;
+  margin-bottom:4px;
+}
+.panel-sub{
+  font-size:14px;
+  color:var(--muted);
+}
+
+/* WEEK LIST */
+.week-list{
+  margin-top:14px;
+  display:flex;
+  flex-direction:column;
+  gap:24px;
+}
+.week-item{
+  border-radius:7px;
+  padding:11px 11px 7px;
+  background:var(--panel-soft);
+  border:1px solid rgba(148,163,184,0.3);
+  cursor:pointer;
+  transition:background 0.15s, border-color 0.15s, transform 0.1s;
+}
+.week-item:hover{
+  background:#151a29;
+  transform:translateY(-1px);
+}
+.week-item.active{
+  border-color:var(--accent-blue);
+  box-shadow:0 0 0 1px rgba(59,130,246,0.6);
+}
+.week-name{
+  font-size:14px;
+  font-weight:700;
+}
+.week-theme{
+  font-size:11px;
+  color:var(--muted);
+  margin-top:2px;
+}
+.progress-bar-wrap{
+  margin-top:6px;
+}
+.progress-label{
+  font-size:11px;
+  color:var(--muted);
+  display:flex;
+  justify-content:space-between;
+}
+.progress-bar{
+  margin-top:3px;
+  height:6px;
+  border-radius:999px;
+  background:#111827;
+  overflow:hidden;
+}
+.progress-bar-fill{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,var(--accent-blue),var(--accent-red));
+}
+
+/* BADGE */
+.badge-block{
+  margin-top:14px;
+  padding:10px;
+  border-radius:14px;
+  background:radial-gradient(circle at 10% 0%,rgba(37,99,235,0.3),transparent 65%), #050814;
+  border:1px solid rgba(79,70,229,0.6);
+  font-size:12px;
+}
+.badge-label{
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+  color:var(--muted);
+}
+.badge-main{
+  margin-top:4px;
+  font-weight:700;
+}
+.badge-main span{
+  font-size:18px;
+}
+
+/* WEEK DETAIL */
+.week-header{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  align-items:flex-start;
+  margin-bottom:8px;
+}
+.week-header-main{
+  flex:1 1 200px;
+}
+.week-tag{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-size:11px;
+  padding:4px 8px;
+  border-radius:999px;
+  border:1px solid rgba(148,163,184,0.4);
+  color:var(--muted);
+}
+.week-title{
+  font-size:18px;
+  font-weight:800;
+  margin-bottom:2px;
+}
+.week-theme-text{
+  font-size:13px;
+  color:var(--muted);
+}
+.week-outcomes{
+  margin-top:8px;
+  padding-left:18px;
+  font-size:13px;
+  color:var(--muted);
+}
+.week-outcomes li{
+  margin:3px 0;
+}
+
+/* DAYS */
+.days-grid{
+  margin-top:10px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.day-card{
+  background:var(--panel-soft);
+  border-radius:12px;
+  padding:10px 10px 10px;
+  border:1px solid rgba(31,41,55,0.9);
+}
+.day-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+}
+.day-title{
+  font-size:17px;
+  font-weight:777;
+}
+.day-tag{
+  font-size:11px;
+  color:var(--muted);
+}
+.task-list{
+  margin-top:8px;
+  padding-left:0;
+  list-style:none;
+  font-size:14px;
+}
+.task-list li{
+  margin:7px 0;
+  display:flex;
+  align-items:flex-start;
+  gap:7px;
+}
+.task-list input[type="checkbox"]{
+  margin-top:5px;
+}
+.task-main{
+  flex:1;
+}
+.task-label-strong{
+  font-weight:555;
+  color:#e5e7eb;
+}
+.task-note{
+  font-size:11px;
+  color:var(--muted);
+}
+
+/* NEW: Task meta (badge + Hub link) */
+.task-meta-row{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:7px;
+  margin-bottom:7px;
+}
+.task-type-pill{
+  font-size:14px;
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  padding:3px 7px;
+  border-radius:7px;
+  border:1px solid rgba(148,163,184,0.5);
+  color:var(--muted);
+  background:rgba(15,23,42,0.9);
+}
+.task-open-link{
+  font-size:14px;
+  padding:3px 7px;
+  border-radius:7px;
+  border:none;
+  background:rgba(37,99,235,0.16);
+  color:#bfdbfe;
+  cursor:pointer;
+}
+.task-open-link:hover{
+  background:rgba(59,130,246,0.4);
+}
+
+/* FOOT / UTILS */
+.footer-note{
+  margin-top:14px;
+  font-size:11px;
+  color:var(--muted);
+  display:flex;
+  justify-content:space-between;
+  gap:11px;
+  flex-wrap:wrap;
+}
+.footer-note button{
+  font-size:11px;
+}
+
+@media(max-width:555px){
+  .hero{
+    padding:24px 14px;
+  }
+  .hero-title{
+    font-size:24px;
+  }
+}
+</style>
+</head>
+<body>
+<div class="app-wrap">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-row">
+      <div class="hero-col">
+        <div class="hero-title">Russian Skills Lab</div>
+        <div class="hero-sub">6-Week Beginner Path • место для учебы — a sovereign place for studying Russian.</div>
+        <div style="margin-top:10px;">
+          <span class="hero-pill">🇷🇺 Alphabet • Words • Phrases</span>
+          <span class="hero-pill">💾 Local-only • No tracking</span>
+        </div>
+      </div>
+      <div class="hero-col">
+        <ul class="hero-list">
+          <li><span class="icon">🎯</span><span>Week-by-week roadmap for absolute beginners and travelers.</span></li>
+          <li><span class="icon">✍️</span><span>Connect to your Russian Hub: alphabet tracing, word challenge, phrase practice.</span></li>
+          <li><span class="icon">🧠</span><span>Check off tasks each day; all progress lives only in your browser.</span></li>
+        </ul>
+      </div>
+      <div class="hero-col" style="display:flex;flex-direction:column;gap:8px;align-items:flex-end;justify-content:flex-end;">
+        <button class="btn" onclick="scrollToWeekLab()">
+          Start 6-Week Path
+          <span>→</span>
+        </button>
+        <button class="btn-ghost" onclick="openRussianHub()">
+          Open Russian Hub v1.0
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN GRID -->
+  <div class="main-grid" id="weekLabRoot">
+
+    <!-- LEFT: WEEK LIST -->
+    <aside class="panel">
+      <div class="panel-title">Weeks 1–6</div>
+      <div class="panel-sub">Click a week to view its days & tasks.</div>
+      <div class="week-list" id="weekList"></div>
+
+      <div class="badge-block">
+        <div class="badge-label">Current status</div>
+        <div class="badge-main" id="badgeLabel">
+          <span>Новичок</span> — Beginner Explorer
+        </div>
+        <div style="margin-top:4px;font-size:11px;">
+          Complete more days to upgrade your badge: <strong>Intermediate</strong> → <strong>Traveler</strong> → <strong>Storyteller</strong>.
+        </div>
+      </div>
+    </aside>
+
+    <!-- RIGHT: WEEK DETAIL -->
+    <main class="panel">
+      <div class="week-header">
+        <div class="week-header-main">
+          <div class="week-tag" id="weekTag">Week 1 of 6</div>
+          <div class="week-title" id="weekTitle">Hello, Russian</div>
+          <div class="week-theme-text" id="weekThemeText">
+            Sound, script, and friendly greetings so you can say “Привет” with confidence.
+          </div>
+        </div>
+      </div>
+
+      <ul class="week-outcomes" id="weekOutcomes">
+        <!-- learning outcomes injected -->
+      </ul>
+
+      <div class="days-grid" id="daysGrid">
+        <!-- day cards injected -->
+      </div>
+
+      <div class="footer-note">
+        <div>Tip: Match “Alphabet / Word Challenge / Phrase / Hub” tasks to your Russian Hub tools for a seamless path.</div>
+        <div>
+          <button class="btn-ghost" onclick="exportCourseProgress()">Export checklist JSON</button>
+          <button class="btn-ghost" onclick="resetCourseProgress()">Reset all progress</button>
+        </div>
+      </div>
+    </main>
+
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   CONFIG: where your Russian Hub lives
+   Change this to match your real URL, for example:
+   "/russian", "/russian-hub", "/khaemenesacademy/russian", etc.
+   ============================================================ */
+const RUSSIAN_HUB_BASE = "/russian";
+
+/* Mapping task types -> labels, icons, and hub sections
+   Make sure your Hub uses matching #anchors:
+   #alphabet, #word-game, #phrase-card, #hub, #speaking, #words
+*/
+const TASK_TYPE_META = {
+  alphabet:  { label:"Alphabet",      icon:"Аа",  section:"alphabet"    },
+  word:      { label:"Word Card",     icon:"📝", section:"words"       },
+  phrase:    { label:"Phrase",        icon:"💬", section:"phrase-card" },
+  challenge: { label:"Word Challenge",icon:"🎮", section:"word-game"   },
+  hub:       { label:"Russian Hub",   icon:"🧭", section:"hub"         },
+  review:    { label:"Review",        icon:"🔁"                       },
+  reflection:{ label:"Reflect",       icon:"🧠"                       },
+  speaking:  { label:"Speaking",      icon:"🎙️", section:"speaking"   }
+};
+
+/* ============================================================
+   6-Week Curriculum Data — Russian Skills Lab
+   ============================================================ */
+
+const RU_COURSE = [
+  {
+    week:1,
+    title:"Hello, Russian",
+    theme:"Sound, script, and basic greetings.",
+    outcomes:[
+      "Recognize and trace 8–10 key Cyrillic letters.",
+      "Use simple greetings (Привет, Здравствуйте, Пока) in context.",
+      "Say who you are at a basic level: “Я турист / Я студент.”"
+    ],
+    days:[
+      {
+        label:"Day 1 — First Hello",
+        tag:"Greetings • Alphabet",
+        tasks:[
+          {
+            type:"alphabet",
+            label:"Alphabet: А, О, М, Т",
+            note:"In the Russian Hub alphabet grid, focus on these four letters. Trace each at least 3 times."
+          },
+          {
+            type:"word",
+            label:"Daily word: Привет",
+            note:"Say it 5 times out loud, then tap Speak in the Hub to compare."
+          },
+          {
+            type:"phrase",
+            label:"Phrase: Привет! Я турист.",
+            note:"Build your first tiny introduction. Record it if your browser supports it."
+          }
+        ]
+      },
+      {
+        label:"Day 2 — Thank You",
+        tag:"Politeness",
+        tasks:[
+          {
+            type:"alphabet",
+            label:"Alphabet: К, Н, Р, С",
+            note:"Trace and listen to each letter in the alphabet module."
+          },
+          {
+            type:"word",
+            label:"Daily word: Спасибо",
+            note:"Pair it with Привет and use both in a tiny role-play."
+          },
+          {
+            type:"challenge",
+            label:"Word Challenge: greetings + thanks",
+            note:"Play 10 rounds of the Word Challenge using the greetings set."
+          }
+        ]
+      },
+      {
+        label:"Day 3 — You’re Welcome",
+        tag:"Politeness",
+        tasks:[
+          {
+            type:"alphabet",
+            label:"Alphabet: Д, Л, В",
+            note:"Focus on the shapes and sound differences."
+          },
+          {
+            type:"word",
+            label:"Daily word: Пожалуйста",
+            note:"Practice the rhythm: па-жал-у-йста."
+          },
+          {
+            type:"phrase",
+            label:"Phrase: Спасибо! — Пожалуйста.",
+            note:"Act out a mini café scene using Russian only."
+          }
+        ]
+      },
+      {
+        label:"Day 4 — Formal Hello",
+        tag:"Formal vs casual",
+        tasks:[
+          {
+            type:"alphabet",
+            label:"Alphabet: Е, И, У",
+            note:"Trace vowels carefully; listen to each in the Hub."
+          },
+          {
+            type:"word",
+            label:"Daily word: Здравствуйте",
+            note:"Break it into chunks and repeat slowly, then faster."
+          },
+          {
+            type:"phrase",
+            label:"Phrase: Здравствуйте, я турист.",
+            note:"Record and listen back if possible."
+          }
+        ]
+      },
+      {
+        label:"Day 5 — Goodbye",
+        tag:"Closing a conversation",
+        tasks:[
+          {
+            type:"alphabet",
+            label:"Alphabet: Б, П, Г",
+            note:"Pay attention to the difference between Б and В."
+          },
+          {
+            type:"word",
+            label:"Daily word: До свидания",
+            note:"Practice both meaning and melody of the phrase."
+          },
+          {
+            type:"phrase",
+            label:"Phrase: До свидания! Хорошего дня!",
+            note:"Use it as your exit line at the end of practice."
+          }
+        ]
+      },
+      {
+        label:"Day 6 — Review Day",
+        tag:"Review",
+        tasks:[
+          {
+            type:"review",
+            label:"Alphabet review (all letters from Week 1)",
+            note:"Spend 10–15 minutes tracing any letters that still feel wobbly."
+          },
+          {
+            type:"challenge",
+            label:"Word Challenge: 15 correct answers in a row",
+            note:"Use your Hub’s word game with the greetings & politeness set."
+          },
+          {
+            type:"speaking",
+            label:"Speaking drill: full greeting script",
+            note:"Say hello, introduce yourself as a tourist, say thank you and goodbye."
+          }
+        ]
+      },
+      {
+        label:"Day 7 — Badge Day",
+        tag:"Consolidation",
+        tasks:[
+          {
+            type:"reflection",
+            label:"Self-check: Can you greet someone in Russian without looking?",
+            note:"If yes, you’ve earned the Week 1 badge."
+          },
+          {
+            type:"hub",
+            label:"Free play in Russian Hub",
+            note:"Explore any letter, word, or phrase you enjoyed this week."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    week:2,
+    title:"This Is Me",
+    theme:"Names, origin, and simple identity.",
+    outcomes:[
+      "Introduce yourself with name and country of origin.",
+      "Recognize and say key identity words (имя, страна, телефон, адрес).",
+      "Use patterns: “Меня зовут…”, “Я из…”, “Мой телефон…”."
+    ],
+    days:[
+      {
+        label:"Day 8 — My Name",
+        tag:"Identity",
+        tasks:[
+          {
+            type:"alphabet",
+            label:"Alphabet: Ж, Ч",
+            note:"Practice their soft sounds with example words from the Hub."
+          },
+          {
+            type:"word",
+            label:"Daily phrase: Меня зовут …",
+            note:"Insert your real name and practice naturally."
+          },
+          {
+            type:"challenge",
+            label:"Word Challenge: name phrases",
+            note:"Add name-related vocab to your word game pool."
+          }
+        ]
+      },
+      {
+        label:"Day 9 — What’s Your Name?",
+        tag:"Questions",
+        tasks:[
+          {
+            type:"word",
+            label:"Daily phrase: Как вас зовут?",
+            note:"Practice both polite “вас” and informal “тебя” if you like."
+          },
+          {
+            type:"speaking",
+            label:"Mini dialogue: names",
+            note:"Record yourself playing both roles if possible."
+          },
+          {
+            type:"review",
+            label:"Review all greetings from Week 1",
+            note:"Blend greetings with name exchanges."
+          }
+        ]
+      },
+      {
+        label:"Day 10 — Where Are You From?",
+        tag:"Origin",
+        tasks:[
+          {
+            type:"word",
+            label:"Daily phrase: Я из …",
+            note:"Use your real city or country (e.g., Я из США / Я из Флориды)."
+          },
+          {
+            type:"word",
+            label:"Daily word set: страна, город, турист",
+            note:"Add them to your Word Challenge list."
+          },
+          {
+            type:"challenge",
+            label:"Word Challenge: identity set (name + origin)",
+            note:"Aim for 10 correct translations."
+          }
+        ]
+      },
+      {
+        label:"Day 11 — Phone & Number",
+        tag:"Practical info",
+        tasks:[
+          {
+            type:"word",
+            label:"Daily word: телефон",
+            note:"Practice saying your own number in Russian digits."
+          },
+          {
+            type:"hub",
+            label:"Use Hub: Numbers practice",
+            note:"Write your number and try speaking it out loud."
+          },
+          {
+            type:"phrase",
+            label:"Phrase: Мой телефон …",
+            note:"Even if you don’t fully say it, practice the pattern."
+          }
+        ]
+      },
+      {
+        label:"Day 12 — Address & Documents",
+        tag:"Practical info",
+        tasks:[
+          {
+            type:"word",
+            label:"Daily words: адрес, паспорт, документ",
+            note:"Add them to your Word Challenge."
+          },
+          {
+            type:"phrase",
+            label:"Phrase: Мой адрес … / У меня паспорт.",
+            note:"Practice slowly, then more natural speed."
+          },
+          {
+            type:"review",
+            label:"Identity script",
+            note:"Combine name + origin + one piece of contact info."
+          }
+        ]
+      },
+      {
+        label:"Day 13 — Identity Review",
+        tag:"Review",
+        tasks:[
+          {
+            type:"review",
+            label:"Script: “Меня зовут … Я из … Мой телефон …”",
+            note:"Say it without looking at the screen if possible."
+          },
+          {
+            type:"challenge",
+            label:"Word Challenge: 20 answers from identity vocab",
+            note:"Use only identity words in your long streak."
+          },
+          {
+            type:"hub",
+            label:"Free Hub practice with identity topics",
+            note:"Search, speak, and trace anything still shaky."
+          }
+        ]
+      },
+      {
+        label:"Day 14 — Badge Day 2",
+        tag:"Consolidation",
+        tasks:[
+          {
+            type:"reflection",
+            label:"Self-check: Can you introduce yourself to a hotel receptionist?",
+            note:"Imagine checking in and walk through it in Russian."
+          },
+          {
+            type:"hub",
+            label:"Choose your favorite identity phrase & record it",
+            note:"Save it as your Week 2 ‘calling card’."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    week:3,
+    title:"Around the City",
+    theme:"Finding places and asking where things are.",
+    outcomes:[
+      "Use Где…? questions to ask for important locations.",
+      "Understand basic direction words (налево, направо, прямо).",
+      "Combine “Мне нужно в…” with key city places (метро, отель, банк)."
+    ],
+    days:[
+      {
+        label:"Day 15 — Where Is…?",
+        tag:"Questions",
+        tasks:[
+          {type:"word",label:"Daily phrase: Где…?",note:"Practice with отель, метро, ресторан from your Hub word list."},
+          {type:"challenge",label:"Word Challenge: city places (отель, вокзал, аэропорт, ресторан)",note:"Aim for 10 correct."},
+          {type:"hub",label:"Alphabet/word review for new city words",note:"Trace or listen to any tricky letters."}
+        ]
+      },
+      {
+        label:"Day 16 — Left / Right / Straight",
+        tag:"Directions",
+        tasks:[
+          {type:"word",label:"Daily words: налево, направо, прямо",note:"Practice saying them as a rhythm: налево-направо-прямо."},
+          {type:"phrase",label:"Phrase: Прямо, потом направо.",note:"Imagine directions from the hotel to a café."},
+          {type:"challenge",label:"Word Challenge: directions only",note:"Play until you get 10 correct in a row."}
+        ]
+      },
+      {
+        label:"Day 17 — Metro & Bus",
+        tag:"Transport",
+        tasks:[
+          {type:"word",label:"Daily words: метро, автобус, остановка",note:"Add them to your Word Challenge pool."},
+          {type:"phrase",label:"Phrase: Где остановка автобуса?",note:"Practice slowly, then try in one breath."},
+          {type:"hub",label:"Use Russian Hub: numbers + city places",note:"Link stop numbers or times with the words."}
+        ]
+      },
+      {
+        label:"Day 18 — Tickets",
+        tag:"Tickets",
+        tasks:[
+          {type:"word",label:"Daily words: билет, платформа, поезд",note:"Say them aloud and connect with travel."},
+          {type:"phrase",label:"Phrase: Один билет, пожалуйста.",note:"Practice asking politely."},
+          {type:"challenge",label:"Word Challenge: tickets & transport",note:"Play 10–15 rounds."}
+        ]
+      },
+      {
+        label:"Day 19 — City Script",
+        tag:"Dialogue",
+        tasks:[
+          {type:"speaking",label:"Script: ask how to get to the metro",note:"Use Где метро? and directions words together."},
+          {type:"review",label:"Review: places + directions",note:"Scan your Week 3 words in the Hub search/translate."},
+          {type:"hub",label:"Free city simulation in Russian Hub",note:"Pretend you’re moving around a city only in Russian."}
+        ]
+      },
+      {
+        label:"Day 20 — Review",
+        tag:"Review",
+        tasks:[
+          {type:"challenge",label:"Word Challenge: 25 mixed city questions",note:"Stick to city/direction/travel words."},
+          {type:"phrase",label:"Create your own city phrase",note:"For example: Мне нужно в банк / Мне нужно в аптеку."},
+          {type:"reflection",label:"Self-check: can you ask for metro + bus + restaurant?",note:"If yes, Week 3 is nearly yours."}
+        ]
+      },
+      {
+        label:"Day 21 — Badge Day 3",
+        tag:"Consolidation",
+        tasks:[
+          {type:"reflection",label:"Walk through a full ‘lost in the city’ scenario in your mind.",note:"Only use words and phrases you’ve learned so far."},
+          {type:"hub",label:"Record your city help line",note:"Example: Помогите, пожалуйста, мне нужно в метро."}
+        ]
+      }
+    ]
+  },
+  {
+    week:4,
+    title:"Food & Menus",
+    theme:"Ordering, asking for the bill, and simple menu language.",
+    outcomes:[
+      "Order simple food and drinks politely.",
+      "Recognize key menu items and meal words (завтрак, обед, ужин).",
+      "Use Я хочу / Я бы хотел(а)… for basic ordering."
+    ],
+    days:[
+      {label:"Day 22 — Meals",tag:"Meals",tasks:[
+        {type:"word",label:"Daily words: завтрак, обед, ужин",note:"Connect them to your actual meal times."},
+        {type:"phrase",label:"Phrase: Завтрак в отеле.",note:"Practice saying your schedule."},
+        {type:"challenge",label:"Word Challenge: meal words",note:"10 correct answers."}
+      ]},
+      {label:"Day 23 — Drinks",tag:"Drinks",tasks:[
+        {type:"word",label:"Daily words: вода, чай, кофе, сок",note:"Say them as you pour or imagine each drink."},
+        {type:"phrase",label:"Phrase: Я хочу чай / Я хочу кофе.",note:"Choose your favorite and repeat."},
+        {type:"hub",label:"Use Hub to search & hear drink words",note:"Play audio and repeat 3 times."}
+      ]},
+      {label:"Day 24 — Restaurant Basics",tag:"Restaurant",tasks:[
+        {type:"word",label:"Daily words: меню, счёт, официант",note:"Add them into your word game."},
+        {type:"phrase",label:"Phrases: Меню, пожалуйста. / Счёт, пожалуйста.",note:"Practice both in a row."},
+        {type:"speaking",label:"Order a simple meal aloud",note:"Combine drink + meal + please."}
+      ]},
+      {label:"Day 25 — I Would Like…",tag:"Polite ordering",tasks:[
+        {type:"phrase",label:"Patterns: Я хочу… / Я бы хотел(а)…",note:"Practice with at least 3 menu items."},
+        {type:"challenge",label:"Word Challenge: restaurant words only",note:"Push for 15 correct."},
+        {type:"hub",label:"Free Hub play with food vocab",note:"Trace any food words that interest you."}
+      ]},
+      {label:"Day 26 — Preferences",tag:"Preferences",tasks:[
+        {type:"word",label:"Daily words: вкусно, невкусно, можно",note:"Practice in pairs: Это вкусно / Нельзя."},
+        {type:"phrase",label:"Phrase: Это очень вкусно!",note:"Add this to your restaurant script."},
+        {type:"review",label:"Restaurant script full run-through",note:"From “здравствуйте” to paying the bill."}
+      ]},
+      {label:"Day 27 — Review",tag:"Review",tasks:[
+        {type:"challenge",label:"Word Challenge: 25 mixed food & restaurant words",note:"Shuffle everything learned."},
+        {type:"reflection",label:"Self-check: Can you order a drink + meal and ask for the bill?",note:"Imagine doing it in a real café."},
+        {type:"hub",label:"Record your favorite food phrase",note:"Example: Я люблю суп / Я люблю кофе."}
+      ]},
+      {label:"Day 28 — Badge Day 4",tag:"Consolidation",tasks:[
+        {type:"reflection",label:"Imagine your perfect Russian café morning.",note:"Narrate in simple Russian using your words."},
+        {type:"hub",label:"Free exploration in Russian Hub",note:"Focus on anything joyful about food & cafés."}
+      ]}
+    ]
+  },
+  {
+    week:5,
+    title:"Time & Plans",
+    theme:"Talking about today, tomorrow, and simple plans.",
+    outcomes:[
+      "Use сегодня, вчера, завтра confidently.",
+      "Describe very simple plans and times of day in Russian.",
+      "Combine location + time (e.g., Я завтра в Москве)."
+    ],
+    days:[
+      {label:"Day 29 — Today / Tomorrow",tag:"Time",tasks:[
+        {type:"word",label:"Daily words: сегодня, завтра, вчера",note:"Attach them to your real calendar."},
+        {type:"phrase",label:"Phrase: Я сегодня в отеле.",note:"Say today’s sentence about your actual day."},
+        {type:"challenge",label:"Word Challenge: time words",note:"10 correct."}
+      ]},
+      {label:"Day 30 — Parts of Day",tag:"Time of day",tasks:[
+        {type:"word",label:"Daily words: утром, днём, вечером, ночью",note:"Think of one thing you do at each time."},
+        {type:"phrase",label:"Phrase: Завтра утром я в городе.",note:"Practice it with different times."},
+        {type:"hub",label:"Hub search: time words",note:"Speak & hear each at least twice."}
+      ]},
+      {label:"Day 31 — Simple Plans",tag:"Plans",tasks:[
+        {type:"word",label:"Daily words: встреча, экскурсия, прогулка",note:"Add them to your word game."},
+        {type:"phrase",label:"Phrase: У меня экскурсия завтра.",note:"Tie it to an imaginary or real trip."},
+        {type:"challenge",label:"Word Challenge: time + activity",note:"15 mixed questions."}
+      ]},
+      {label:"Day 32 — Combined Sentences",tag:"Sentences",tasks:[
+        {type:"speaking",label:"Combine where + when",note:"Example: Я завтра вечером в ресторане."},
+        {type:"review",label:"Review weeks 3–5 vocabulary",note:"City + food + time all together."},
+        {type:"hub",label:"Free Hub play: build 3 future-ish sentences",note:"Even if grammar isn’t perfect, focus on clarity."}
+      ]},
+      {label:"Day 33 — My Schedule",tag:"Schedule",tasks:[
+        {type:"phrase",label:"Make a 3-line schedule for tomorrow",note:"Use сегодня/завтра and parts of day."},
+        {type:"challenge",label:"Word Challenge: 20 random from all weeks",note:"Full-mix practice."},
+        {type:"reflection",label:"Self-check: can you describe a simple day?",note:"Morning, afternoon, evening in Russian."}
+      ]},
+      {label:"Day 34 — Review",tag:"Review",tasks:[
+        {type:"challenge",label:"Speaking drill: tell a friend your plans",note:"Describe tomorrow only in Russian."},
+        {type:"hub",label:"Record a short ‘plans’ message",note:"Keep it under 20 seconds."},
+        {type:"review",label:"Skim all time words in the Hub",note:"Reinforce spellings and sounds."}
+      ]},
+      {label:"Day 35 — Badge Day 5",tag:"Consolidation",tasks:[
+        {type:"reflection",label:"Imagine planning a whole travel day in Russian.",note:"From breakfast to evening activities."},
+        {type:"hub",label:"Free exploration",note:"Pick any topic that feels weak and patch it."}
+      ]}
+    ]
+  },
+  {
+    week:6,
+    title:"Stay Safe & Combine",
+    theme:"Emergencies, help phrases, and putting everything together.",
+    outcomes:[
+      "Ask for help in simple emergency situations.",
+      "Use Помогите, пожалуйста and related phrases.",
+      "Combine greeting, identity, city, food, and time into short personal scripts."
+    ],
+    days:[
+      {label:"Day 36 — Help!",tag:"Emergencies",tasks:[
+        {type:"word",label:"Daily words: помощь, полиция, больница, врач",note:"Add them to your word game immediately."},
+        {type:"phrase",label:"Phrase: Помогите, пожалуйста.",note:"Say it clearly and firmly."},
+        {type:"challenge",label:"Word Challenge: emergency words only",note:"10 correct."}
+      ]},
+      {label:"Day 37 — Problems",tag:"Problems",tasks:[
+        {type:"word",label:"Daily words: проблема, документ, страховка",note:"Connect to real-world meaning."},
+        {type:"phrase",label:"Phrase: У меня проблема с документами.",note:"Practice a few variations (with паспорт / билетом)."},
+        {type:"hub",label:"Hub search: emergency phrases",note:"Listen carefully to stress and rhythm."}
+      ]},
+      {label:"Day 38 — Doctor & Pharmacy",tag:"Health",tasks:[
+        {type:"word",label:"Daily words: аптека, лекарство, температура",note:"Add to Word Challenge health set."},
+        {type:"phrase",label:"Phrase: Мне нужен врач / Мне нужна аптека.",note:"Practice both forms."},
+        {type:"review",label:"Combine help + place",note:"For example: Помогите, пожалуйста, мне нужна аптека."}
+      ]},
+      {label:"Day 39 — Lost & Found",tag:"Lost items",tasks:[
+        {type:"word",label:"Daily words: потерял(а), сумка, кошелёк, паспорт",note:"Think of realistic travel scenarios."},
+        {type:"phrase",label:"Phrase: Я потерял(а) паспорт.",note:"Practice both masculine and feminine endings if you like."},
+        {type:"challenge",label:"Word Challenge: lost/found vocab",note:"Practice until you’re comfortable."}
+      ]},
+      {label:"Day 40 — Big Review Script",
+        tag:"Full script",
+        tasks:[
+          {type:"speaking",label:"Create your own ‘help’ script",note:"Start with greeting, say who you are, where you’re from, what the problem is, and what you need."},
+          {type:"review",label:"Run through all six weeks in your mind",note:"Greetings, identity, city, food, time, emergencies."},
+          {type:"hub",label:"Use the Russian Hub to revisit any weak module",note:"Alphabet, word challenges, or phrase cards."}
+        ]
+      },
+      {label:"Day 41 — Gentle Review",tag:"Review",tasks:[
+        {type:"challenge",label:"Word Challenge: 40 mixed questions",note:"Take your time; focus on accuracy."},
+        {type:"reflection",label:"Write 3 sentences about yourself and your travel plans",note:"Use any words you like."},
+        {type:"hub",label:"Record your ‘I can do this’ message in Russian",note:"Short, simple, from the heart."}
+      ]},
+      {label:"Day 42 — Final Badge",tag:"Completion",tasks:[
+        {type:"reflection",label:"Self-assessment: what can you now do in Russian?",note:"List 3 things you couldn’t do before."},
+        {type:"hub",label:"Celebrate in the Hub",note:"Practice your favorite phrase and store this as your Week 6 seal."}
+      ]}
+    ]
+  }
+];
+
+/* ============================================================
+   LocalStorage Progress
+   ============================================================ */
+
+const STORAGE_KEY = "ru6w_course_progress_v1";
+
+let completedSet = new Set(loadProgress());
+
+function loadProgress(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return [];
+    const arr = JSON.parse(raw);
+    if(Array.isArray(arr)) return arr;
+    return [];
+  }catch(e){
+    return [];
+  }
+}
+
+function saveProgress(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(completedSet)));
+}
+
+/* ============================================================
+   Rendering
+   ============================================================ */
+
+let activeWeekIndex = 0;
+
+const weekListEl = document.getElementById("weekList");
+const weekTagEl = document.getElementById("weekTag");
+const weekTitleEl = document.getElementById("weekTitle");
+const weekThemeTextEl = document.getElementById("weekThemeText");
+const weekOutcomesEl = document.getElementById("weekOutcomes");
+const daysGridEl = document.getElementById("daysGrid");
+const badgeLabelEl = document.getElementById("badgeLabel");
+
+function renderWeekList(){
+  weekListEl.innerHTML = "";
+  RU_COURSE.forEach((weekObj, idx)=>{
+    const totalTasks = weekObj.days.reduce((sum,d)=> sum + d.tasks.length, 0);
+    const doneTasks = weekObj.days.reduce((sum,d,di)=>{
+      return sum + d.tasks.filter((t,ti)=> completedSet.has(makeTaskId(weekObj.week, di, ti))).length;
+    },0);
+    const pct = totalTasks ? Math.round(doneTasks / totalTasks * 100) : 0;
+
+    const item = document.createElement("div");
+    item.className = "week-item" + (idx === activeWeekIndex ? " active" : "");
+    item.onclick = ()=> { activeWeekIndex = idx; renderAll(); };
+
+    const name = document.createElement("div");
+    name.className = "week-name";
+    name.textContent = `Week ${weekObj.week}: ${weekObj.title}`;
+
+    const theme = document.createElement("div");
+    theme.className = "week-theme";
+    theme.textContent = weekObj.theme;
+
+    const pbWrap = document.createElement("div");
+    pbWrap.className = "progress-bar-wrap";
+    const pbLabel = document.createElement("div");
+    pbLabel.className = "progress-label";
+    pbLabel.innerHTML = `<span>${doneTasks}/${totalTasks} tasks</span><span>${pct}%</span>`;
+    const bar = document.createElement("div");
+    bar.className = "progress-bar";
+    const fill = document.createElement("div");
+    fill.className = "progress-bar-fill";
+    fill.style.width = pct + "%";
+    bar.appendChild(fill);
+    pbWrap.appendChild(pbLabel);
+    pbWrap.appendChild(bar);
+
+    item.appendChild(name);
+    item.appendChild(theme);
+    item.appendChild(pbWrap);
+
+    weekListEl.appendChild(item);
+  });
+}
+
+function renderWeekDetail(){
+  const weekObj = RU_COURSE[activeWeekIndex];
+  weekTagEl.textContent = `Week ${weekObj.week} of ${RU_COURSE.length}`;
+  weekTitleEl.textContent = weekObj.title;
+  weekThemeTextEl.textContent = weekObj.theme;
+
+  weekOutcomesEl.innerHTML = "";
+  weekObj.outcomes.forEach(o=>{
+    const li = document.createElement("li");
+    li.textContent = "• " + o;
+    weekOutcomesEl.appendChild(li);
+  });
+
+  daysGridEl.innerHTML = "";
+  weekObj.days.forEach((dayObj, dayIndex)=>{
+    const card = document.createElement("div");
+    card.className = "day-card";
+
+    const head = document.createElement("div");
+    head.className = "day-head";
+    const title = document.createElement("div");
+    title.className = "day-title";
+    title.textContent = dayObj.label;
+    const tag = document.createElement("div");
+    tag.className = "day-tag";
+    tag.textContent = dayObj.tag || "";
+    head.appendChild(title);
+    head.appendChild(tag);
+
+    const ul = document.createElement("ul");
+    ul.className = "task-list";
+
+    dayObj.tasks.forEach((taskObj, taskIndex)=>{
+      const li = document.createElement("li");
+      const cb = document.createElement("input");
+      cb.type = "checkbox";
+      const id = makeTaskId(weekObj.week, dayIndex, taskIndex);
+      cb.checked = completedSet.has(id);
+      cb.onchange = ()=>{
+        if(cb.checked){
+          completedSet.add(id);
+        }else{
+          completedSet.delete(id);
+        }
+        saveProgress();
+        renderWeekList();
+        updateBadge();
+      };
+
+      const mainDiv = document.createElement("div");
+      mainDiv.className = "task-main";
+
+      // NEW: type pill + "Open in Hub" link
+      const meta = TASK_TYPE_META[taskObj.type] || null;
+      if(meta){
+        const metaRow = document.createElement("div");
+        metaRow.className = "task-meta-row";
+
+        const pill = document.createElement("span");
+        pill.className = "task-type-pill";
+        pill.textContent = `${meta.icon} ${meta.label}`;
+        metaRow.appendChild(pill);
+
+        if(meta.section){
+          const linkBtn = document.createElement("button");
+          linkBtn.type = "button";
+          linkBtn.className = "task-open-link";
+          linkBtn.textContent = "Open in Hub";
+          linkBtn.onclick = (e)=>{
+            e.stopPropagation();
+            openHubSection(meta.section);
+          };
+          metaRow.appendChild(linkBtn);
+        }
+
+        mainDiv.appendChild(metaRow);
+      }
+
+      const strong = document.createElement("div");
+      strong.className = "task-label-strong";
+      strong.textContent = taskObj.label;
+      const note = document.createElement("div");
+      note.className = "task-note";
+      note.textContent = taskObj.note || "";
+
+      mainDiv.appendChild(strong);
+      if(taskObj.note) mainDiv.appendChild(note);
+
+      li.appendChild(cb);
+      li.appendChild(mainDiv);
+      ul.appendChild(li);
+    });
+
+    card.appendChild(head);
+    card.appendChild(ul);
+    daysGridEl.appendChild(card);
+  });
+}
+
+function makeTaskId(weekNum, dayIndex, taskIndex){
+  return `w${weekNum}d${dayIndex+1}_t${taskIndex}`;
+}
+
+function updateBadge(){
+  const totalTasks = RU_COURSE.reduce((sum,w)=> sum + w.days.reduce((ds,d)=> ds + d.tasks.length, 0),0);
+  const doneTasks = completedSet.size;
+  const pct = totalTasks ? Math.round(doneTasks/totalTasks*100) : 0;
+  let label = "Новичок — Beginner Explorer";
+  if(pct >= 80) label = "Сказочник — Storyteller (80%+ complete)";
+  else if(pct >= 55) label = "Путешественник — Traveler (55%+ complete)";
+  else if(pct >= 30) label = "Ученик — Intermediate Learner (30%+ complete)";
+  badgeLabelEl.innerHTML = `<span>${label}</span>`;
+}
+
+/* ============================================================
+   Export / Reset
+   ============================================================ */
+
+function exportCourseProgress(){
+  const data = {
+    completed:Array.from(completedSet),
+    totalTasks: RU_COURSE.reduce((sum,w)=> sum + w.days.reduce((ds,d)=> ds + d.tasks.length, 0),0),
+    generatedAt:new Date().toISOString()
+  };
+  const blob = new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "russian-skills-lab-progress.json";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function resetCourseProgress(){
+  if(!confirm("Reset all checked tasks for this 6-week path?")) return;
+  completedSet = new Set();
+  saveProgress();
+  renderAll();
+}
+
+/* ============================================================
+   Navigation helpers / Hub wiring
+   ============================================================ */
+
+function scrollToWeekLab(){
+  const root = document.getElementById("weekLabRoot");
+  if(root) root.scrollIntoView({behavior:"smooth"});
+}
+
+function openRussianHub(){
+  window.location.href = RUSSIAN_HUB_BASE;
+}
+
+// Deep-link to a section inside the Hub (e.g. /russian#alphabet)
+function openHubSection(section){
+  window.location.href = `${RUSSIAN_HUB_BASE}#${section}`;
+}
+
+/* ============================================================
+   Init
+   ============================================================ */
+
+function renderAll(){
+  renderWeekList();
+  renderWeekDetail();
+  updateBadge();
+}
+
+renderAll();
+</script>
+</body>
+</html>
