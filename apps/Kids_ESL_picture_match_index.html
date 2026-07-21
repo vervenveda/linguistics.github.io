@@ -1,0 +1,1024 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Khaemenes Kids — ESL Picture Match</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+  :root{
+    --bg:#e0f2fe;
+    --card:#ffffff;
+    --card-soft:#f9fafb;
+    --accent:#3b82f6;
+    --accent-soft:#bfdbfe;
+    --accent-2:#f97316;
+    --accent-3:#22c55e;
+    --text:#0f172a;
+    --muted:#64748b;
+    --muted-2:#94a3b8;
+    --radius:18px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    background:
+      radial-gradient(circle at 0 0, rgba(59,130,246,0.18), transparent 55%),
+      radial-gradient(circle at 100% 0, rgba(249,115,22,0.18), transparent 55%),
+      linear-gradient(180deg,#eff6ff,#e0f2fe 60%,#dbeafe);
+    color:var(--text);
+    padding:14px;
+  }
+  .app{
+    max-width:1120px;
+    margin:0 auto;
+  }
+  header{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    justify-content:space-between;
+    padding:6px 4px 12px;
+  }
+  header h1{
+    margin:0;
+    font-size:1.5rem;
+    letter-spacing:0.03em;
+  }
+  header .sub{
+    margin-top:4px;
+    font-size:0.95rem;
+    color:var(--muted);
+    max-width:560px;
+  }
+  .tagrow{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    justify-content:flex-end;
+    align-items:center;
+  }
+  .pill{
+    padding:7px 11px;
+    border-radius:999px;
+    border:1px solid rgba(15,23,42,0.06);
+    background:rgba(255,255,255,0.9);
+    font-size:0.86rem;
+    color:var(--muted-2);
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+  }
+  .pill strong{color:var(--text);}
+  .pill.kids{
+    border-color:rgba(59,130,246,0.5);
+    box-shadow:0 0 0 3px rgba(59,130,246,0.18);
+  }
+  .pill.local{
+    border-color:rgba(34,197,94,0.6);
+    background:rgba(220,252,231,0.96);
+  }
+
+  .layout{
+    display:grid;
+    grid-template-columns: minmax(0,2fr) minmax(260px,1.1fr);
+    gap:14px;
+  }
+  @media(max-width:900px){
+    .layout{grid-template-columns:1fr}
+  }
+
+  .card{
+    background:var(--card);
+    border-radius:var(--radius);
+    border:1px solid rgba(15,23,42,0.06);
+    box-shadow:0 14px 32px rgba(15,23,42,0.15);
+    padding:10px 12px 12px;
+  }
+  .card-soft{
+    background:var(--card-soft);
+  }
+  .card h2{
+    margin:0 0 6px 0;
+    font-size:1.05rem;
+  }
+  .small{
+    font-size:0.86rem;
+    color:var(--muted-2);
+  }
+
+  .controls{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    align-items:center;
+    margin-bottom:10px;
+  }
+  .controls .field{
+    display:flex;
+    flex-direction:column;
+    gap:3px;
+    font-size:0.8rem;
+    color:var(--muted);
+  }
+  .controls input[type="text"],
+  .controls select{
+    min-width:140px;
+    padding:6px 8px;
+    border-radius:999px;
+    border:1px solid rgba(148,163,184,0.8);
+    font:inherit;
+    outline:none;
+    background:#ffffff;
+    color:var(--text);
+  }
+  .controls input[type="text"]:focus,
+  .controls select:focus{
+    box-shadow:0 0 0 2px rgba(59,130,246,0.35);
+  }
+
+  .sound-toggle{
+    display:flex;
+    align-items:center;
+    gap:5px;
+    font-size:0.8rem;
+    color:var(--muted);
+  }
+  .sound-toggle input{
+    width:16px;
+    height:16px;
+  }
+
+  .levels{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+  }
+
+  .btn{
+    border:none;
+    cursor:pointer;
+    border-radius:999px;
+    padding:7px 12px;
+    font-size:0.86rem;
+    font-weight:700;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    background:#e5e7eb;
+    color:#111827;
+    box-shadow:0 4px 10px rgba(15,23,42,0.12);
+    transition:transform 0.06s, box-shadow 0.1s, background 0.1s;
+  }
+  .btn:hover{
+    background:#dfe3ef;
+  }
+  .btn:active{
+    transform:translateY(1px);
+    box-shadow:0 2px 5px rgba(15,23,42,0.18);
+  }
+  .btn.primary{
+    background:linear-gradient(135deg,#3b82f6,#2563eb);
+    color:#f9fafb;
+  }
+  .btn.primary:hover{
+    background:linear-gradient(135deg,#2563eb,#1d4ed8);
+  }
+  .btn.level{
+    background:#eff6ff;
+    border:1px solid rgba(59,130,246,0.35);
+  }
+  .btn.level.active{
+    background:#3b82f6;
+    color:#eff6ff;
+    border-color:#1d4ed8;
+  }
+  .btn.small{
+    padding:5px 9px;
+    font-size:0.78rem;
+    box-shadow:none;
+  }
+  .btn.ghost{
+    background:transparent;
+    border:1px dashed rgba(148,163,184,0.9);
+    box-shadow:none;
+  }
+
+  .hud{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:8px;
+    font-size:0.85rem;
+    color:var(--muted-2);
+  }
+  .hud span.label{
+    font-weight:700;
+    color:var(--text);
+  }
+
+  .board-wrap{
+    border-radius:14px;
+    border:1px solid rgba(148,163,184,0.6);
+    background:linear-gradient(180deg,#eff6ff,#e0f2fe);
+    padding:10px;
+    margin-bottom:10px;
+  }
+  .board{
+    display:grid;
+    gap:8px;
+    justify-content:center;
+    align-content:flex-start;
+    min-height:240px;
+  }
+  .board-empty{
+    text-align:center;
+    font-size:0.92rem;
+    color:var(--muted);
+    padding:24px 8px;
+  }
+
+  .tile{
+    position:relative;
+    border:none;
+    cursor:pointer;
+    border-radius:12px;
+    background:linear-gradient(135deg,#1d4ed8,#2563eb);
+    color:#eff6ff;
+    font-weight:800;
+    font-size:1rem;
+    padding:8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 6px 14px rgba(15,23,42,0.35);
+    transition:transform 0.09s, box-shadow 0.09s, background 0.16s, opacity 0.16s;
+  }
+  .tile:disabled{
+    cursor:default;
+  }
+  .tile:hover{
+    transform:translateY(-1px);
+  }
+  .tile.flipped{
+    background:#f9fafb;
+    color:#0f172a;
+  }
+  .tile.matched{
+    background:linear-gradient(135deg,#22c55e,#16a34a);
+    color:#ecfdf5;
+    box-shadow:0 0 0 2px rgba(34,197,94,0.4);
+  }
+
+  .tile-inner{
+    text-align:center;
+  }
+  .tile-main{
+    font-size:1.8rem;
+    line-height:1.1;
+  }
+  .tile-sub{
+    font-size:0.8rem;
+    margin-top:2px;
+    color:var(--muted-2);
+  }
+  .tile-back{
+    font-size:1.6rem;
+  }
+
+  .practice-list{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    margin-top:6px;
+  }
+  .practice-item{
+    display:flex;
+    gap:8px;
+    padding:6px 7px;
+    border-radius:12px;
+    background:rgba(239,246,255,0.96);
+    border:1px solid rgba(148,163,184,0.6);
+    align-items:center;
+  }
+  .practice-icon{
+    font-size:1.6rem;
+    width:36px;
+    text-align:center;
+  }
+  .practice-word{
+    font-weight:800;
+    font-size:0.92rem;
+  }
+  .practice-hint{
+    font-size:0.8rem;
+    color:var(--muted-2);
+  }
+
+  .score-header{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:6px;
+  }
+  .score-filter{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:0.8rem;
+    color:var(--muted-2);
+  }
+  .score-filter select{
+    padding:5px 7px;
+    border-radius:999px;
+    border:1px solid rgba(148,163,184,0.9);
+    font:inherit;
+    font-size:0.8rem;
+    outline:none;
+    background:#ffffff;
+    color:var(--text);
+  }
+  .score-table{
+    margin-top:4px;
+    max-height:260px;
+    overflow:auto;
+  }
+  .score-table table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:0.8rem;
+  }
+  .score-table th,
+  .score-table td{
+    padding:4px 5px;
+    border-bottom:1px solid rgba(226,232,240,0.9);
+    text-align:left;
+    white-space:nowrap;
+  }
+  .score-table th{
+    position:sticky;
+    top:0;
+    background:#f9fafb;
+    z-index:1;
+    font-weight:700;
+    color:var(--muted);
+  }
+  .score-table td.level{
+    color:var(--muted);
+  }
+  .score-table td.name{
+    font-weight:700;
+  }
+
+  .statusbar{
+    margin-top:10px;
+    padding:7px 10px;
+    border-radius:999px;
+    background:rgba(15,23,42,0.04);
+    border:1px dashed rgba(148,163,184,0.7);
+    font-size:0.84rem;
+    color:var(--muted-2);
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .statusbar strong{color:var(--text);}
+</style>
+</head>
+<body>
+<div class="app" role="application" aria-label="Khaemenes Kids ESL Picture Match">
+  <header>
+    <div>
+      <h1>Khaemenes Kids — ESL Picture Match</h1>
+      <div class="sub">
+        Match <b>English words</b> to their <b>pictures</b>. Three levels, a timer, sound effects,
+        and a shared scoreboard so friends and siblings can race together.
+      </div>
+    </div>
+    <div class="tagrow">
+      <div class="pill kids"><strong>Ages:</strong> about 6–11</div>
+      <div class="pill local">Local only · no accounts</div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <!-- LEFT: Game -->
+    <section>
+      <div class="card card-soft">
+        <h2>Game Controls</h2>
+        <div class="controls" aria-label="Game controls">
+          <div class="field">
+            <span>Player name</span>
+            <input id="playerName" type="text" placeholder="Type your name…" />
+          </div>
+          <div class="field" style="min-width:220px">
+            <span>Choose level</span>
+            <div class="levels">
+              <button type="button" class="btn level active" data-level="0">Level 1</button>
+              <button type="button" class="btn level" data-level="1">Level 2</button>
+              <button type="button" class="btn level" data-level="2">Level 3</button>
+            </div>
+          </div>
+          <div class="sound-toggle">
+            <input type="checkbox" id="soundToggle" checked />
+            <label for="soundToggle">Sound on</label>
+          </div>
+          <button type="button" class="btn primary" id="startBtn">▶ Start Level</button>
+        </div>
+
+        <div class="hud" aria-label="Game status">
+          <div><span class="label">Level:</span> <span id="levelLabel">Level 1 · Classroom</span></div>
+          <div><span class="label">Time:</span> <span id="timeLabel">0s</span></div>
+          <div><span class="label">Matches:</span> <span id="matchesLabel">0 / 0</span></div>
+          <div><span class="label">Moves:</span> <span id="movesLabel">0</span></div>
+        </div>
+
+        <div class="board-wrap">
+          <div id="gameBoard" class="board">
+            <div class="board-empty">
+              Choose a level and press <b>“Start Level”</b> to begin.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:10px;">
+        <h2>Practice the Words First</h2>
+        <p class="small">
+          Look at each picture, say the word out loud, then play the matching game.
+          This helps shy learners warm up.
+        </p>
+        <div id="practiceList" class="practice-list"></div>
+      </div>
+
+      <div class="statusbar" id="statusBar">
+        <strong>Ready.</strong> Pick a level and press “Start Level” to begin.
+      </div>
+    </section>
+
+    <!-- RIGHT: Scores -->
+    <aside class="card">
+      <div class="score-header">
+        <div>
+          <h2>Scoreboard</h2>
+          <div class="small">Fastest finishes on this device only.</div>
+        </div>
+        <div class="score-filter">
+          <span>Show:</span>
+          <select id="scoreFilter">
+            <option value="all">All levels</option>
+          </select>
+        </div>
+      </div>
+      <div class="score-table" id="scoreTable"></div>
+      <div style="margin-top:8px;display:flex;justify-content:space-between;align-items:center;gap:8px;">
+        <span class="small">Tip: Let each child type their name before playing.</span>
+        <button type="button" class="btn small ghost" id="clearScoresBtn">Clear scores</button>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  const LS_KEY = "kha_kids_esl_picture_match_v1";
+
+  const WORD_BANK = {
+    apple:  { word:"apple",  icon:"🍎", hint:"A red or green fruit." },
+    book:   { word:"book",   icon:"📘", hint:"You read this in class." },
+    dog:    { word:"dog",    icon:"🐶", hint:"A friendly animal." },
+    ball:   { word:"ball",   icon:"⚽️", hint:"You can kick or throw it." },
+    house:  { word:"house",  icon:"🏠", hint:"Where people live." },
+    chair:  { word:"chair",  icon:"🪑", hint:"You sit on this." },
+    sun:    { word:"sun",    icon:"☀️", hint:"It shines in the sky." },
+    pencil: { word:"pencil", icon:"✏️", hint:"You write with it." }
+  };
+
+  const LEVELS = [
+    {
+      id:1,
+      label:"Level 1 · Classroom",
+      cols:4,
+      rows:2,
+      timeLimit:90,
+      words:["apple","book","dog","ball"]
+    },
+    {
+      id:2,
+      label:"Level 2 · Home & School",
+      cols:4,
+      rows:3,
+      timeLimit:120,
+      words:["apple","book","dog","ball","house","chair"]
+    },
+    {
+      id:3,
+      label:"Level 3 · Challenge",
+      cols:4,
+      rows:4,
+      timeLimit:150,
+      words:["apple","book","dog","ball","house","chair","sun","pencil"]
+    }
+  ];
+
+  const $ = function(id){ return document.getElementById(id); };
+
+  const boardEl      = $("gameBoard");
+  const playerNameEl = $("playerName");
+  const startBtn     = $("startBtn");
+  const soundToggle  = $("soundToggle");
+  const levelLabelEl = $("levelLabel");
+  const timeLabelEl  = $("timeLabel");
+  const matchesEl    = $("matchesLabel");
+  const movesEl      = $("movesLabel");
+  const practiceList = $("practiceList");
+  const statusBar    = $("statusBar");
+  const scoreFilter  = $("scoreFilter");
+  const scoreTable   = $("scoreTable");
+  const clearScoresBtn = $("clearScoresBtn");
+
+  const levelButtons = Array.prototype.slice.call(document.querySelectorAll(".btn.level"));
+
+  let STORAGE = loadStorage();
+  let game = null;
+
+  function newGameState(){
+    return {
+      level: LEVELS[selectedLevelIndex],
+      cards: [],
+      flipped: [],
+      matchedKeys: new Set(),
+      moves: 0,
+      timeLeft: 0,
+      timerId: null,
+      running:false,
+      startTimestamp: null
+    };
+  }
+
+  let selectedLevelIndex = 0;
+
+  function createCardsForLevel(level){
+    let cards = [];
+    level.words.forEach(function(key){
+      const info = WORD_BANK[key];
+      if(!info) return;
+      cards.push({
+        pairKey:key,
+        type:"word",
+        word:info.word,
+        icon:null
+      });
+      cards.push({
+        pairKey:key,
+        type:"icon",
+        word:info.word,
+        icon:info.icon
+      });
+    });
+    return shuffle(cards);
+  }
+
+  function shuffle(arr){
+    const a = arr.slice();
+    for(let i=a.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      const t = a[i];
+      a[i] = a[j];
+      a[j] = t;
+    }
+    return a;
+  }
+
+  function startGame(){
+    if(game && game.timerId) clearInterval(game.timerId);
+
+    game = newGameState();
+    const level = game.level;
+    const expectedCards = level.cols * level.rows;
+    const neededPairs = expectedCards / 2;
+    if(level.words.length !== neededPairs){
+      console.warn("Level words mismatch grid size; using available pairs.");
+    }
+
+    game.cards = createCardsForLevel(level);
+    game.timeLeft = level.timeLimit;
+    game.moves = 0;
+    game.flipped = [];
+    game.matchedKeys = new Set();
+    game.running = true;
+    game.startTimestamp = Date.now();
+
+    renderBoard();
+    updateHud();
+    setStatus("Find all the matching pairs before the time runs out!");
+    playSound("start");
+
+    if(game.timerId) clearInterval(game.timerId);
+    game.timerId = setInterval(tickTimer, 1000);
+  }
+
+  function tickTimer(){
+    if(!game || !game.running) return;
+    game.timeLeft--;
+    if(game.timeLeft < 0) game.timeLeft = 0;
+    updateHud();
+    if(game.timeLeft === 0){
+      finishGame(false);
+    }
+  }
+
+  function renderBoard(){
+    boardEl.innerHTML = "";
+    if(!game){
+      boardEl.innerHTML = '<div class="board-empty">Choose a level and press <b>“Start Level”</b> to begin.</div>';
+      return;
+    }
+    const level = game.level;
+    boardEl.style.gridTemplateColumns = "repeat(" + level.cols + ", minmax(70px, 1fr))";
+
+    game.cards.forEach(function(card, index){
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "tile";
+      btn.setAttribute("data-index", String(index));
+      btn.innerHTML = '<span class="tile-back">❓</span>';
+      btn.setAttribute("aria-label","Hidden card");
+      btn.addEventListener("click", onTileClick);
+      boardEl.appendChild(btn);
+    });
+  }
+
+  function onTileClick(evt){
+    if(!game || !game.running) return;
+    const btn = evt.currentTarget;
+    const idx = parseInt(btn.getAttribute("data-index"),10);
+    if(isNaN(idx)) return;
+
+    const card = game.cards[idx];
+    if(game.matchedKeys.has(card.pairKey)) return;
+    if(game.flipped.indexOf(idx) !== -1) return;
+    if(game.flipped.length === 2) return;
+
+    flipTile(idx);
+    playSound("flip");
+    game.flipped.push(idx);
+
+    if(game.flipped.length === 2){
+      game.moves++;
+      updateHud();
+
+      const a = game.flipped[0];
+      const b = game.flipped[1];
+      const ca = game.cards[a];
+      const cb = game.cards[b];
+
+      if(ca.pairKey === cb.pairKey && ca.type !== cb.type){
+        setTimeout(function(){
+          playSound("match");
+          markMatched(a);
+          markMatched(b);
+          game.matchedKeys.add(ca.pairKey);
+          game.flipped = [];
+          updateHud();
+          if(game.matchedKeys.size === game.level.words.length){
+            finishGame(true);
+          }
+        }, 350);
+      }else{
+        setTimeout(function(){
+          playSound("mismatch");
+          unflipTile(a);
+          unflipTile(b);
+          game.flipped = [];
+        }, 650);
+      }
+    }
+  }
+
+  function flipTile(index){
+    const card = game.cards[index];
+    const btn = boardEl.querySelector('.tile[data-index="'+index+'"]');
+    if(!btn) return;
+    btn.classList.add("flipped");
+    btn.innerHTML =
+      '<div class="tile-inner">' +
+        '<div class="tile-main">' + escapeHtml(card.icon ? card.icon : card.word.toUpperCase()) + '</div>' +
+        '<div class="tile-sub">' + (card.icon ? escapeHtml(card.word) : "") + '</div>' +
+      '</div>';
+    btn.setAttribute("aria-label", card.icon ? (card.word + " picture") : (card.word + " word"));
+  }
+
+  function unflipTile(index){
+    const btn = boardEl.querySelector('.tile[data-index="'+index+'"]');
+    if(!btn) return;
+    btn.classList.remove("flipped");
+    btn.classList.remove("matched");
+    btn.innerHTML = '<span class="tile-back">❓</span>';
+    btn.setAttribute("aria-label","Hidden card");
+  }
+
+  function markMatched(index){
+    const btn = boardEl.querySelector('.tile[data-index="'+index+'"]');
+    if(!btn) return;
+    btn.classList.add("matched");
+  }
+
+  function updateHud(){
+    if(!game){
+      levelLabelEl.textContent = LEVELS[selectedLevelIndex].label;
+      timeLabelEl.textContent = "0s";
+      matchesEl.textContent = "0 / 0";
+      movesEl.textContent = "0";
+      return;
+    }
+    levelLabelEl.textContent = game.level.label;
+    timeLabelEl.textContent = game.timeLeft + "s";
+    matchesEl.textContent = game.matchedKeys.size + " / " + game.level.words.length;
+    movesEl.textContent = String(game.moves);
+  }
+
+  function finishGame(won){
+    if(!game) return;
+    game.running = false;
+    if(game.timerId) clearInterval(game.timerId);
+
+    const elapsedMs = Date.now() - game.startTimestamp;
+    const elapsed = Math.max(0, Math.round(elapsedMs/1000));
+    const level = game.level;
+    const nameRaw = (playerNameEl.value || "").trim();
+    const name = nameRaw || "Player";
+
+    if(won){
+      playSound("win");
+      setStatus("🎉 " + name + " finished " + level.label +
+        " in " + elapsed + " seconds with " + game.moves + " moves!");
+      addScoreRecord({
+        name:name,
+        levelId: level.id,
+        levelLabel: level.label,
+        elapsed: elapsed,
+        moves: game.moves,
+        pairs: level.words.length,
+        ts: Date.now()
+      });
+    }else{
+      playSound("timeout");
+      setStatus("⏱ Time is up. Try the level again!");
+    }
+  }
+
+  function setStatus(msg){
+    statusBar.innerHTML = "<strong>Status:</strong> " + escapeHtml(msg);
+  }
+
+  function loadStorage(){
+    try{
+      const raw = localStorage.getItem(LS_KEY);
+      if(!raw) return {scores:[], settings:{sound:true,lastName:""}};
+      const parsed = JSON.parse(raw);
+      if(!parsed || typeof parsed !== "object") return {scores:[], settings:{sound:true,lastName:""}};
+      if(!Array.isArray(parsed.scores)) parsed.scores = [];
+      if(!parsed.settings || typeof parsed.settings !== "object"){
+        parsed.settings = {sound:true,lastName:""};
+      }
+      if(typeof parsed.settings.sound !== "boolean"){
+        parsed.settings.sound = true;
+      }
+      if(typeof parsed.settings.lastName !== "string"){
+        parsed.settings.lastName = "";
+      }
+      return parsed;
+    }catch(e){
+      return {scores:[], settings:{sound:true,lastName:""}};
+    }
+  }
+
+  function saveStorage(){
+    try{
+      localStorage.setItem(LS_KEY, JSON.stringify(STORAGE));
+    }catch(e){}
+  }
+
+  function addScoreRecord(rec){
+    STORAGE.scores.push(rec);
+    trimScores();
+    saveStorage();
+    renderScores();
+  }
+
+  function trimScores(){
+    const byLevel = {};
+    STORAGE.scores.forEach(function(r){
+      const k = "L"+r.levelId;
+      if(!byLevel[k]) byLevel[k] = [];
+      byLevel[k].push(r);
+    });
+    const merged = [];
+    Object.keys(byLevel).forEach(function(k){
+      const list = byLevel[k];
+      list.sort(function(a,b){
+        if(a.elapsed === b.elapsed){
+          return a.moves - b.moves;
+        }
+        return a.elapsed - b.elapsed;
+      });
+      merged.push.apply(merged, list.slice(0,10));
+    });
+    STORAGE.scores = merged;
+  }
+
+  function renderScores(){
+    const filterVal = scoreFilter.value || "all";
+    let rows = STORAGE.scores.slice();
+    if(filterVal !== "all"){
+      const levelId = parseInt(filterVal,10);
+      rows = rows.filter(function(r){ return r.levelId === levelId; });
+    }
+    if(rows.length === 0){
+      scoreTable.innerHTML = '<p class="small">No scores yet. Play a level and win to appear here!</p>';
+      return;
+    }
+    rows.sort(function(a,b){
+      if(a.levelId === b.levelId){
+        if(a.elapsed === b.elapsed) return a.moves - b.moves;
+        return a.elapsed - b.elapsed;
+      }
+      return a.levelId - b.levelId;
+    });
+    const htmlRows = rows.map(function(r, i){
+      const secs = r.elapsed;
+      const mins = Math.floor(secs/60);
+      const secPart = secs % 60;
+      const timeText = mins ? (mins + "m " + secPart + "s") : (secs + "s");
+      return (
+        "<tr>" +
+          "<td>"+(i+1)+"</td>" +
+          "<td class=\"name\">"+escapeHtml(r.name)+"</td>" +
+          "<td class=\"level\">L"+r.levelId+"</td>" +
+          "<td>"+timeText+"</td>" +
+          "<td>"+r.moves+"</td>" +
+          "<td>"+r.pairs+"</td>" +
+        "</tr>"
+      );
+    }).join("");
+    scoreTable.innerHTML =
+      "<table>" +
+        "<thead>" +
+          "<tr>" +
+            "<th>#</th>" +
+            "<th>Player</th>" +
+            "<th>Level</th>" +
+            "<th>Time</th>" +
+            "<th>Moves</th>" +
+            "<th>Pairs</th>" +
+          "</tr>" +
+        "</thead>" +
+        "<tbody>"+htmlRows+"</tbody>" +
+      "</table>";
+  }
+
+  function renderPracticeWords(){
+    const level = LEVELS[selectedLevelIndex];
+    const items = level.words.map(function(key){
+      const info = WORD_BANK[key];
+      if(!info) return "";
+      return (
+        "<div class=\"practice-item\">" +
+          "<div class=\"practice-icon\">" + escapeHtml(info.icon) + "</div>" +
+          "<div>" +
+            "<div class=\"practice-word\">" + escapeHtml(info.word) + "</div>" +
+            "<div class=\"practice-hint\">" + escapeHtml(info.hint) + "</div>" +
+          "</div>" +
+        "</div>"
+      );
+    }).join("");
+    practiceList.innerHTML = items;
+  }
+
+  function escapeHtml(s){
+    return String(s == null ? "" : s)
+      .replace(/&/g,"&amp;")
+      .replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;")
+      .replace(/'/g,"&#039;");
+  }
+
+  /* ============== SOUND ENGINE (Offline, tiny beeps) ============== */
+  let audioCtx = null;
+  function ensureAudioContext(){
+    if(audioCtx) return audioCtx;
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if(!AC) return null;
+    audioCtx = new AC();
+    return audioCtx;
+  }
+
+  function playTone(type, freq, duration){
+    if(!STORAGE.settings.sound) return;
+    const ctx = ensureAudioContext();
+    if(!ctx) return;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type;
+    osc.frequency.value = freq;
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    const now = ctx.currentTime;
+    gain.gain.setValueAtTime(0.18, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+    osc.start(now);
+    osc.stop(now + duration);
+  }
+
+  function playSound(kind){
+    if(!STORAGE.settings.sound) return;
+    if(kind === "start"){
+      playTone("triangle", 550, 0.12);
+    }else if(kind === "flip"){
+      playTone("sine", 700, 0.07);
+    }else if(kind === "match"){
+      playTone("sine", 750, 0.16);
+      setTimeout(function(){ playTone("sine", 900, 0.12); }, 110);
+    }else if(kind === "mismatch"){
+      playTone("sawtooth", 260, 0.12);
+    }else if(kind === "win"){
+      playTone("square", 700, 0.16);
+      setTimeout(function(){ playTone("square", 900, 0.16); }, 160);
+      setTimeout(function(){ playTone("square", 1100, 0.16); }, 320);
+    }else if(kind === "timeout"){
+      playTone("triangle", 400, 0.12);
+      setTimeout(function(){ playTone("triangle", 320, 0.12); }, 120);
+      setTimeout(function(){ playTone("triangle", 260, 0.12); }, 240);
+    }
+  }
+
+  /* =========================== INIT =========================== */
+  function init(){
+    LEVELS.forEach(function(lvl, idx){
+      if(idx === 0) return;
+      const opt = document.createElement("option");
+      opt.value = String(lvl.id);
+      opt.textContent = lvl.label;
+      scoreFilter.appendChild(opt);
+    });
+
+    scoreFilter.addEventListener("change", renderScores);
+
+    levelButtons.forEach(function(btn, idx){
+      btn.addEventListener("click", function(){
+        levelButtons.forEach(function(b){ b.classList.remove("active"); });
+        btn.classList.add("active");
+        selectedLevelIndex = idx;
+        updateHud();
+        renderPracticeWords();
+        setStatus("Level changed to " + LEVELS[selectedLevelIndex].label + ". Press Start when ready.");
+      });
+    });
+
+    startBtn.addEventListener("click", function(){
+      // first click to enable audio context on some browsers
+      ensureAudioContext();
+      startGame();
+    });
+
+    clearScoresBtn.addEventListener("click", function(){
+      if(!confirm("Clear all saved scores on this device?")) return;
+      STORAGE.scores = [];
+      saveStorage();
+      renderScores();
+      setStatus("All scores cleared on this device.");
+    });
+
+    soundToggle.checked = STORAGE.settings.sound;
+    soundToggle.addEventListener("change", function(){
+      STORAGE.settings.sound = !!soundToggle.checked;
+      saveStorage();
+      setStatus("Sound is now " + (STORAGE.settings.sound ? "on." : "off."));
+    });
+
+    if(STORAGE.settings.lastName){
+      playerNameEl.value = STORAGE.settings.lastName;
+    }
+    playerNameEl.addEventListener("change", function(){
+      STORAGE.settings.lastName = (playerNameEl.value || "").trim();
+      saveStorage();
+    });
+
+    renderPracticeWords();
+    updateHud();
+    renderScores();
+  }
+
+  init();
+
+})();
+</script>
+</body>
+</html>
