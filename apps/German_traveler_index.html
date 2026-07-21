@@ -1,0 +1,588 @@
+<section class="hero-header" id="german-quiz-hero">
+  <div class="hero-content">
+    <h1>German Traveler Crash Course</h1>
+    <p>Take a 15-question quiz about Germany and unlock your traveler badge.</p>
+
+    <!-- Intro state -->
+    <div id="quizIntro">
+      <ul class="hero-features">
+        <li>Culture, cities, language & travel basics</li>
+        <li>Live score, streaks, and progress bar</li>
+        <li>Unlock a traveler badge at the end</li>
+      </ul>
+      <button class="btn" id="startQuizBtn">Start Quiz</button>
+      <div class="quiz-best muted" id="bestScoreText"></div>
+    </div>
+
+    <!-- Quiz state -->
+    <div id="quizBox" class="quiz-box hidden">
+      <div class="quiz-header-row">
+        <div class="quiz-progress-label" id="quizProgressLabel">Question 1 / 15</div>
+        <div class="quiz-score-label" id="quizScoreLabel">Score: 0</div>
+      </div>
+      <div class="quiz-bar">
+        <div class="quiz-bar-fill" id="quizBarFill"></div>
+      </div>
+
+      <div class="quiz-question" id="quizQuestionText">Question goes here</div>
+      <div class="quiz-options" id="quizOptions"></div>
+
+      <div class="quiz-feedback" id="quizFeedback"></div>
+
+      <div class="quiz-footer-row">
+        <div class="quiz-streak-label" id="quizStreakLabel">Streak: 0</div>
+        <button class="btn quiz-next-btn" id="nextQuestionBtn" disabled>Next</button>
+      </div>
+    </div>
+
+    <!-- Result state -->
+    <div id="quizResultBox" class="quiz-result-box hidden">
+      <h2>Your Traveler Badge</h2>
+      <div class="badge-pill" id="quizBadge"></div>
+      <p id="quizResultSummary"></p>
+      <p class="muted" id="quizBestSummary"></p>
+      <button class="btn" id="playAgainBtn">Play Again</button>
+    </div>
+  </div>
+</section>
+
+<style>
+.hero-header{
+  width:88%;
+  padding:66px 22px;
+  border-radius:24px;
+  background: linear-gradient(90deg, #000000 33%, #dd0000 66%, #ffcc00 100%);
+  color:#fff;
+  text-align:center;
+  margin-bottom:22px;
+  box-shadow: 1px 11px 44px rgba(0,0,0,0.7);
+}
+.hero-content{
+  max-width:960px;
+  margin:0 auto;
+}
+.hero-header h1{
+  font-family: 'Cinzel', serif;
+  font-size:48px;
+  margin-bottom:14px;
+  letter-spacing:1px;
+}
+.hero-header p{
+  font-size:20px;
+  margin-bottom:16px;
+  color: #f0f0f0;
+}
+.hero-features{
+  list-style:none;
+  padding:0;
+  margin:0 0 22px 0;
+}
+.hero-features li{
+  font-size:18px;
+  margin:8px 0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.hero-features li::before{
+  content:'🎯';
+  margin-right:8px;
+}
+.hero-header .btn{
+  font-size:18px;
+  padding:12px 26px;
+  border-radius:22px;
+  background:#fff;
+  color:#dd0000;
+  font-weight:700;
+  cursor:pointer;
+  border:none;
+  transition:all 0.3s ease;
+}
+.hero-header .btn:hover{
+  background:#ffcc00;
+  color:#000;
+}
+
+/* Quiz layout inside hero */
+.hidden{display:none;}
+
+.quiz-box{
+  margin-top:16px;
+  padding:16px;
+  border-radius:18px;
+  background:rgba(0,0,0,0.25);
+  border:1px solid rgba(255,255,255,0.18);
+  text-align:left;
+}
+.quiz-header-row,
+.quiz-footer-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  font-size:14px;
+}
+.quiz-progress-label{
+  font-weight:600;
+}
+.quiz-score-label{
+  font-weight:600;
+}
+.quiz-bar{
+  margin:10px 0 16px;
+  height:8px;
+  border-radius:999px;
+  background:rgba(15,23,42,0.7);
+  overflow:hidden;
+}
+.quiz-bar-fill{
+  height:100%;
+  width:0%;
+  border-radius:inherit;
+  background:linear-gradient(90deg,#22c55e,#facc15);
+  transition:width 0.2s ease-out;
+}
+.quiz-question{
+  font-size:20px;
+  font-weight:600;
+  margin-bottom:10px;
+}
+.quiz-options{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.quiz-options button{
+  width:100%;
+  text-align:left;
+  padding:10px 12px;
+  border-radius:14px;
+  border:1px solid rgba(148,163,184,0.5);
+  background:rgba(15,23,42,0.9);
+  color:#f9fafb;
+  font-size:15px;
+  cursor:pointer;
+  transition:background 0.15s ease, transform 0.1s ease, border-color 0.15s ease;
+}
+.quiz-options button:hover{
+  background:rgba(30,64,175,0.9);
+  transform:translateY(-1px);
+}
+.quiz-options button.correct{
+  border-color:#22c55e;
+  background:rgba(22,163,74,0.9);
+}
+.quiz-options button.incorrect{
+  border-color:#ef4444;
+  background:rgba(185,28,28,0.9);
+}
+.quiz-options button.disabled{
+  opacity:0.75;
+  cursor:default;
+}
+.quiz-feedback{
+  margin-top:10px;
+  min-height:20px;
+  font-size:14px;
+}
+.quiz-feedback.correct{
+  color:#bbf7d0;
+}
+.quiz-feedback.incorrect{
+  color:#fecaca;
+}
+.quiz-streak-label{
+  font-size:14px;
+}
+.quiz-next-btn[disabled]{
+  opacity:0.7;
+  cursor:default;
+}
+
+.quiz-result-box{
+  margin-top:18px;
+  padding:18px;
+  border-radius:18px;
+  background:rgba(0,0,0,0.25);
+  border:1px solid rgba(255,255,255,0.18);
+}
+.quiz-result-box h2{
+  margin-top:0;
+  margin-bottom:10px;
+  font-size:24px;
+}
+.badge-pill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:8px 18px;
+  border-radius:999px;
+  background:#facc15;
+  color:#111827;
+  font-weight:800;
+  margin-bottom:8px;
+  font-size:16px;
+}
+.muted{
+  color:rgba(229,231,235,0.8);
+  font-size:14px;
+}
+.quiz-best{
+  margin-top:6px;
+  font-size:14px;
+}
+
+/* Responsive tweaks */
+@media (max-width:768px){
+  .hero-header{
+    padding:40px 16px;
+  }
+  .hero-header h1{
+    font-size:32px;
+  }
+  .hero-header p{
+    font-size:16px;
+  }
+  .hero-features li{
+    font-size:14px;
+  }
+  .quiz-question{
+    font-size:18px;
+  }
+  .hero-header .btn{
+    font-size:16px;
+    padding:10px 20px;
+  }
+}
+</style>
+
+<script>
+(function(){
+  const TOTAL_QUESTIONS = 15;
+  const STORAGE_KEY = "german_hero_quiz_best_v1";
+
+  const QUESTIONS = [
+    {
+      q: "What is the capital city of Germany?",
+      options: ["Berlin", "Munich", "Hamburg", "Frankfurt"],
+      correctIndex: 0,
+      info: "Berlin has been the capital of a unified Germany since 1990."
+    },
+    {
+      q: "Which colors are on the German flag?",
+      options: ["Black, red, gold", "Blue, white, red", "Green, white, orange"],
+      correctIndex: 0,
+      info: "The German flag is black, red, and gold in horizontal stripes."
+    },
+    {
+      q: "How do you say “Good morning” in German?",
+      options: ["Guten Morgen", "Gute Nacht", "Auf Wiedersehen"],
+      correctIndex: 0,
+      info: "“Guten Morgen” is used in the morning, like “Good morning”."
+    },
+    {
+      q: "Which of these is a famous festival in Munich?",
+      options: ["Oktoberfest", "Carnaval", "La Tomatina"],
+      correctIndex: 0,
+      info: "Oktoberfest is the world’s largest beer and folk festival."
+    },
+    {
+      q: "What is the German word for “train station”?",
+      options: ["Bahnhof", "Flughafen", "Straße"],
+      correctIndex: 0,
+      info: "“Bahnhof” = train station, “Flughafen” = airport, “Straße” = street."
+    },
+    {
+      q: "Which German city is known for its cathedral (Kölner Dom)?",
+      options: ["Cologne (Köln)", "Dresden", "Stuttgart"],
+      correctIndex: 0,
+      info: "The Kölner Dom in Cologne is a UNESCO World Heritage Site."
+    },
+    {
+      q: "How do you say “Thank you” in German?",
+      options: ["Danke", "Bitte", "Entschuldigung"],
+      correctIndex: 0,
+      info: "“Danke” = thank you, “Bitte” = please / you’re welcome, “Entschuldigung” = excuse me."
+    },
+    {
+      q: "What is Germany’s word for “bread”?",
+      options: ["Brot", "Käse", "Milch"],
+      correctIndex: 0,
+      info: "Germany is famous for its many kinds of Brot (bread)."
+    },
+    {
+      q: "Which country does NOT share a border with Germany?",
+      options: ["Spain", "Austria", "Poland"],
+      correctIndex: 0,
+      info: "Spain is far to the southwest; Austria and Poland both border Germany."
+    },
+    {
+      q: "What is the German word for “please / you’re welcome”?",
+      options: ["Bitte", "Ja", "Nein"],
+      correctIndex: 0,
+      info: "“Bitte” can mean please, here you go, or you’re welcome."
+    },
+    {
+      q: "Which river flows through cities like Bonn and Cologne?",
+      options: ["Rhine (Rhein)", "Danube (Donau)", "Elbe"],
+      correctIndex: 0,
+      info: "The Rhine is one of Europe’s great rivers and passes through western Germany."
+    },
+    {
+      q: "How do you ask “Do you speak English?” in German?",
+      options: ["Sprechen Sie Englisch?", "Wie heißt du?", "Wo ist das Hotel?"],
+      correctIndex: 0,
+      info: "“Sprechen Sie Englisch?” is very handy for travelers."
+    },
+    {
+      q: "Which of these is a traditional German dish?",
+      options: ["Bratwurst", "Sushi", "Tacos"],
+      correctIndex: 0,
+      info: "Bratwurst is a type of German sausage often served with mustard."
+    },
+    {
+      q: "What is the German word for “airport”?",
+      options: ["Flughafen", "Bahnhof", "Markt"],
+      correctIndex: 0,
+      info: "“Flug” = flight, “Hafen” = harbor → Flughafen = airport."
+    },
+    {
+      q: "Which German phrase means “I don’t understand”?",
+      options: ["Ich verstehe nicht", "Ich bin müde", "Ich habe Hunger"],
+      correctIndex: 0,
+      info: "“Ich verstehe nicht” = I don’t understand."
+    },
+    {
+      q: "What does “Guten Abend” mean?",
+      options: ["Good evening", "Good afternoon", "Goodbye"],
+      correctIndex: 0,
+      info: "Use “Guten Abend” in the evening."
+    },
+    {
+      q: "Which city is famous for being a major port in northern Germany?",
+      options: ["Hamburg", "Leipzig", "Nuremberg"],
+      correctIndex: 0,
+      info: "Hamburg is a huge port city on the Elbe river."
+    },
+    {
+      q: "What is the German word for “ticket” (for trains, buses, etc.)?",
+      options: ["Fahrkarte", "Straße", "Haus"],
+      correctIndex: 0,
+      info: "“Fahrkarte” literally means a card for traveling (ride card)."
+    },
+    {
+      q: "How do you say “Good night” in German?",
+      options: ["Gute Nacht", "Guten Tag", "Auf Wiedersehen"],
+      correctIndex: 0,
+      info: "“Gute Nacht” is said when going to sleep."
+    },
+    {
+      q: "Which of these German words means “beautiful / nice”?",
+      options: ["Schön", "Kalt", "Alt"],
+      correctIndex: 0,
+      info: "“Schön” = beautiful/nice, “kalt” = cold, “alt” = old."
+    }
+  ];
+
+  // Shuffle and pick TOTAL_QUESTIONS
+  function shuffle(arr){
+    const a = arr.slice();
+    for(let i=a.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [a[i],a[j]] = [a[j],a[i]];
+    }
+    return a;
+  }
+
+  let quizSet = [];
+  let currentIndex = 0;
+  let score = 0;
+  let streak = 0;
+  let answered = false;
+  let bestScore = 0;
+
+  const introBox = document.getElementById("quizIntro");
+  const quizBox = document.getElementById("quizBox");
+  const resultBox = document.getElementById("quizResultBox");
+  const startBtn = document.getElementById("startQuizBtn");
+  const nextBtn = document.getElementById("nextQuestionBtn");
+  const playAgainBtn = document.getElementById("playAgainBtn");
+  const bestScoreText = document.getElementById("bestScoreText");
+
+  const qLabel = document.getElementById("quizProgressLabel");
+  const scoreLabel = document.getElementById("quizScoreLabel");
+  const streakLabel = document.getElementById("quizStreakLabel");
+  const barFill = document.getElementById("quizBarFill");
+  const qText = document.getElementById("quizQuestionText");
+  const qOptions = document.getElementById("quizOptions");
+  const qFeedback = document.getElementById("quizFeedback");
+
+  const badgeEl = document.getElementById("quizBadge");
+  const resultSummary = document.getElementById("quizResultSummary");
+  const bestSummary = document.getElementById("quizBestSummary");
+
+  function loadBest(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return 0;
+      return Number(raw) || 0;
+    }catch(e){
+      return 0;
+    }
+  }
+
+  function saveBest(val){
+    try{
+      localStorage.setItem(STORAGE_KEY, String(val));
+    }catch(e){}
+  }
+
+  function updateBestText(){
+    if(bestScore > 0){
+      bestScoreText.textContent = "Your best score on this device: " + bestScore;
+    }else{
+      bestScoreText.textContent = "";
+    }
+  }
+
+  function startQuiz(){
+    quizSet = shuffle(QUESTIONS).slice(0, TOTAL_QUESTIONS);
+    currentIndex = 0;
+    score = 0;
+    streak = 0;
+    answered = false;
+
+    introBox.classList.add("hidden");
+    resultBox.classList.add("hidden");
+    quizBox.classList.remove("hidden");
+
+    renderQuestion();
+    updateHud();
+  }
+
+  function renderQuestion(){
+    const current = quizSet[currentIndex];
+    qText.textContent = current.q;
+    qOptions.innerHTML = "";
+    answered = false;
+    nextBtn.disabled = true;
+    qFeedback.textContent = "";
+    qFeedback.className = "quiz-feedback";
+
+    const options = shuffle(current.options.map((opt, idx) => ({opt, idx})));
+    options.forEach(({opt, idx})=>{
+      const btn = document.createElement("button");
+      btn.textContent = opt;
+      btn.addEventListener("click", ()=> handleAnswer(idx, btn));
+      qOptions.appendChild(btn);
+    });
+  }
+
+  function handleAnswer(selectedIndex, buttonEl){
+    if(answered) return;
+    answered = true;
+
+    const current = quizSet[currentIndex];
+    const correctIndex = current.correctIndex;
+
+    // decorate buttons
+    const buttons = qOptions.querySelectorAll("button");
+    buttons.forEach((b, visualIdx)=>{
+      const originIdx = current.options.indexOf(b.textContent);
+      b.classList.add("disabled");
+      if(originIdx === correctIndex){
+        b.classList.add("correct");
+      }
+      if(b === buttonEl && originIdx !== correctIndex){
+        b.classList.add("incorrect");
+      }
+    });
+
+    const isCorrect = current.options[selectedIndex] === current.options[correctIndex];
+
+    if(isCorrect){
+      streak++;
+      const base = 10;
+      const bonus = Math.max(0, streak-1) * 3; // streak bonus
+      score += base + bonus;
+      qFeedback.textContent = "✅ Correct! " + current.info + " (+"+ (base+bonus) +" pts)";
+      qFeedback.classList.add("correct");
+    }else{
+      streak = 0;
+      qFeedback.textContent = "❌ Not quite. " + current.info;
+      qFeedback.classList.add("incorrect");
+    }
+
+    updateHud();
+    nextBtn.disabled = false;
+  }
+
+  function updateHud(){
+    qLabel.textContent = "Question " + (currentIndex+1) + " / " + quizSet.length;
+    scoreLabel.textContent = "Score: " + score;
+    streakLabel.textContent = "Streak: " + streak;
+    const pct = Math.round(((currentIndex) / quizSet.length) * 100);
+    barFill.style.width = pct + "%";
+  }
+
+  function nextQuestion(){
+    if(!answered) return;
+    currentIndex++;
+    if(currentIndex >= quizSet.length){
+      endQuiz();
+      return;
+    }
+    renderQuestion();
+    updateHud();
+  }
+
+  function computeBadge(scoreVal){
+    if(scoreVal >= 180) return "⚡ Berlin-Ready Pro";
+    if(scoreVal >= 140) return "🛫 Confident Traveler";
+    if(scoreVal >= 100) return "🧳 Street-Smart Sightseer";
+    if(scoreVal >= 60) return "🌍 Curious Tourist";
+    return "🌱 New Explorer";
+  }
+
+  function endQuiz(){
+    quizBox.classList.add("hidden");
+    resultBox.classList.remove("hidden");
+
+    const maxScore = quizSet.length * (10 + 3*4); // rough theoretical max
+    const badge = computeBadge(score);
+    badgeEl.textContent = badge;
+
+    resultSummary.textContent =
+      "You scored " + score + " points on " + quizSet.length +
+      " questions. Great job warming up your German travel brain!";
+
+    if(score > bestScore){
+      bestScore = score;
+      saveBest(bestScore);
+    }
+
+    if(bestScore > 0){
+      bestSummary.textContent = "Best score on this device so far: " + bestScore + " points.";
+    }else{
+      bestSummary.textContent = "";
+    }
+
+    bestScoreText.textContent = "";
+  }
+
+  function playAgain(){
+    startQuiz();
+  }
+
+  // init
+  bestScore = loadBest();
+  updateBestText();
+
+  startBtn.addEventListener("click", startQuiz);
+  nextBtn.addEventListener("click", nextQuestion);
+  playAgainBtn.addEventListener("click", playAgain);
+})();
+</script>
+</body>
+</html>
