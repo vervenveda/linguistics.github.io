@@ -1,0 +1,1036 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Temple of Letters — Qur'anic Root Lab (Full)</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Brandon+Grotesque:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#050712;
+  --panel:#111525;
+  --panel-soft:#171b2b;
+  --gold:#d9b878;
+  --bronze:#8b5e3c;
+  --ivory:#FFFDF5;
+  --muted:#bfa78f;
+  --accent:#e6cf96;
+  --border-subtle:rgba(255,255,255,0.06);
+  --border-strong:rgba(217,184,120,0.75);
+
+  --madd:#ffdca8;
+  --ghunnah:#f3d0ff;
+  --idgham:#c6f7d6;
+  --ikhfa:#dbe9ff;
+  --qalqalah:#ffd1d1;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:
+    radial-gradient(800px 400px at 10% 10%, rgba(202,165,90,0.04), transparent),
+    var(--bg);
+  color:var(--ivory);
+  font-family:'Brandon Grotesque',system-ui,-apple-system,'Segoe UI',sans-serif;
+  text-align:center;
+  padding:18px;
+}
+.app{
+  max-width:1200px;
+  margin:0 auto;
+  padding:18px 18px 22px;
+  border-radius:14px;
+  background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  border:1px solid var(--border-subtle);
+  box-shadow:0 18px 72px rgba(0,0,0,0.55);
+}
+.header{display:flex;flex-direction:column;align-items:center;gap:6px}
+.sigil{
+  width:86px;height:86px;border-radius:18px;
+  background:radial-gradient(circle at 20% 10%, #f5e2b8 0%, #caa55a 38%, #8b5e3c 100%);
+  display:flex;align-items:center;justify-content:center;
+  color:#120b07;font-family:Cinzel,serif;font-size:22px;
+  box-shadow:0 10px 24px rgba(0,0,0,0.7)
+}
+h1{
+  font-family:Cinzel,serif;
+  color:var(--gold);
+  font-size:40px;
+  margin:6px 0 2px;
+}
+.lead{
+  color:var(--muted);
+  max-width:900px;
+  margin-bottom:6px;
+  font-size:14px;
+}
+
+/* Beginner toggle bar */
+.mode-bar{
+  margin-top:8px;
+  display:flex;
+  justify-content:flex-end;
+}
+.beginner-toggle{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-size:12px;
+  color:var(--muted);
+  background:rgba(0,0,0,0.25);
+  padding:4px 10px;
+  border-radius:999px;
+  border:1px solid var(--border-subtle);
+}
+.beginner-toggle input{
+  accent-color:var(--gold);
+}
+
+/* Layout */
+.layout{
+  display:grid;
+  grid-template-columns:1fr 360px;
+  gap:18px;
+  margin-top:18px;
+}
+.main{
+  padding:14px;
+  border-radius:12px;
+  background:var(--panel-soft);
+  border:1px solid var(--border-subtle);
+}
+.side{
+  padding:14px;
+  border-radius:12px;
+  background:var(--panel-soft);
+  border:1px solid var(--border-subtle);
+  min-height:520px;
+}
+
+/* Beginner mode changes layout + hides advanced */
+.beginner .layout{
+  grid-template-columns:1fr;
+}
+.beginner .advanced-only{
+  display:none !important;
+}
+
+/* Controls row */
+.controls{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  justify-content:center;
+  margin-bottom:12px;
+  padding:10px;
+  border-radius:12px;
+  background:rgba(255,255,255,0.02);
+}
+
+/* Buttons & form elements */
+button{
+  font-size:14px;
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid var(--border-strong);
+  background:var(--accent);
+  color:#05040a;
+  cursor:pointer;
+  font-family:inherit;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  transition:background .18s,transform .15s,box-shadow .18s,border-color .18s,opacity .18s;
+}
+button:hover{
+  background:var(--gold);
+  box-shadow:0 6px 16px rgba(0,0,0,0.45);
+  transform:translateY(-1px);
+}
+button.secondary{
+  background:#181d2d;
+  color:var(--ivory);
+  border-color:rgba(217,184,120,0.6);
+}
+button.secondary:hover{
+  background:#21283a;
+}
+button:disabled{
+  opacity:0.55;
+  cursor:default;
+  box-shadow:none;
+  transform:none;
+}
+
+select,
+input[type="text"],
+input[type="search"],
+input[list]{
+  font-size:14px;
+  padding:8px 10px;
+  border-radius:10px;
+  border:1px solid var(--border-subtle);
+  background:#141828;
+  color:var(--ivory);
+  font-family:inherit;
+}
+input::placeholder{
+  color:rgba(191,167,143,0.75);
+}
+input.search{
+  background:#141828;
+  width:100%;
+}
+input[type="file"]{
+  font-size:13px;
+  padding:4px 0;
+  background:transparent;
+  border:none;
+  color:var(--muted);
+}
+
+/* Panels & content */
+.panel{
+  background:rgba(7,10,22,0.9);
+  padding:12px;
+  border-radius:10px;
+  margin-bottom:12px;
+  text-align:left;
+  border:1px solid var(--border-subtle);
+}
+.panel h3{
+  margin:0 0 8px 0;
+  font-size:14px;
+  text-transform:uppercase;
+  letter-spacing:0.12em;
+  color:var(--accent);
+}
+.panel h3.small{
+  font-size:12px;
+}
+
+/* Verse display */
+.verse{
+  font-size:40px;
+  direction:rtl;
+  text-align:center;
+  padding:14px;
+  border-radius:10px;
+  line-height:1.7;
+  background:#151a2a;
+  border:1px solid var(--border-subtle);
+}
+.translit{
+  font-size:16px;
+  color:var(--muted);
+  text-align:center;
+  margin-top:8px;
+}
+
+/* Tajwīd chips */
+.taj{
+  display:inline-block;
+  padding:2px 6px;
+  border-radius:6px;
+  margin:2px;
+}
+.madd{background:var(--madd);color:#2b1700}
+.ghunnah{background:var(--ghunnah);color:#3a0a4a}
+.idgham{background:var(--idgham);color:#014d18}
+.ikhfa{background:var(--ikhfa);color:#022447}
+.qalqalah{background:var(--qalqalah);color:#4a0b0b}
+.shaddah{background:#ffd;color:#000}
+
+/* Root & ayah styling */
+.rootBig{
+  font-family:Cinzel,serif;
+  font-size:46px;
+  color:var(--gold);
+  margin-bottom:6px;
+}
+.small{font-size:12px;color:var(--muted)}
+.ayah{
+  font-size:16px;
+  padding:8px;
+  border-radius:8px;
+  background:#151a2a;
+  margin-bottom:8px;
+  border:1px solid var(--border-subtle);
+}
+.audioList{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  margin-top:4px;
+}
+
+/* Flashcards & SRS */
+.flashCard{
+  font-size:30px;
+  direction:rtl;
+  padding:16px;
+  border-radius:12px;
+  background:#171c2e;
+  border:1px solid var(--border-subtle);
+  margin:14px 0;
+  text-align:center;
+}
+.srsItem{
+  padding:8px;
+  background:#151a2a;
+  border-radius:8px;
+  margin-bottom:8px;
+  border:1px solid var(--border-subtle);
+}
+
+/* Tajwīd key labels */
+.taj-key span.taj{font-size:13px}
+
+/* Responsive */
+@media(max-width:980px){
+  .layout{grid-template-columns:1fr}
+  .side{order:2}
+}
+
+@media(max-width:600px){
+  h1{font-size:30px}
+  .verse{font-size:30px}
+}
+</style>
+</head>
+<body>
+  <div class="app" role="application">
+    <div class="header">
+      <div class="sigil">قلم</div>
+      <h1>Temple of Letters — Qur'anic Root Lab</h1>
+      <div class="lead">
+        Root Explorer • Transliteration • Morphology • Tajwīd Coloring • Audio Recitation • Flashcards &amp; SRS
+      </div>
+
+      <div class="mode-bar">
+        <label class="beginner-toggle">
+          <input type="checkbox" id="beginnerToggle">
+          <span>Beginner mode (simplified view)</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="layout" role="main">
+      <div class="main" aria-live="polite">
+        <div class="controls">
+          <!-- input + datalist so we can attach suggestions -->
+          <input
+            id="verseSelect"
+            list="verseOptions"
+            style="min-width:260px;flex:1"
+            placeholder="Search verse id (e.g. 1:1, 2:255) or type 'load roots'"/>
+          <datalist id="verseOptions"></datalist>
+
+          <select id="voiceRate" aria-label="Speech speed">
+            <option value="0.8">0.8×</option>
+            <option value="1.0" selected>1.0×</option>
+            <option value="1.2">1.2×</option>
+            <option value="1.5">1.5×</option>
+          </select>
+          <button id="playBtn">▶ Play Verse (TTS)</button>
+          <button id="pauseBtn" class="secondary">⏹ Stop</button>
+          <button id="stepWord" class="secondary advanced-only">⇢ Step Word</button>
+          <button id="tajDrill" class="secondary advanced-only">🎯 Tajwīd Drill</button>
+          <button id="addSRS" class="secondary advanced-only">➕ Add to SRS</button>
+        </div>
+
+        <div class="panel">
+          <h3 style="margin-bottom:6px">Verse View</h3>
+          <div id="verseBox" class="verse">Loading verse…</div>
+          <div id="translitBox" class="translit"></div>
+        </div>
+
+        <div class="panel advanced-only">
+          <h3>Root Explorer</h3>
+          <input id="rootQuery" class="search" placeholder="Search root (e.g. كتب or K T B)"/>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:6px">
+            <button id="searchBtn">Search Root</button>
+            <button id="randomRootBtn" class="secondary">Random Root</button>
+            <button id="morphBtn" class="secondary">Generate Forms (I–X)</button>
+          </div>
+          <div id="rootResult" style="margin-top:12px"></div>
+        </div>
+
+        <div class="panel">
+          <h3>Flashcards &amp; SRS</h3>
+          <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap">
+            <button id="startFlash">Start Flashcards</button>
+            <button id="reviewSRS" class="secondary advanced-only">Review SRS</button>
+            <button id="clearSRS" class="secondary advanced-only">Clear SRS</button>
+          </div>
+          <div id="flashArea"></div>
+          <div id="srsArea" class="advanced-only" style="margin-top:12px"></div>
+        </div>
+      </div>
+
+      <aside class="side advanced-only">
+        <div class="panel">
+          <h3 class="small">Dataset Status</h3>
+          <div id="datasetStatus" class="small">Initializing roots dataset…</div>
+        </div>
+
+        <div class="panel">
+          <h3 class="small">Audio / Recitations</h3>
+          <div class="small">Optional: upload mp3 for specific āyāt (stored locally in this browser).</div>
+          <div style="margin-top:8px">
+            <input id="uploadAudio" type="file" accept="audio/*"/>
+            <div id="audioStatus" class="small" style="margin-top:8px"></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3 class="small">Tajwīd Key</h3>
+          <div class="small taj-key">
+            <span class="taj madd">Madd</span> elongation ·
+            <span class="taj ghunnah">Ghunnah</span> nasal ·
+            <span class="taj idgham">Idghām</span> merge ·
+            <span class="taj ikhfa">Ikhfāʼ</span> conceal ·
+            <span class="taj qalqalah">Qalqalah</span> echo
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+<script>
+/* ===================================================
+   Temple of Letters — Qur'anic Root Lab
+   + Beginner Mode toggle (simplified verse + root cards)
+   =================================================== */
+
+// ---------- Helpers ----------
+const $ = id => document.getElementById(id);
+const saveJSON = (k,v)=>localStorage.setItem(k,JSON.stringify(v));
+const loadJSON = k=>{ try{return JSON.parse(localStorage.getItem(k)||'null');}catch(e){return null;} }
+
+// ---------- Beginner mode toggle ----------
+(function initBeginnerMode(){
+  const toggle = $('beginnerToggle');
+  if(!toggle) return;
+  const saved = localStorage.getItem('tos_beginner_mode');
+  // Default to ON for kids if nothing saved yet
+  const on = saved === null ? true : saved === '1';
+  toggle.checked = on;
+  document.body.classList.toggle('beginner', on);
+  toggle.addEventListener('change', ()=>{
+    const v = toggle.checked;
+    document.body.classList.toggle('beginner', v);
+    localStorage.setItem('tos_beginner_mode', v ? '1' : '0');
+  });
+})();
+
+// ---------- Sample built-in dataset (small) ----------
+let ROOTS = [
+  {
+    root:'كتب',
+    transliteration:'k-t-b',
+    meaning:'to write / book family',
+    notes:'Classic writing root',
+    derived:[
+      {form:'kataba',meaning:'he wrote'},
+      {form:'kitāb',meaning:'book'},
+      {form:'kātib',meaning:'writer'}
+    ],
+    ayahs:[
+      {ref:'2:2',text:'ذَٰلِكَ الْكِتَابُ لَا رَيْبَ ۛ فِيهِ'},
+      {ref:'96:4',text:'الَّذِي عَلَّمَ بِالْقَلَمِ'}
+    ]
+  },
+  {
+    root:'علم',
+    transliteration:"ʿ-l-m",
+    meaning:"to know",
+    notes:"Knowledge root",
+    derived:[
+      {form:'ʿalima',meaning:'he knew'},
+      {form:'ʿilm',meaning:'knowledge'},
+      {form:'mutaʿallim',meaning:'learner'}
+    ],
+    ayahs:[
+      {ref:'96:5',text:'عَلَّمَ الْإِنسَانَ مَا لَمْ يَعْلَمْ'}
+    ]
+  },
+  {
+    root:'رحم',
+    transliteration:'r-ḥ-m',
+    meaning:'mercy',
+    notes:'Divine mercy family',
+    derived:[
+      {form:'raḥmān',meaning:'merciful'},
+      {form:'raḥīm',meaning:'compassionate'}
+    ],
+    ayahs:[
+      {ref:'1:3',text:'الرَّحْمَٰنِ الرَّحِيمِ'}
+    ]
+  }
+];
+
+let FULL_ROOTS_LOADED = false;
+
+// ---------- Try to auto-load quranic_1000_roots.json ----------
+async function tryLoadFullRoots(){
+  try{
+    const resp = await fetch('quranic_1000_roots.json');
+    if(resp.ok){
+      const data = await resp.json();
+      if(Array.isArray(data) && data.length>0){
+        ROOTS = data.map((r)=>({
+          root: r.root || r.root,
+          transliteration: r.transliteration || r.tr || '',
+          meaning: r.meaning || r.mean || '',
+          notes: r.notes || r.note || '',
+          derived: r.derived || r.forms || [],
+          ayahs: r.ayahs || r.examples || []
+        }));
+        FULL_ROOTS_LOADED = true;
+        const ds = $('datasetStatus');
+        if(ds) ds.textContent = `Full roots dataset loaded (${ROOTS.length} entries).`;
+        return true;
+      }
+    } else {
+      const ds = $('datasetStatus');
+      if(ds) ds.textContent = `Using embedded sample roots dataset (${ROOTS.length} entries).`;
+      return false;
+    }
+  }catch(err){
+    console.warn('Could not load external dataset',err);
+    const ds = $('datasetStatus');
+    if(ds) ds.textContent = `Using embedded sample roots dataset (${ROOTS.length} entries).`;
+    return false;
+  }
+}
+
+// ---------- Verse Reader (minimal sample verses) ----------
+const SAMPLE_VERSES = [
+  {id:'1:1',text:'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ', translit:'Bismillāhi ar-raḥmāni ar-raḥīm'},
+  {id:'1:2',text:'الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ', translit:'Al-ḥamdu lillāhi rabbi al-ʿālamīn'},
+  {id:'112:1',text:'قُلْ هُوَ اللَّهُ أَحَدٌ', translit:'Qul huwa Allāhu aḥad'},
+  {id:'112:2',text:'اللَّهُ الصَّمَدُ', translit:'Allāhu ṣ-ṣamad'}
+];
+
+let currentVerse = SAMPLE_VERSES[0];
+
+function loadVerseInput(q){
+  if(!q) return;
+  const found =
+    SAMPLE_VERSES.find(v=>v.id===q.trim()) ||
+    SAMPLE_VERSES.find(v=>v.text.includes(q.trim())) ||
+    null;
+
+  if(found){
+    renderVerse(found);
+    return;
+  }
+  if(q.trim().toLowerCase()==='load roots'){
+    tryLoadFullRoots();
+    return;
+  }
+  $('verseBox').textContent = 'Verse not found in sample. Try 1:1 or 112:1.';
+  $('translitBox').textContent = '';
+}
+
+function renderVerse(v){
+  currentVerse = v;
+  const tokens = analyzeTajwid(v.text);
+  const verseBox = $('verseBox');
+  verseBox.innerHTML = '';
+  tokens.forEach(tok=>{
+    const span = document.createElement('span');
+    span.textContent = tok.text;
+    span.className = 'taj';
+    if(tok.rule) span.classList.add(tok.rule.class);
+    span.addEventListener('click', ()=>{
+      $('translitBox').textContent = tok.rule ? tok.rule.label : 'No tajwīd rule detected on this token.';
+    });
+    verseBox.appendChild(span);
+  });
+  $('translitBox').textContent = v.translit;
+}
+
+// ---------- Tajwīd Analysis (simplified heuristics) ----------
+const tajRules = [
+  {name:'madd', label:'Madd (elongation)', class:'madd', test:s=> /[اوي]/.test(s)},
+  {name:'ghunnah', label:'Ghunnah (nasal)', class:'ghunnah', test:s=> /ّ[نم]|نْ|مْ/.test(s)},
+  {name:'idgham', label:'Idghām', class:'idgham', test:s=> /نْ[يرملون]/.test(s)},
+  {name:'ikhfa', label:'Ikhfāʼ', class:'ikhfa', test:s=> /نْ[بتثجدذرزسشصضطظفقكلمنهوي]/.test(s)},
+  {name:'qalqalah', label:'Qalqalah', class:'qalqalah', test:s=> /[قطبجد]/.test(s)},
+  {name:'shaddah', label:'Shaddah (doubling)', class:'shaddah', test:s=> /ّ/.test(s)}
+];
+
+function analyzeTajwid(text){
+  const tokens = text.split(/(\s+)/).filter(Boolean);
+  return tokens.map(t=>{
+    for(const r of tajRules){
+      try{
+        if(r.test(t)) return {text:t, rule:r};
+      }catch(e){}
+    }
+    return {text:t, rule:null};
+  });
+}
+
+// ---------- Morphology Engine (I–X, simplified) ----------
+const FORM_PATTERNS = {
+  I:  r => `${r[0]}${r[1]}${r[2]}`,
+  II: r => `${r[0]}${r[1]}${r[1]}${r[2]}`,
+  III:r => `${r[0]}ا${r[1]}${r[2]}`,
+  IV: r => `أ${r[0]}${r[1]}${r[2]}`,
+  V:  r => `ت${r[0]}${r[1]}${r[1]}${r[2]}`,
+  VI: r => `ت${r[0]}ا${r[1]}${r[2]}`,
+  VII:r => `ان${r[0]}${r[1]}${r[2]}`,
+  VIII:r=> `ا${r[0]}ت${r[1]}${r[2]}`,
+  IX: r => `${r[0]}${r[1]}${r[2]}ّ`,
+  X:  r => `است${r[0]}${r[1]}${r[2]}`
+};
+
+function genFormsFromRoot(rootStr){
+  let joined = rootStr.replace(/\s+/g,'');
+  let letters = Array.from(joined).slice(0,3);
+  if(letters.length<3) letters = letters.concat(Array(3-letters.length).fill('ـ'));
+  const forms = [];
+  for(const [k,v] of Object.entries(FORM_PATTERNS)){
+    try{
+      const f = v(letters);
+      forms.push({form:`Form ${k}`, pattern:f});
+    }catch(e){}
+  }
+  return forms;
+}
+
+// ---------- Root Journal helpers ----------
+function rootJournalKey(root){
+  return `tos_root_journal_${root}`;
+}
+function initRootJournal(r){
+  const area = document.getElementById('rootJournal');
+  if(!area) return;
+  let saved = '';
+  try{
+    saved = localStorage.getItem(rootJournalKey(r.root)) || '';
+  }catch(e){
+    saved = '';
+  }
+  area.value = saved;
+  area.oninput = ()=>{
+    try{
+      localStorage.setItem(rootJournalKey(r.root), area.value);
+    }catch(e){}
+  };
+}
+
+// ---------- Root Search & Rendering ----------
+function renderRootResult(r){
+  const out = document.createElement('div');
+  out.innerHTML = `
+    <div class="rootBig">${r.root}</div>
+    <div style="font-size:18px;color:var(--muted)">${r.transliteration || ''}</div>
+    <div style="margin-top:10px;font-size:18px">${r.meaning || ''}</div>
+    <div style="margin-top:10px" class="small">${r.notes || ''}</div>
+
+    <div style="color:var(--gold);font-size:18px;margin-top:14px">Derived / Forms (sample)</div>
+    <div>
+      ${
+        (r.derived && r.derived.length>0)
+        ? r.derived.map(d=>`<div style="margin:6px 0">${d.form} — <i>${d.meaning}</i></div>`).join('')
+        : genFormsFromRoot(r.root).map(d=>`<div style="margin:6px 0">${d.form}: ${d.pattern}</div>`).join('')
+      }
+    </div>
+
+    <div style="color:var(--gold);font-size:18px;margin-top:14px">Example āyāt</div>
+    <div>
+      ${
+        (r.ayahs && r.ayahs.length>0)
+        ? r.ayahs.map(a=>`
+            <div class="ayah">
+              <b>${a.ref}</b> — ${a.text}
+              <div class="audioList">
+                <button data-ref="${a.ref}" class="playAyah">Play (TTS/upload)</button>
+              </div>
+            </div>`).join('')
+        : '<div class="small">No āyāt in this record.</div>'
+      }
+    </div>
+
+    <div style="margin-top:16px">
+      <div class="small" style="margin-bottom:4px;color:var(--accent)">Reflection Journal</div>
+      <textarea
+        id="rootJournal"
+        style="width:100%;min-height:80px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(0,0,0,0.2);color:var(--ivory);padding:8px;font-family:inherit;font-size:14px;resize:vertical;"
+        placeholder="Write any patterns, connections, or insights about this root..."></textarea>
+      <div class="small" style="margin-top:4px">Saved locally on this device per root.</div>
+    </div>
+  `;
+  $('rootResult').innerHTML = '';
+  $('rootResult').appendChild(out);
+
+  // wire ayah audio buttons
+  document.querySelectorAll('.playAyah').forEach(btn=>{
+    btn.addEventListener('click', ()=> {
+      const ref = btn.getAttribute('data-ref');
+      playAyahAudio(ref);
+    });
+  });
+
+  // init journal for this root
+  initRootJournal(r);
+}
+
+// ---------- Play Verse / Āyah Audio ----------
+async function playAyahAudio(ref){
+  const audMap = loadJSON('tos_ayah_audio') || {};
+  if(audMap[ref]){
+    const a = new Audio(audMap[ref]);
+    a.play();
+    return;
+  }
+
+  let text = '';
+  for(const r of ROOTS){
+    if(r.ayahs && r.ayahs.length){
+      const found = r.ayahs.find(a=>a.ref===ref);
+      if(found){ text = found.text; break; }
+    }
+  }
+  if(!text){
+    const sv = SAMPLE_VERSES.find(s=> s.id===ref);
+    if(sv) text = sv.text;
+  }
+  if(!text){
+    alert('No āyah text found for ' + ref);
+    return;
+  }
+  const u = new SpeechSynthesisUtterance(text);
+  const voices = speechSynthesis.getVoices();
+  const ar = voices.find(v=> v.lang && v.lang.startsWith('ar')) || voices[0];
+  if(ar) u.voice = ar;
+  u.rate = parseFloat(($('voiceRate').value||'1.0'));
+  speechSynthesis.speak(u);
+}
+
+// ---------- Upload audio for āyah ----------
+const uploadEl = $('uploadAudio');
+if(uploadEl){
+  uploadEl.addEventListener('change', (ev)=>{
+    const f = ev.target.files[0];
+    if(!f) return;
+    const reader = new FileReader();
+    reader.onload = ()=> {
+      const ref = prompt('Enter āyah reference to attach this audio to (e.g. 2:2 or 112:1)');
+      if(!ref){
+        alert('No reference provided — upload cancelled.');
+        return;
+      }
+      const map = loadJSON('tos_ayah_audio') || {};
+      map[ref] = reader.result; // data URL
+      saveJSON('tos_ayah_audio', map);
+      const as = $('audioStatus');
+      if(as) as.textContent = `Uploaded audio for ${ref} (saved locally)`;
+    };
+    reader.readAsDataURL(f);
+  });
+}
+
+// ---------- Search Root ----------
+const searchBtn = $('searchBtn');
+if(searchBtn){
+  searchBtn.addEventListener('click', ()=>{
+    const q = $('rootQuery').value.trim();
+    if(!q){
+      alert('Enter a root string (e.g. كتب or k-t-b)');
+      return;
+    }
+    const normalized = q.replace(/\s+/g,'').toLowerCase();
+    const found = ROOTS.find(r=>
+      r.root.replace(/\s+/g,'').toLowerCase() === normalized ||
+      (r.transliteration||'').toLowerCase().includes(normalized) ||
+      (r.meaning||'').toLowerCase().includes(q.toLowerCase())
+    );
+    if(found) renderRootResult(found);
+    else $('rootResult').innerHTML = `<div class="small">No exact match. Try variations (with/without spaces).</div>`;
+  });
+}
+
+// ---------- Random Root ----------
+const randomRootBtn = $('randomRootBtn');
+if(randomRootBtn){
+  randomRootBtn.addEventListener('click', ()=>{
+    if(!ROOTS || ROOTS.length === 0){
+      alert('No roots loaded yet.');
+      return;
+    }
+    const r = ROOTS[Math.floor(Math.random()*ROOTS.length)];
+    $('rootQuery').value = r.root;
+    renderRootResult(r);
+  });
+}
+
+// ---------- Generate Forms (I–X) ----------
+const morphBtn = $('morphBtn');
+if(morphBtn){
+  morphBtn.addEventListener('click', ()=>{
+    const q = $('rootQuery').value.trim();
+    if(!q){
+      alert('Enter a root to generate forms for (e.g. كتب)');
+      return;
+    }
+    const forms = genFormsFromRoot(q);
+    $('rootResult').innerHTML =
+      `<div class="panel"><h3 class="small">Generated Forms (I–X)</h3>${
+        forms.map(f=>`<div style="margin:6px 0">${f.form}: ${f.pattern}</div>`).join('')
+      }</div>`;
+  });
+}
+
+// ---------- Verse field events ----------
+$('verseSelect').addEventListener('change', (e)=> loadVerseInput(e.target.value));
+$('verseSelect').addEventListener('keyup', (e)=> {
+  if(e.key === 'Enter') loadVerseInput(e.target.value);
+});
+
+// Prefill datalist with suggestions
+(function initVerseSelect(){
+  const input = $('verseSelect');
+  const dl = document.getElementById('verseOptions');
+  if(!input || !dl) return;
+  dl.innerHTML = '';
+  SAMPLE_VERSES.forEach(v=>{
+    const opt = document.createElement('option');
+    opt.value = v.id;
+    opt.label = `${v.id} — ${v.text.slice(0,40)} …`;
+    dl.appendChild(opt);
+  });
+  input.value = SAMPLE_VERSES[0].id;
+  renderVerse(SAMPLE_VERSES[0]);
+})();
+
+// ---------- Play / Pause / Step Word ----------
+$('playBtn').addEventListener('click', ()=>{
+  if(!currentVerse) return;
+  const u = new SpeechSynthesisUtterance(currentVerse.text);
+  const voices = speechSynthesis.getVoices();
+  const ar = voices.find(v=> v.lang && v.lang.startsWith('ar')) || voices[0];
+  if(ar) u.voice = ar;
+  u.rate = parseFloat(($('voiceRate').value||'1.0'));
+  speechSynthesis.speak(u);
+});
+
+$('pauseBtn').addEventListener('click', ()=> speechSynthesis.cancel());
+
+let stepIdx = 0;
+const stepWordBtn = $('stepWord');
+if(stepWordBtn){
+  stepWordBtn.addEventListener('click', ()=>{
+    if(!currentVerse) return;
+    const words = currentVerse.text.split(/\s+/);
+    if(words.length === 0) return;
+    if(stepIdx >= words.length) stepIdx = 0;
+    const tok = words[stepIdx];
+    const spans = document.querySelectorAll('#verseBox .taj');
+    spans.forEach(s=>{
+      s.style.outline = 'none';
+      if(s.textContent.trim() === tok.trim()){
+        s.style.outline = '3px solid rgba(255,210,120,0.6)';
+      }
+    });
+    const u = new SpeechSynthesisUtterance(tok);
+    const voices = speechSynthesis.getVoices();
+    const ar = voices.find(v=>v.lang && v.lang.startsWith('ar')) || voices[0];
+    if(ar) u.voice = ar;
+    u.rate = parseFloat(($('voiceRate').value||'1.0'));
+    speechSynthesis.speak(u);
+    stepIdx++;
+  });
+}
+
+// ---------- Tajwīd Drill ----------
+const tajDrillBtn = $('tajDrill');
+if(tajDrillBtn){
+  tajDrillBtn.addEventListener('click', ()=>{
+    const spans = Array.from(document.querySelectorAll('#verseBox .taj'));
+    const withRule = spans.filter(s=>
+      s.classList.contains('madd') ||
+      s.classList.contains('ghunnah') ||
+      s.classList.contains('idgham') ||
+      s.classList.contains('ikhfa') ||
+      s.classList.contains('qalqalah') ||
+      s.classList.contains('shaddah')
+    );
+    if(withRule.length === 0){
+      $('flashArea').innerHTML = '<div class="small">No tajwīd targets detected in this verse.</div>';
+      return;
+    }
+    const target = withRule[Math.floor(Math.random()*withRule.length)];
+    $('flashArea').innerHTML =
+      `<div class="flashCard">
+         Identify the tajwīd rule:
+         <div style="font-size:26px;margin-top:8px">${target.textContent}</div>
+       </div>`;
+    const area = document.createElement('div');
+    area.style.marginTop = '8px';
+    const opts = tajRules.map(r=>({k:r.name,label:r.label}));
+    opts.sort(()=>Math.random()-0.5).forEach(o=>{
+      const b = document.createElement('button');
+      b.textContent = o.label;
+      b.style.margin = '6px';
+      b.classList.add('secondary');
+      b.addEventListener('click', ()=>{
+        const correct = Array.from(target.classList).some(c=> c === o.k);
+        if(correct){
+          addToSRS({type:'tajwid',item:target.textContent});
+          $('flashArea').innerHTML = '<div class="small">✔️ Correct — added to SRS queue.</div>';
+        }else{
+          $('flashArea').innerHTML = '<div class="small">✖ Not that one — try again or click Tajwīd Drill for a new card.</div>';
+        }
+      });
+      area.appendChild(b);
+    });
+    $('flashArea').appendChild(area);
+  });
+}
+
+// ---------- Flashcards & SRS ----------
+function loadSRS(){ return loadJSON('tos_srs') || []; }
+function saveSRS(data){ saveJSON('tos_srs', data); renderSRS(); }
+
+function addToSRS(obj){
+  const q = loadSRS();
+  q.push({obj,when:Date.now(),score:0});
+  saveSRS(q);
+  alert('Added to SRS.');
+}
+
+function renderSRS(){
+  const s = loadSRS();
+  const el = $('srsArea');
+  if(!el) return;
+  el.innerHTML = '';
+  if(s.length === 0){
+    el.innerHTML = '<div class="small">SRS queue empty.</div>';
+    return;
+  }
+  s.slice(0,20).forEach((it,idx)=>{
+    const d = document.createElement('div');
+    d.className = 'srsItem';
+    d.innerHTML =
+      `<div><b>${it.obj.type}</b> — <span class="small">${it.obj.item}</span></div>
+       <div style="margin-top:6px">
+         <button class="secondary" data-idx="${idx}">Remove</button>
+       </div>`;
+    el.appendChild(d);
+  });
+  document.querySelectorAll('.srsItem button').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      const i = parseInt(b.getAttribute('data-idx'),10);
+      const q = loadSRS();
+      q.splice(i,1);
+      saveSRS(q);
+    });
+  });
+}
+
+const addSRSBtn = $('addSRS');
+if(addSRSBtn){
+  addSRSBtn.addEventListener('click', ()=>{
+    if(currentVerse) addToSRS({type:'verse',item:currentVerse.id});
+    else alert('No current verse selected.');
+  });
+}
+
+const clearSRSBtn = $('clearSRS');
+if(clearSRSBtn){
+  clearSRSBtn.addEventListener('click', ()=>{
+    if(confirm('Clear SRS queue?')){
+      saveSRS([]);
+      renderSRS();
+    }
+  });
+}
+
+const reviewSRSBtn = $('reviewSRS');
+if(reviewSRSBtn){
+  reviewSRSBtn.addEventListener('click', ()=>{
+    const s = loadSRS();
+    if(s.length === 0){
+      alert('No SRS items to review.');
+      return;
+    }
+    let idx = 0;
+    const next = ()=>{
+      if(idx >= s.length){
+        alert('Review complete.');
+        renderSRS();
+        return;
+      }
+      const item = s[idx];
+      if(item.obj.type === 'verse'){
+        alert('Review verse: ' + item.obj.item);
+      }else if(item.obj.type === 'tajwid'){
+        alert('Review tajwīd target: ' + item.obj.item);
+      }else{
+        alert(JSON.stringify(item.obj));
+      }
+      idx++;
+      setTimeout(next, 400);
+    };
+    next();
+  });
+}
+
+$('startFlash').addEventListener('click', ()=>{
+  if(!ROOTS || ROOTS.length === 0){
+    alert('No roots loaded yet.');
+    return;
+  }
+  let i = 0;
+  const area = $('flashArea');
+
+  function showNext(){
+    if(ROOTS.length === 0) return;
+    if(i >= ROOTS.length) i = 0;
+    const r = ROOTS[i++];
+    const isBeginner = document.body.classList.contains('beginner');
+    area.innerHTML =
+      `<div class="flashCard" id="flashCard">
+         ${r.root}
+         <div style="font-size:18px;margin-top:8px;color:var(--muted)">${r.transliteration||''}</div>
+         <div style="margin-top:8px" class="small">${r.meaning||''}</div>
+         ${
+           isBeginner
+             ? ''
+             : '<div style="margin-top:8px"><button id="showDef" class="secondary">Show Details</button></div>'
+         }
+         <div class="small" style="margin-top:8px">Tap the card to see the next root.</div>
+       </div>`;
+    if(!isBeginner){
+      const showDefBtn = $('showDef');
+      if(showDefBtn){
+        showDefBtn.addEventListener('click',(ev)=>{
+          ev.stopPropagation();
+          renderRootResult(r);
+        });
+      }
+    }
+    const card = $('flashCard');
+    if(card){
+      card.addEventListener('click', showNext);
+    }
+  }
+
+  showNext();
+});
+
+// ---------- Initial UI State ----------
+renderSRS();
+renderVerse(currentVerse);
+const ds = $('datasetStatus');
+if(ds) ds.textContent = `Embedded sample roots dataset (${ROOTS.length} entries).`;
+tryLoadFullRoots();
+</script>
+</body>
+</html>
