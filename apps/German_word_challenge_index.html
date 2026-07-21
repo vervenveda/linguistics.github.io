@@ -1,0 +1,544 @@
+<section id="wordGame" class="card">
+  <h2>German Word Challenge</h2>
+  <p class="muted">
+    Choose a level, translate the word, and level up your traveler skills.
+  </p>
+
+  <div class="word-game-wrap">
+    <!-- LEVEL SELECTOR -->
+    <div class="wg-levels">
+      <button type="button" class="wg-level-btn active" data-level="1">
+        Level 1 · Essentials
+      </button>
+      <button type="button" class="wg-level-btn" data-level="2">
+        Level 2 · Travel & Places
+      </button>
+      <button type="button" class="wg-level-btn" data-level="3">
+        Level 3 · Life & Time
+      </button>
+    </div>
+
+    <!-- PROGRESS BAR -->
+    <div class="wg-bar">
+      <div class="wg-bar-fill" id="wgBarFill"></div>
+    </div>
+
+    <!-- SCORE & STATS -->
+    <div class="wg-score-line muted" id="wordGameScore">
+      Level 1 · Words in pool: 0 · Points: 0 · Accuracy: — · Best: 0
+    </div>
+
+    <!-- BADGE -->
+    <div class="wg-badge muted" id="wgBadge">
+      Badge: Level 1 Beginner
+    </div>
+
+    <!-- CURRENT WORD -->
+    <div class="wg-word-display" id="currentWord">—</div>
+
+    <!-- INPUT + CHECK -->
+    <div class="wg-input-row">
+      <input id="translationInput"
+             type="text"
+             placeholder="Type the translation..."
+      />
+      <button type="button" class="btn" onclick="checkTranslation()">
+        Check
+      </button>
+    </div>
+
+    <!-- NEW WORD BUTTON -->
+    <button type="button" class="btn wg-new-btn" onclick="generateWord()">
+      🎲 New Word
+    </button>
+
+    <!-- FEEDBACK -->
+    <div id="translationFeedback" class="wg-feedback muted"></div>
+
+    <!-- OPEN HUB BUTTON -->
+    <button type="button" class="btn wg-hub-btn" onclick="openGermanHub()">
+      🌐 Open German Hub
+    </button>
+  </div>
+
+  <!-- BADGE LEGEND -->
+  <div class="wg-legend">
+    <div class="wg-legend-title muted">Badge legend</div>
+    <ul class="wg-legend-list">
+      <li><strong>Level 1 Beginner</strong> · 0–59 pts</li>
+      <li><strong>Level 1 Explorer</strong> · 60–119 pts</li>
+      <li><strong>Level 1 Master</strong> · 120+ pts</li>
+      <li><strong>Level 2 Beginner</strong> · 0–59 pts</li>
+      <li><strong>Level 2 Explorer</strong> · 60–119 pts</li>
+      <li><strong>Level 2 Voyager</strong> · 120+ pts</li>
+      <li><strong>Level 3 Beginner</strong> · 0–59 pts</li>
+      <li><strong>Level 3 Explorer</strong> · 60–119 pts</li>
+      <li><strong>Level 3 Storyteller</strong> · 120+ pts</li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  /* ---------- Word Game Shell ---------- */
+  #wordGame{
+    margin-top:22px;
+  }
+  #wordGame h2{
+    margin-bottom:4px;
+  }
+  .word-game-wrap{
+    margin:18px auto 8px;
+    max-width:520px;
+    padding:18px 18px 20px;
+    border-radius:18px;
+    background:linear-gradient(
+      180deg,
+      rgba(255,255,255,0.04),
+      rgba(0,0,0,0.75)
+    );
+    box-shadow:1px 11px 33px rgba(0,0,0,0.7);
+  }
+
+  /* ---------- Levels Row ---------- */
+  .wg-levels{
+    display:flex;
+    flex-wrap:wrap;
+    gap:11px;
+    justify-content:center;
+    margin-bottom:11px;
+  }
+  .wg-level-btn{
+    border-radius:7px;
+    border:1px solid rgba(255,255,255,0.18);
+    background:rgba(0,0,0,0.35);
+    color:#ffffff;
+    padding:7px 11px;
+    font-size:14px;
+    font-weight:555;
+    cursor:pointer;
+    transition:background 0.2s ease, transform 0.1s ease, border-color 0.2s ease;
+  }
+  .wg-level-btn:hover{
+    background:rgba(17,24,39,0.9);
+    transform:translateY(-1px);
+  }
+  .wg-level-btn.active{
+    background:linear-gradient(90deg,#000000 33%,#dd0000 88%,#ffcc00 100%);
+    color:#ffffff;
+    border-color:rgba(0,0,0,0.8);
+  }
+
+  /* ---------- Progress Bar ---------- */
+  .wg-bar{
+    margin:6px 0 8px;
+    height:8px;
+    border-radius:7px;
+    background:rgba(15,23,42,0.85);
+    overflow:hidden;
+  }
+  .wg-bar-fill{
+    height:100%;
+    width:0%;
+    border-radius:inherit;
+    background:linear-gradient(90deg,#22c55e,#facc15);
+    transition:width 0.25s ease-out;
+  }
+
+  /* ---------- Score Line ---------- */
+  .wg-score-line{
+    font-size:13px;
+    text-align:center;
+    margin-bottom:4px;
+  }
+
+  /* ---------- Badge ---------- */
+  .wg-badge{
+    font-size:14px;
+    text-align:center;
+    margin-bottom:24px;
+  }
+
+  /* ---------- Word Display ---------- */
+  .wg-word-display{
+    font-size:33px;
+    font-weight:555px;
+    color:#ffffff;
+    margin:14px 0 11px;
+    text-align:center;
+    letter-spacing:0.02em;
+  }
+
+  /* ---------- Input Row ---------- */
+  .wg-input-row{
+    display:flex;
+    gap:11px;
+    align-items:center;
+    margin:0 auto 11px;
+  }
+  .wg-input-row input{
+    flex:1;
+    padding:11px 14px;
+    border-radius:7px;
+    border:1px solid rgba(255,255,255,0.10);
+    background:#0a0b0d;
+    color:#ffffff;
+    font-size:14px;
+    outline:none;
+  }
+  .wg-input-row input:focus{
+    border-color:#facc15;
+    box-shadow:0 0 0 1px rgba(250,204,21,0.5);
+  }
+
+  .wg-new-btn{
+    margin-top:7px;
+    width:100%;
+    font-size:14px;
+  }
+
+  /* ---------- Feedback ---------- */
+  .wg-feedback{
+    margin-top:11px;
+    min-height:24px;
+    font-size:14px;
+  }
+  .wg-feedback.right{
+    color:#bbf7d0;
+  }
+  .wg-feedback.wrong{
+    color:#fecaca;
+  }
+
+  /* ---------- Hub Button ---------- */
+  .wg-hub-btn{
+    margin-top:14px;
+    width:100%;
+    font-size:15px;
+    background:linear-gradient(90deg,#000000 33%,#dd0000 66%,#ffcc00 100%);
+    color:#ffffff;
+  }
+
+  /* ---------- Legend ---------- */
+  .wg-legend{
+    max-width:333px;
+    margin:6px auto 0;
+    padding:10px 14px;
+    border-radius:14px;
+    background:rgba(0,0,0,0.35);
+    border:1px solid rgba(255,255,255,0.08);
+  }
+  .wg-legend-title{
+    font-size:14px;
+    margin-bottom:4px;
+  }
+  .wg-legend-list{
+    list-style:none;
+    padding:0;
+    margin:0;
+    columns:1;
+  }
+  .wg-legend-list li{
+    font-size:14px;
+    line-height:1.4;
+    color:var(--muted,#ffffff);
+  }
+
+  @media (max-width:600px){
+    .word-game-wrap{
+      padding:16px 12px 18px;
+    }
+    .wg-word-display{
+      font-size:26px;
+    }
+    .wg-input-row input{
+      font-size:15px;
+    }
+    .wg-level-btn{
+      font-size:12px;
+      padding:5px 10px;
+    }
+    .wg-legend-list{
+      columns:1;
+    }
+  }
+</style>
+
+<script>
+(function(){
+  const WORD_GAME_STORAGE = 'german_word_game_levels_v1';
+
+  /* ---------- Internal fallback word list ----------
+     NOTE: If German Skills Lab / Crash Course exposes data,
+     we will use that instead of this internal list.
+  */
+  const internalWordList = [
+    {g:'Hallo', e:'Hello'}, {g:'Tschüss', e:'Goodbye'}, {g:'Danke', e:'Thank you'},
+    {g:'Bitte', e:'Please / You’re welcome'}, {g:'Ja', e:'Yes'}, {g:'Nein', e:'No'},
+    {g:'Entschuldigung', e:'Excuse me / Sorry'}, {g:'Wo?', e:'Where?'}, {g:'Was?', e:'What?'},
+    {g:'Wer?', e:'Who?'}, {g:'Warum?', e:'Why?'}, {g:'Wie viel?', e:'How much?'},
+    {g:'Ich', e:'I'}, {g:'Du', e:'You'}, {g:'Wir', e:'We'}, {g:'Sie', e:'They / You formal'},
+    {g:'Essen', e:'Food'}, {g:'Wasser', e:'Water'}, {g:'Brot', e:'Bread'}, {g:'Milch', e:'Milk'},
+    {g:'Bier', e:'Beer'}, {g:'Cafe', e:'Coffee'}, {g:'Zimmer', e:'Room'}, {g:'Hotel', e:'Hotel'},
+    {g:'Bahnhof', e:'Train station'}, {g:'Flughafen', e:'Airport'}, {g:'Straße', e:'Street'},
+    {g:'Links', e:'Left'}, {g:'Rechts', e:'Right'}, {g:'Geradeaus', e:'Straight ahead'}, 
+    {g:'Hilfe', e:'Help'}, {g:'Polizei', e:'Police'}, {g:'Krankenhaus', e:'Hospital'}, 
+    {g:'Apotheke', e:'Pharmacy'}, {g:'Arzt', e:'Doctor'}, {g:'Ich verstehe nicht', e:'I don’t understand'}, 
+    {g:'Sprechen Sie Englisch?', e:'Do you speak English?'}, {g:'Heute', e:'Today'}, 
+    {g:'Morgen', e:'Tomorrow'}, {g:'Gestern', e:'Yesterday'}, {g:'Frühstück', e:'Breakfast'}, 
+    {g:'Mittagessen', e:'Lunch'}, {g:'Abendessen', e:'Dinner'}, {g:'Guten Morgen', e:'Good morning'}, 
+    {g:'Guten Abend', e:'Good evening'}, {g:'Gute Nacht', e:'Good night'}, {g:'Schön', e:'Beautiful / Nice'}, 
+    {g:'Klein', e:'Small'}, {g:'Groß', e:'Big'}, {g:'Alt', e:'Old'}, {g:'Neu', e:'New'}, 
+    {g:'Heiß', e:'Hot'}, {g:'Kalt', e:'Cold'}, {g:'Langsam', e:'Slow'}, {g:'Schnell', e:'Fast'}, 
+    {g:'Links abbiegen', e:'Turn left'}, {g:'Rechts abbiegen', e:'Turn right'}, 
+    {g:'Geradeaus gehen', e:'Go straight'}, {g:'Tankstelle', e:'Gas station'}, {g:'Bank', e:'Bank'}, 
+    {g:'Post', e:'Post office'}, {g:'Supermarkt', e:'Supermarket'}, {g:'Einkaufen', e:'Shopping'}, 
+    {g:'Markt', e:'Market'}, {g:'Straßenbahn', e:'Tram'}, {g:'Bus', e:'Bus'}, {g:'Taxi', e:'Taxi'}, 
+    {g:'Auto', e:'Car'}, {g:'Fahrrad', e:'Bicycle'}, {g:'Fluss', e:'River'}, {g:'See', e:'Lake'}, 
+    {g:'Berg', e:'Mountain'}, {g:'Wald', e:'Forest'}, {g:'Meer', e:'Sea'}, {g:'Strand', e:'Beach'}, 
+    {g:'Sonne', e:'Sun'}, {g:'Regen', e:'Rain'}, {g:'Schnee', e:'Snow'}, {g:'Wind', e:'Wind'}, 
+    {g:'Heimat', e:'Home'}, {g:'Stadt', e:'City'}, {g:'Dorf', e:'Village'}, {g:'Freund', e:'Friend'}, 
+    {g:'Familie', e:'Family'}, {g:'Liebe', e:'Love'}, {g:'Glück', e:'Happiness'}, 
+    {g:'Arbeit', e:'Work'}, {g:'Schule', e:'School'}, {g:'Universität', e:'University'}, 
+    {g:'Buch', e:'Book'}, {g:'Zeitung', e:'Newspaper'}, {g:'Film', e:'Movie'}, {g:'Musik', e:'Music'}, 
+    {g:'Handy', e:'Mobile phone'}, {g:'Computer', e:'Computer'}, {g:'Internet', e:'Internet'}, 
+    {g:'Reise', e:'Trip'}, {g:'Ticket', e:'Ticket'}, {g:'Pass', e:'Passport'}, {g:'Geld', e:'Money'}, 
+    {g:'Karte', e:'Map'}, {g:'Restaurant', e:'Restaurant'}, {g:'Café', e:'Café'}, {g:'Bäckerei', e:'Bakery'}, 
+    {g:'Gesundheit', e:'Health'}, {g:'Wetter', e:'Weather'}, {g:'Zeit', e:'Time'}, {g:'Tag', e:'Day'}, 
+    {g:'Nacht', e:'Night'}, {g:'Stunde', e:'Hour'}, {g:'Minute', e:'Minute'}, {g:'Sekunde', e:'Second'}
+  ];
+
+  /* ---------- External data hook ----------
+     If present, we prefer:
+       window.GERMAN_SKILLS_LAB_WORD_POOLS = {
+         level1: [{g,e},...],
+         level2: [...],
+         level3: [...]
+       }
+     or (fallback) window.lessons365 = [{g,e,...}, ...]
+  */
+  function getMasterWordList(){
+    // 1) Skills Lab explicit pools
+    const pools = window.GERMAN_SKILLS_LAB_WORD_POOLS;
+    if(pools && typeof pools === 'object'){
+      // Just flatten so we can slice later
+      const combined = []
+        .concat(pools.level1 || [])
+        .concat(pools.level2 || [])
+        .concat(pools.level3 || []);
+      if(combined.length){
+        return combined.map(w=>({g:w.g, e:w.e}));
+      }
+    }
+
+    // 2) Crash Course lessons365 structure
+    const cc = window.lessons365;
+    if(Array.isArray(cc) && cc.length){
+      return cc
+        .filter(d=>d.g && d.e)
+        .map(d=>({g:d.g, e:d.e}));
+    }
+
+    // 3) Internal static
+    return internalWordList;
+  }
+
+  const masterWordList = getMasterWordList();
+
+  /* Level pools:
+     Level 1: first 30 items
+     Level 2: next 30
+     Level 3: all remaining
+     If Skills Lab later provides exact level arrays, you can instead
+     set window.GERMAN_SKILLS_LAB_WORD_POOLS and this widget will
+     automatically pick those up (see getPoolForLevel below).
+  */
+
+  function getPoolForLevel(level){
+    // If explicit per-level pools exist, use them
+    const pools = window.GERMAN_SKILLS_LAB_WORD_POOLS;
+    if(pools && typeof pools === 'object'){
+      const arr = pools['level' + level];
+      if(Array.isArray(arr) && arr.length){
+        return arr.map(w=>({g:w.g, e:w.e}));
+      }
+    }
+
+    // Otherwise slice master list
+    if(level === 1) return masterWordList.slice(0, 30);
+    if(level === 2) return masterWordList.slice(30, 60);
+    return masterWordList.slice(60);
+  }
+
+  let currentLevel = 1;
+  let currentWord = null;
+  let showingGerman = true;
+  let points = 0;
+  let correctCount = 0;
+  let totalCount = 0;
+  let bestByLevel = {1:0,2:0,3:0};
+
+  const scoreEl = document.getElementById('wordGameScore');
+  const feedbackEl = document.getElementById('translationFeedback');
+  const wordEl = document.getElementById('currentWord');
+  const inputEl = document.getElementById('translationInput');
+  const barFillEl = document.getElementById('wgBarFill');
+  const badgeEl = document.getElementById('wgBadge');
+  const levelBtns = document.querySelectorAll('#wordGame .wg-level-btn');
+
+  function loadState(){
+    try{
+      const raw = localStorage.getItem(WORD_GAME_STORAGE);
+      if(!raw) return;
+      const saved = JSON.parse(raw);
+      if(saved.bestByLevel){
+        bestByLevel = Object.assign(bestByLevel, saved.bestByLevel);
+      }
+    }catch(e){}
+  }
+
+  function saveState(){
+    try{
+      localStorage.setItem(WORD_GAME_STORAGE, JSON.stringify({bestByLevel}));
+    }catch(e){}
+  }
+
+  function getBadge(level, pts){
+    if(level === 1){
+      if(pts >= 120) return 'Level 1 Master';
+      if(pts >= 60)  return 'Level 1 Explorer';
+      return 'Level 1 Beginner';
+    }
+    if(level === 2){
+      if(pts >= 120) return 'Level 2 Voyager';
+      if(pts >= 60)  return 'Level 2 Explorer';
+      return 'Level 2 Beginner';
+    }
+    // level 3
+    if(pts >= 120) return 'Level 3 Storyteller';
+    if(pts >= 60)  return 'Level 3 Explorer';
+    return 'Level 3 Beginner';
+  }
+
+  function setLevel(level){
+    if(currentLevel === level) return;
+    currentLevel = level;
+    // Reset run stats (per play session)
+    points = 0;
+    correctCount = 0;
+    totalCount = 0;
+    currentWord = null;
+
+    wordEl.textContent = '—';
+    inputEl.value = '';
+    feedbackEl.textContent = '';
+    feedbackEl.classList.remove('right','wrong');
+
+    levelBtns.forEach(btn=>{
+      btn.classList.toggle('active', Number(btn.dataset.level) === level);
+    });
+    updateScoreUI();
+  }
+
+  function updateScoreUI(){
+    const pool = getPoolForLevel(currentLevel);
+    const accuracy = totalCount ? Math.round((correctCount/totalCount)*100) : '—';
+    const best = bestByLevel[currentLevel] || 0;
+    scoreEl.textContent =
+      `Level ${currentLevel} · Words in pool: ${pool.length} · ` +
+      `Points: ${points} · Accuracy: ${accuracy}% · Best: ${best}`;
+    const barPct = totalCount ? Math.min(100, Math.round((correctCount/totalCount)*100)) : 0;
+    barFillEl.style.width = barPct + '%';
+
+    const badgeText = getBadge(currentLevel, points);
+    badgeEl.textContent = `Badge: ${badgeText}`;
+  }
+
+  function generateWord(){
+    const pool = getPoolForLevel(currentLevel);
+    if(!pool.length){
+      wordEl.textContent = 'No words in this level yet.';
+      return;
+    }
+    const idx = Math.floor(Math.random()*pool.length);
+    currentWord = pool[idx];
+    showingGerman = Math.random() > 0.5;
+    wordEl.textContent = showingGerman ? currentWord.g : currentWord.e;
+    inputEl.value = '';
+    feedbackEl.textContent = '';
+    feedbackEl.classList.remove('right','wrong');
+  }
+
+  function normalize(str){
+    return (str || '').toLowerCase().trim().replace(/\s+/g, ' ');
+  }
+
+  // Expose generateWord so the button can call it
+  window.generateWord = generateWord;
+
+  window.checkTranslation = function(){
+    if(!currentWord){
+      feedbackEl.textContent = 'Tap “🎲 New Word” to begin.';
+      feedbackEl.classList.remove('right','wrong');
+      return;
+    }
+    const input = normalize(inputEl.value);
+    if(!input){
+      feedbackEl.textContent = 'Type your answer first.';
+      feedbackEl.classList.remove('right','wrong');
+      return;
+    }
+
+    const expectedMain = normalize(showingGerman ? currentWord.e : currentWord.g);
+    const expectedAlt  = normalize(showingGerman ? currentWord.g : currentWord.e); // accept either direction
+    const correctNow = (input === expectedMain || input === expectedAlt);
+
+    totalCount++;
+    if(correctNow){
+      points += 10;
+      correctCount++;
+      feedbackEl.textContent = `✅ Correct! ${currentWord.g} → ${currentWord.e}`;
+      feedbackEl.classList.remove('wrong');
+      feedbackEl.classList.add('right');
+    }else{
+      feedbackEl.textContent = `❌ Not quite. ${currentWord.g} → ${currentWord.e}`;
+      feedbackEl.classList.remove('right');
+      feedbackEl.classList.add('wrong');
+    }
+
+    if(points > (bestByLevel[currentLevel] || 0)){
+      bestByLevel[currentLevel] = points;
+      saveState();
+    }
+
+    updateScoreUI();
+    // auto-advance after a short pause
+    setTimeout(generateWord, 700);
+  };
+
+  // Level buttons
+  levelBtns.forEach(btn=>{
+    btn.addEventListener('click', ()=> setLevel(Number(btn.dataset.level)));
+  });
+
+  // Hub opener: connects to your German Crash Course / Skills Lab
+  window.openGermanHub = function(){
+    // Prefer your existing smoothScroll if present
+    if(typeof smoothScroll === 'function'){
+      smoothScroll('#learn');
+      return;
+    }
+    const target = document.querySelector('#learn') || document.body;
+    if(target && target.scrollIntoView){
+      target.scrollIntoView({behavior:'smooth'});
+    }else{
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+  };
+
+  // Init
+  loadState();
+  updateScoreUI();
+  // start with a word ready
+  generateWord();
+})();
+</script>
