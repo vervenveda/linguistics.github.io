@@ -1,0 +1,1427 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Khaemenes Academy — ESL Mastercourse (Honor-Based)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b1020;
+    --card:#121a33;
+    --card2:#0f1730;
+    --text:#eef2ff;
+    --muted:rgba(238,242,255,0.72);
+    --muted2:rgba(238,242,255,0.55);
+    --accent:#7dd3fc;
+    --accent2:#a78bfa;
+    --ok:#86efac;
+    --warn:#fbbf24;
+    --bad:#fb7185;
+    --ring:rgba(125,211,252,0.35);
+    --radius:18px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    background:
+      radial-gradient(circle at 10% 0%, rgba(167,139,250,0.18), transparent 45%),
+      radial-gradient(circle at 90% 10%, rgba(125,211,252,0.16), transparent 48%),
+      linear-gradient(180deg, #070b18, #0b1020 55%, #070b18);
+    color:var(--text);
+    padding:18px;
+  }
+  a{color:inherit}
+  .app{max-width:1180px;margin:0 auto}
+  header{
+    display:flex;gap:14px;align-items:flex-start;justify-content:space-between;
+    padding:16px 16px 10px;
+  }
+  .brand h1{margin:0;font-size:1.25rem;letter-spacing:0.01em}
+  .brand .sub{color:var(--muted);font-size:0.98rem;margin-top:6px;line-height:1.35}
+  .pillrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:flex-end}
+  .pill{
+    padding:10px 12px;border:1px solid rgba(255,255,255,0.10);
+    border-radius:999px;background:rgba(255,255,255,0.04);
+    font-size:0.92rem;color:var(--muted);
+  }
+  .pill strong{color:var(--text)}
+  .pill.pro{border-color:rgba(125,211,252,0.35); box-shadow:0 0 0 3px rgba(125,211,252,0.10) inset}
+  .pill.lock{border-color:rgba(251,191,36,0.30)}
+  .btn{
+    border:none;cursor:pointer;
+    padding:10px 14px;border-radius:999px;
+    background:rgba(255,255,255,0.06);
+    color:var(--text);font-weight:700;
+    transition:transform .05s, box-shadow .15s, background .15s;
+    display:inline-flex;align-items:center;gap:8px;
+    box-shadow:0 8px 18px rgba(0,0,0,0.22);
+  }
+  .btn:hover{background:rgba(255,255,255,0.09)}
+  .btn:active{transform:translateY(1px)}
+  .btn.primary{
+    background:linear-gradient(90deg, rgba(125,211,252,0.95), rgba(167,139,250,0.95));
+    color:#071024;
+  }
+  .btn.primary:hover{box-shadow:0 0 0 4px rgba(125,211,252,0.18)}
+  .btn.good{background:rgba(134,239,172,0.16); border:1px solid rgba(134,239,172,0.28)}
+  .btn.warn{background:rgba(251,191,36,0.16); border:1px solid rgba(251,191,36,0.30)}
+  .btn.bad{background:rgba(251,113,133,0.14); border:1px solid rgba(251,113,133,0.30)}
+  .grid{
+    display:grid;
+    grid-template-columns:340px 1fr;
+    gap:14px;
+  }
+  @media(max-width:980px){.grid{grid-template-columns:1fr}}
+  .card{
+    background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+    border:1px solid rgba(255,255,255,0.10);
+    border-radius:var(--radius);
+    box-shadow:0 18px 40px rgba(0,0,0,0.35);
+    overflow:hidden;
+  }
+  .section{
+    padding:14px 14px;
+    border-top:1px solid rgba(255,255,255,0.08);
+  }
+  .section:first-child{border-top:none}
+  .posture{
+    padding:14px;
+    background:rgba(125,211,252,0.08);
+    border-bottom:1px solid rgba(255,255,255,0.10);
+  }
+  .posture h2{margin:0 0 8px 0;font-size:1.05rem}
+  .posture p{margin:0;color:var(--muted);line-height:1.45}
+  .tabs{
+    display:flex;flex-wrap:wrap;gap:8px;
+    padding:12px;border-bottom:1px solid rgba(255,255,255,0.08);
+    background:rgba(0,0,0,0.16);
+  }
+  .tab{
+    padding:9px 12px;border-radius:999px;border:1px solid rgba(255,255,255,0.12);
+    background:rgba(255,255,255,0.04);color:var(--muted);
+    cursor:pointer;font-weight:700;font-size:0.92rem;
+  }
+  .tab.active{color:var(--text); border-color:rgba(125,211,252,0.35); box-shadow:0 0 0 3px rgba(125,211,252,0.10) inset}
+  .weeks{
+    padding:10px 12px 14px;
+  }
+  .weeks h3{margin:8px 0 10px 0;font-size:1.03rem}
+  .weeklist{display:flex;flex-direction:column;gap:8px}
+  .weekitem{
+    display:flex;gap:10px;align-items:flex-start;justify-content:space-between;
+    padding:10px;border-radius:14px;
+    border:1px solid rgba(255,255,255,0.10);
+    background:rgba(255,255,255,0.03);
+    cursor:pointer;
+  }
+  .weekitem:hover{border-color:rgba(125,211,252,0.30)}
+  .weekitem.active{border-color:rgba(125,211,252,0.40); box-shadow:0 0 0 3px rgba(125,211,252,0.10) inset}
+  .wk-left{display:flex;gap:10px;align-items:flex-start}
+  .wk-num{
+    width:34px;height:34px;border-radius:12px;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(167,139,250,0.14);
+    border:1px solid rgba(167,139,250,0.25);
+    font-weight:800;
+  }
+  .wk-title{font-weight:800}
+  .wk-meta{margin-top:4px;color:var(--muted2);font-size:0.92rem;line-height:1.25}
+  .wk-right{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+  .badge{
+    font-size:0.78rem;font-weight:800;
+    padding:6px 9px;border-radius:999px;
+    border:1px solid rgba(255,255,255,0.14);
+    color:var(--muted);
+  }
+  .badge.free{border-color:rgba(134,239,172,0.25); color:rgba(134,239,172,0.95); background:rgba(134,239,172,0.10)}
+  .badge.lock{border-color:rgba(251,191,36,0.25); color:rgba(251,191,36,0.95); background:rgba(251,191,36,0.10)}
+  .badge.done{border-color:rgba(125,211,252,0.30); color:rgba(125,211,252,0.95); background:rgba(125,211,252,0.10)}
+  .content{
+    padding:14px;
+  }
+  .content h2{margin:0 0 8px 0;font-size:1.28rem}
+  .content .kicker{color:var(--muted);margin:0 0 10px 0;line-height:1.45}
+  .box{
+    padding:12px;border-radius:14px;
+    background:rgba(0,0,0,0.16);
+    border:1px solid rgba(255,255,255,0.10);
+    margin:10px 0;
+  }
+  .box h4{margin:0 0 8px 0;font-size:1.02rem}
+  .box p{margin:0;color:var(--muted);line-height:1.5}
+  .two{
+    display:grid;grid-template-columns:1fr 1fr;gap:10px;
+  }
+  @media(max-width:980px){.two{grid-template-columns:1fr}}
+  .list{margin:8px 0 0 0;color:var(--muted);padding-left:18px;line-height:1.55}
+  .hr{height:1px;background:rgba(255,255,255,0.08);margin:12px 0}
+  .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  .input, textarea{
+    width:100%;
+    padding:10px 12px;border-radius:12px;
+    border:1px solid rgba(255,255,255,0.14);
+    background:rgba(255,255,255,0.04);
+    color:var(--text);
+    font:inherit;
+    outline:none;
+  }
+  textarea{min-height:110px;resize:vertical}
+  .small{font-size:0.92rem;color:var(--muted)}
+  .lockOverlay{
+    margin-top:10px;
+    padding:14px;border-radius:16px;
+    border:1px dashed rgba(251,191,36,0.34);
+    background:rgba(251,191,36,0.08);
+  }
+  .lockOverlay h4{margin:0 0 6px 0}
+  .footer{
+    padding:12px 14px;
+    border-top:1px solid rgba(255,255,255,0.08);
+    color:var(--muted2);
+    display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;
+    font-size:0.92rem;
+  }
+  .link{color:rgba(125,211,252,0.95);text-decoration:none;border-bottom:1px dotted rgba(125,211,252,0.55)}
+  .link:hover{border-bottom-style:solid}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
+</style>
+</head>
+<body>
+<div class="app">
+  
+
+  <header>
+    <div class="brand">
+      <h1>Khaemenes Academy — ESL Mastercourse</h1>
+      <div class="sub">A self-paced adult ESL workshop that blends structured instruction, skill labs, weekly quizzes, and a portfolio of finished work.</div>
+    </div>
+    <div class="pillrow">
+      <div class="pill"><strong>Preview:</strong> Week 1 is free</div>
+      <div id="proPill" class="pill pro lock"><strong>Full Course:</strong> Preview only</div>
+      <a class="btn primary" id="donateBtn" target="_blank" rel="noopener">💗 Optional Donation</a>
+      <button class="btn good" id="alreadyProBtn">Activate full course on this device</button>
+    </div>
+  </header>
+
+  <div class="grid">
+    <!-- LEFT: course posture + weeks -->
+    <div class="card">
+      <div class="posture">
+        <h2>Course Posture Statement</h2>
+        <p>
+          This course teaches English with clarity, dignity, and high standards.
+          You will practice real-world language for work, school, and daily life—building skills step by step.
+          Progress is saved on your device. This course is offered on an honor system:
+          if it serves you and you are able, a suggested donation of <b>$11.11/month</b> supports the Academy and future courses.
+        </p>
+      </div>
+
+      <div class="weeks">
+        <h3>Weeks</h3>
+        <div id="weekList" class="weeklist"></div>
+
+        <div class="section">
+          <div class="row">
+            <button class="btn" id="resetBtn">Reset progress</button>
+            <button class="btn" id="exportBtn">Export</button>
+            <button class="btn" id="importBtn">Import</button>
+          </div>
+          <div class="small" style="margin-top:8px">
+            Tip: If you open this page with <span class="mono">?full=1</span> in the URL
+            (for example, <span class="mono">/esl?full=1</span>), it will unlock the full course
+            on that device automatically.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: tabs + content -->
+    <div class="card">
+      <div class="tabs">
+        <button class="tab active" data-tab="lesson">Lesson</button>
+        <button class="tab" data-tab="resources">Compare Resources</button>
+        <button class="tab" data-tab="labs">Skill Labs</button>
+        <button class="tab" data-tab="portfolio">Portfolio</button>
+      </div>
+      <div class="content" id="content"></div>
+      <div class="footer">
+        <div>All progress is local (localStorage). No uploads.</div>
+        <div id="statusText"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   CONFIG
+   ========================================================= */
+const DONATION_URL = "https://buy.stripe.com/00w5kEf7P9Sc0bb3En4AU0c"; // replace with any donation page (Stripe, PayPal, etc.)
+const LS_KEY = "kha_esl_mastercourse_v1";
+const FREE_WEEK_COUNT = 1; // Week 1 free, weeks 2..n are part of the full course
+
+/* =========================================================
+   COURSE DATA (12 weeks)
+   - You can expand/edit text freely without breaking the engine
+   ========================================================= */
+const COURSE = [
+  {
+    title: "Orientation + Sounds + Survival English",
+    minutes: "45–60 min workshop",
+    outcomes: [
+      "Set your learning plan + daily practice routine",
+      "Pronounce core vowel/consonant sounds more clearly",
+      "Use survival phrases confidently (introductions, asking for help)"
+    ],
+    lessonFlow: {
+      openingPrayer: "Creator of wisdom and language, grant me clarity, patience, and courage to learn. Help me speak with humility and understanding. Amen.",
+      welcome: [
+        "Welcome. This is a structured adult ESL workshop with weekly lessons, quizzes, and a portfolio of finished work.",
+        "Today’s goal: start strong, build confidence, and create a sustainable practice routine."
+      ],
+      readAloud: [
+        "Read this aloud 2 times (slow → natural):",
+        "“Hello. My name is ____. I am learning English. Please speak slowly. Thank you.”"
+      ],
+      observe: [
+        "What words repeat? What is the main message?",
+        "Which words feel hard to pronounce? Circle them."
+      ],
+      interpret: [
+        "Why is polite, clear survival English powerful in real life?",
+        "How does tone (gentle, confident) change how people respond?"
+      ],
+      apply: [
+        "This week I will practice 10 minutes per day.",
+        "I will use 3 survival phrases in real life (or roleplay)."
+      ],
+      pray: "Creator, help me practice daily and grow steadily. Strengthen my confidence and my kindness. Amen."
+    },
+    activities: [
+      "Build your personal phrase card: name, city, job/school, help phrases.",
+      "Pronunciation drill: repeat minimal pairs (ship/sheep, sit/seat, bad/bed).",
+      "Micro-dialogue: introduce yourself + ask someone to repeat slowly."
+    ],
+    homework: [
+      "Practice 10 minutes/day using the Skill Labs (Pronunciation + Flashcards).",
+      "Write a 6-sentence self-introduction for your portfolio."
+    ],
+    quiz: [
+      {type:"tf", q:"In English conversation, it’s polite to say 'Please speak slowly' if you need help.", a:true},
+      {type:"mc", q:"Which is the best survival phrase for clarification?", options:["I hungry now.", "Can you repeat that, please?", "You talk fast."], a:1},
+      {type:"mc", q:"Which pair practices vowel clarity?", options:["run/running", "ship/sheep", "walk/walked"], a:1},
+      {type:"short", q:"Write 2 polite phrases you can use when you don’t understand."},
+      {type:"essay", q:"In 5–8 sentences: describe your goal for learning English and your weekly practice plan."}
+    ],
+    proPrompt: true
+  },
+  {
+    title: "Sentence Basics + Present Simple",
+    minutes: "45–60 min workshop",
+    outcomes: ["Use Subject–Verb–Object structure", "Talk about routines", "Ask and answer present simple questions"],
+    lessonFlow: {
+      openingPrayer: "Creator, help me build strong foundations and speak with honesty and clarity. Amen.",
+      welcome: ["Today you learn sentence building: I/You/We/They + verb; He/She/It + verb+s."],
+      readAloud: ["Read aloud:", "“I work on weekdays. She works on weekdays. Do you work on weekends?”"],
+      observe: ["Where does -s appear? Which word changes?", "Underline the verbs."],
+      interpret: ["Why is consistency important in grammar?", "How do questions form in English?"],
+      apply: ["This week I will write 5 routine sentences daily.", "I will practice questions with Do/Does."],
+      pray: "Creator, strengthen my discipline. Help me practice daily. Amen."
+    },
+    activities: ["Routine chart: morning/afternoon/evening", "Question swap: Do/Does practice", "Listening: short routine paragraph + key words"],
+    homework: ["Write 10 routine sentences and 10 questions.", "Record yourself reading them (phone) and listen for clarity."],
+    quiz: [
+      {type:"tf", q:"In present simple, 'she' often takes a verb ending in -s.", a:true},
+      {type:"mc", q:"Choose the correct sentence:", options:["She go to work.", "She goes to work.", "She going to work."], a:1},
+      {type:"mc", q:"Choose the correct question:", options:["Do she work?", "Does she work?", "She does work?"], a:1},
+      {type:"short", q:"Write 3 present simple sentences about your routine."},
+      {type:"essay", q:"In 6–10 sentences: describe your typical weekday routine using present simple."}
+    ]
+  },
+  {
+    title: "Past Simple + Telling a Story",
+    minutes: "45–60 min workshop",
+    outcomes: ["Talk about yesterday/last week", "Use regular/irregular verbs", "Tell a short story clearly"],
+    lessonFlow: {
+      openingPrayer:"Creator, help me remember and speak clearly about the past. Amen.",
+      welcome:["Today: past simple for finished actions."],
+      readAloud:["Read aloud:", "“Yesterday I walked to the store. I bought fruit. I met a friend.”"],
+      observe:["Which verbs changed? Which stayed the same?", "Find time words (yesterday, last…)."],
+      interpret:["Why do languages mark time?", "How do time words reduce confusion?"],
+      apply:["This week I will write a 6-sentence story about one day.", "I will learn 12 irregular verbs."],
+      pray:"Creator, help me practice steadily and speak with confidence. Amen."
+    },
+    activities:["Story ladder: 1) time 2) place 3) action 4) result", "Irregular verb flashcards", "Short listening: past tense highlight"],
+    homework:["Write a 'Yesterday' paragraph and save it to Portfolio.", "Learn 12 irregular verbs (go/went, have/had…)."],
+    quiz:[
+      {type:"tf", q:"Past simple is used for actions completed in the past.", a:true},
+      {type:"mc", q:"Choose the correct past form:", options:["buyed","bought","buy"], a:1},
+      {type:"mc", q:"Choose the correct sentence:", options:["Yesterday I go to the store.","Yesterday I went to the store.","Yesterday I going to the store."], a:1},
+      {type:"short", q:"Write 3 past simple sentences about yesterday."},
+      {type:"essay", q:"Write a short story (8–12 sentences) about something you did last week."}
+    ]
+  },
+  {
+    title: "Future Forms + Plans",
+    minutes:"45–60 min workshop",
+    outcomes:["Talk about plans (going to)", "Talk about schedules (will / present)", "Make invitations and responses"],
+    lessonFlow:{
+      openingPrayer:"Creator, guide my plans and my words. Amen.",
+      welcome:["Today: 'going to' for plans; 'will' for decisions."],
+      readAloud:["Read aloud:", "“I’m going to study tonight. I will call you after class.”"],
+      observe:["Which phrase signals a plan? Which signals a quick decision?"],
+      interpret:["How do plan words create trust?", "How can polite invitations build community?"],
+      apply:["This week I will plan 3 goals and speak them aloud daily."],
+      pray:"Creator, help me practice with discipline and peace. Amen."
+    },
+    activities:["Plan board: week goals", "Invitations: Would you like to…?", "Roleplay: accept/decline politely"],
+    homework:["Write 10 future sentences: 5 'going to', 5 'will'.", "Add your weekly plan to Portfolio."],
+    quiz:[
+      {type:"tf", q:"'Going to' often expresses a plan you already decided.", a:true},
+      {type:"mc", q:"Choose the best invitation:", options:["You come now.","Would you like to study together?","Go study."], a:1},
+      {type:"mc", q:"Pick the best response:", options:["No.","No, thanks. Maybe another time.","You wrong."], a:1},
+      {type:"short", q:"Write 2 sentences using 'going to' and 2 using 'will'."},
+      {type:"essay", q:"Write a 10-sentence plan for your next week (include study + life plans)." }
+    ]
+  },
+  {
+    title:"Modals + Polite Power",
+    minutes:"45–60 min workshop",
+    outcomes:["Use can/could/should/must", "Ask for permission", "Give advice politely"],
+    lessonFlow:{
+      openingPrayer:"Creator, teach me kindness and clarity in my speech. Amen.",
+      welcome:["Today: modals change meaning and politeness."],
+      readAloud:["Read aloud:", "“Could you help me, please? You should rest. You must show ID.”"],
+      observe:["Which words sound polite? Which sound strong/required?"],
+      interpret:["How does politeness increase success?", "When do rules require firm language?"],
+      apply:["This week I will replace rude phrases with polite modals."],
+      pray:"Creator, help me speak with wisdom and respect. Amen."
+    },
+    activities:["Politeness rewrite: rude → polite", "Advice circle: should/shouldn’t", "Permission requests: may/can/could"],
+    homework:["Rewrite 8 phrases politely.", "Write 5 advice sentences."],
+    quiz:[
+      {type:"tf", q:"'Could you…' is often more polite than 'Can you…'.", a:true},
+      {type:"mc", q:"Best polite request:", options:["Give me water.","Could I have some water, please?","Water now."], a:1},
+      {type:"mc", q:"Best advice sentence:", options:["You should see a doctor.","You seeing doctor.","Doctor now you."], a:0},
+      {type:"short", q:"Write 3 polite requests using could/may/can."},
+      {type:"essay", q:"In 8–12 sentences: describe a situation where politeness helped (real or imagined)." }
+    ]
+  },
+  {
+    title:"Vocabulary Systems + Memory",
+    minutes:"45–60 min workshop",
+    outcomes:["Build vocabulary by topic", "Use spaced repetition", "Learn collocations (word partners)"],
+    lessonFlow:{
+      openingPrayer:"Creator, strengthen my mind and memory. Amen.",
+      welcome:["Today: learn words in systems, not random lists."],
+      readAloud:["Read aloud:", "“Make a decision. Take a break. Pay attention.”"],
+      observe:["Which words go together? Why?"],
+      interpret:["Why does context improve memory?", "How does repetition build mastery?"],
+      apply:["This week I will learn 25 words in one topic (work/health/food)."],
+      pray:"Creator, help me practice faithfully and remember well. Amen."
+    },
+    activities:["Topic map: 25 words", "Collocation matching", "Flashcard creation in Skill Labs"],
+    homework:["Create 25 flashcards in the Labs.", "Write 10 sentences using collocations."],
+    quiz:[
+      {type:"tf", q:"Collocations are common word pairings like 'make a decision'.", a:true},
+      {type:"mc", q:"Choose the best collocation:", options:["do a decision","make a decision","create a decision"], a:1},
+      {type:"mc", q:"Best study habit:", options:["1 hour once a month","10 minutes daily","Never review"], a:1},
+      {type:"short", q:"Write 5 collocations you learned today."},
+      {type:"essay", q:"Describe your weekly vocabulary plan (topic, daily minutes, review method)." }
+    ]
+  },
+  {
+    title:"Listening + Real Speech",
+    minutes:"45–60 min workshop",
+    outcomes:["Understand main idea vs details", "Handle fast speech patterns", "Take notes effectively"],
+    lessonFlow:{
+      openingPrayer:"Creator, open my ears and my understanding. Amen.",
+      welcome:["Today: listening strategies."],
+      readAloud:["Read aloud:", "“First, listen for the main idea. Second, listen for key details.”"],
+      observe:["Which words are instruction words (first/second)?"],
+      interpret:["Why do we miss words when speech is fast?", "How does note-taking reduce stress?"],
+      apply:["This week I will listen to 5 minutes daily and write 5 key words."],
+      pray:"Creator, help me understand clearly and stay patient. Amen."
+    },
+    activities:["Main idea drill", "Key-word notes", "Shadowing (repeat after audio)"],
+    homework:["Use VOA/British Council listening links in Resources.", "Write 5 key words and 2-sentence summary each day (3 days)."],
+    quiz:[
+      {type:"tf", q:"It’s okay to miss some words if you still understand the main idea.", a:true},
+      {type:"mc", q:"Best listening strategy first:", options:["Translate every word","Listen for main idea","Stop after 3 seconds"], a:1},
+      {type:"mc", q:"Best note-taking:", options:["Write everything","Write key words","Write nothing"], a:1},
+      {type:"short", q:"Write 5 key words from something you listened to today."},
+      {type:"essay", q:"Write a short summary (8–10 sentences) of an audio you listened to this week." }
+    ]
+  },
+  {
+    title:"Reading Strategies + Speed",
+    minutes:"45–60 min workshop",
+    outcomes:["Skim for gist", "Scan for answers", "Build reading stamina"],
+    lessonFlow:{
+      openingPrayer:"Creator, give me focus and calm while I read. Amen.",
+      welcome:["Today: reading strategies for adults."],
+      readAloud:["Read aloud:", "“Skim for the idea. Scan for facts. Read deeply for meaning.”"],
+      observe:["Which verbs are action verbs?"],
+      interpret:["Why does strategy matter more than speed?", "How does repetition build reading fluency?"],
+      apply:["This week I will read 10 minutes daily and mark 5 new words."],
+      pray:"Creator, help me learn steadily and not rush. Amen."
+    },
+    activities:["Skim vs scan exercises", "Vocabulary in context", "Reading log setup"],
+    homework:["Use News in Levels (Resources).", "Add a reading log entry to Portfolio."],
+    quiz:[
+      {type:"tf", q:"Scanning means looking for specific information (names, numbers).", a:true},
+      {type:"mc", q:"Skimming is best for:", options:["Main idea","Exact numbers","Spelling"], a:0},
+      {type:"mc", q:"Scanning is best for:", options:["Story theme","Specific facts","Poetry"], a:1},
+      {type:"short", q:"Write 5 new words you met while reading and their meanings."},
+      {type:"essay", q:"Write a reading reflection: what helped you understand faster this week?"}
+    ]
+  },
+  {
+    title:"Writing I — Clear Paragraphs + Emails",
+    minutes:"45–60 min workshop",
+    outcomes:["Write a paragraph with topic sentence", "Write a professional email", "Edit for clarity"],
+    lessonFlow:{
+      openingPrayer:"Creator, help me write with truth and clarity. Amen.",
+      welcome:["Today: writing structure."],
+      readAloud:["Read aloud:", "“Hello, I am writing to ask about _____. Thank you for your time.”"],
+      observe:["Identify greeting, purpose, closing."],
+      interpret:["Why does structure create respect?", "How does editing improve professionalism?"],
+      apply:["This week I will write 2 emails and revise them."],
+      pray:"Creator, guide my words and my tone. Amen."
+    },
+    activities:["Paragraph frame: topic → support → conclusion", "Email templates", "Editing checklist"],
+    homework:["Add one professional email draft to Portfolio.", "Revise it using checklist."],
+    quiz:[
+      {type:"tf", q:"A topic sentence tells the main idea of a paragraph.", a:true},
+      {type:"mc", q:"Best email closing:", options:["Bye.","Thanks for your time.","Now do it."], a:1},
+      {type:"mc", q:"Best structure:", options:["No greeting","Greeting + purpose + closing","All caps"], a:1},
+      {type:"short", q:"Write a 2-sentence topic sentence + support sentence."},
+      {type:"essay", q:"Write a professional email asking for information (10–14 sentences)." }
+    ]
+  },
+  {
+    title:"Speaking I — Conversation + Interviews",
+    minutes:"45–60 min workshop",
+    outcomes:["Hold a 2–3 minute conversation", "Answer interview questions", "Use follow-up questions"],
+    lessonFlow:{
+      openingPrayer:"Creator, give me courage to speak. Amen.",
+      welcome:["Today: speaking patterns + confidence."],
+      readAloud:["Read aloud:", "“I have experience in ____. I am reliable. I learn quickly.”"],
+      observe:["Which phrases show confidence? Which show humility?"],
+      interpret:["How does practice reduce anxiety?", "Why do follow-up questions build connection?"],
+      apply:["This week I will practice 3 interview answers out loud daily."],
+      pray:"Creator, help me speak clearly and kindly. Amen."
+    },
+    activities:["Roleplay interview", "Follow-up questions", "Speaking recording + self-review"],
+    homework:["Add a 2-minute talk outline to Portfolio.", "Practice it 3 times."],
+    quiz:[
+      {type:"tf", q:"Speaking confidence improves through repetition and feedback.", a:true},
+      {type:"mc", q:"Best follow-up question:", options:["Why you talk?","Could you tell me more about that?","Stop."], a:1},
+      {type:"mc", q:"Best interview answer style:", options:["Short + clear + example","One word","No answer"], a:0},
+      {type:"short", q:"Write 3 common interview questions."},
+      {type:"essay", q:"Write a 12–16 sentence self-introduction for an interview." }
+    ]
+  },
+  {
+    title:"Academic Skills — Summarize + Paraphrase",
+    minutes:"45–60 min workshop",
+    outcomes:["Summarize accurately", "Paraphrase without copying", "Use simple citation language"],
+    lessonFlow:{
+      openingPrayer:"Creator, keep me honest and clear in my learning. Amen.",
+      welcome:["Today: summarize vs paraphrase."],
+      readAloud:["Read aloud:", "“A summary is shorter. A paraphrase uses new words but keeps the meaning.”"],
+      observe:["Which words define each skill?"],
+      interpret:["Why is accurate meaning important?", "How do we respect sources ethically?"],
+      apply:["This week I will summarize one article in 6 sentences."],
+      pray:"Creator, help me learn with integrity. Amen."
+    },
+    activities:["Summary frames", "Paraphrase practice", "Quote vs paraphrase"],
+    homework:["Summarize one short article from Resources.", "Add summary to Portfolio."],
+    quiz:[
+      {type:"tf", q:"Paraphrasing keeps the meaning but changes the wording.", a:true},
+      {type:"mc", q:"A summary is usually:", options:["Longer than the original","Shorter than the original","The same length"], a:1},
+      {type:"mc", q:"Best ethical habit:", options:["Copy without credit","Change a few words only","Understand meaning and rewrite"], a:2},
+      {type:"short", q:"Write one sentence summarizing an article you read this week."},
+      {type:"essay", q:"Paraphrase this sentence in your own words: 'Practice every day leads to steady improvement.'" }
+    ]
+  },
+  {
+    title:"Capstone — Portfolio Review + Next Steps",
+    minutes:"45–60 min workshop",
+    outcomes:["Compile finished work", "Self-assess your progress", "Build your next 30-day plan"],
+    lessonFlow:{
+      openingPrayer:"Creator, thank you for growth and discipline. Amen.",
+      welcome:["Today: review, polish, plan your next stage."],
+      readAloud:["Read aloud:", "“I have improved through practice. I will continue learning with discipline.”"],
+      observe:["Which words show progress and commitment?"],
+      interpret:["Why do portfolios matter?", "How does consistency beat intensity?"],
+      apply:["This month I will keep a steady streak and upgrade my portfolio."],
+      pray:"Creator, keep me steady and hopeful. Amen."
+    },
+    activities:["Portfolio checklist", "Self-assessment rubric", "30-day plan builder"],
+    homework:["Finalize 3 portfolio entries (intro, email, summary).", "Create a 30-day plan."],
+    quiz:[
+      {type:"tf", q:"A portfolio shows real skill growth over time.", a:true},
+      {type:"mc", q:"Best next step after a course:", options:["Stop practicing","Make a 30-day plan","Erase your notes"], a:1},
+      {type:"mc", q:"Best improvement strategy:", options:["Random study","Daily small practice","No review"], a:1},
+      {type:"short", q:"List 3 skills you improved and 1 skill you want to improve next."},
+      {type:"essay", q:"Write your 30-day English plan (12–18 sentences)." }
+    ]
+  }
+];
+
+/* =========================================================
+   RESOURCE LINKS (compare)
+   ========================================================= */
+const RESOURCES = [
+  {name:"British Council – LearnEnglish", url:"https://learnenglish.britishcouncil.org/", tags:["course","grammar","skills"]},
+  {name:"VOA Learning English", url:"https://learningenglish.voanews.com/", tags:["listening","news","pronunciation"]},
+  {name:"USA Learns", url:"https://www.usalearns.org/", tags:["adult course","free"]},
+  {name:"ELLLO", url:"https://www.elllo.org/", tags:["listening","quizzes"]},
+  {name:"Randall’s ESL Lab", url:"https://www.esl-lab.com/", tags:["listening","quizzes"]},
+  {name:"News in Levels", url:"https://www.newsinlevels.com/", tags:["graded reading"]},
+  {name:"Cambridge Dictionary", url:"https://dictionary.cambridge.org/", tags:["dictionary","audio"]},
+  {name:"Oxford Learner’s Dictionaries", url:"https://www.oxfordlearnersdictionaries.com/", tags:["dictionary","pronunciation"]},
+  {name:"YouGlish", url:"https://youglish.com/", tags:["pronunciation in context"]},
+  {name:"Anki", url:"https://apps.ankiweb.net/", tags:["spaced repetition"]},
+  {name:"Quizlet", url:"https://quizlet.com/", tags:["flashcards"]},
+  {name:"HelloTalk", url:"https://www.hellotalk.com/", tags:["language exchange"]}
+];
+
+/* =========================================================
+   STORAGE / STATE
+   ========================================================= */
+const state = loadState();
+let selectedWeek = clamp(state.selectedWeek ?? 0, 0, COURSE.length-1);
+let activeTab = state.activeTab || "lesson";
+
+function loadState(){
+  const base = {
+    pro: false,
+    progress: {},
+    portfolio: [],
+    selectedWeek: 0,
+    activeTab: "lesson",
+    lab: { deck: [] }
+  };
+
+  try{
+    const raw = localStorage.getItem(LS_KEY);
+    if(!raw) return base;
+
+    const parsed = JSON.parse(raw) || {};
+
+    // Ensure required shapes exist
+    if(typeof parsed.progress !== "object" || !parsed.progress){
+      parsed.progress = {};
+    }
+    if(!Array.isArray(parsed.portfolio)){
+      parsed.portfolio = [];
+    }
+    if(typeof parsed.lab !== "object" || !parsed.lab){
+      parsed.lab = { deck: [] };
+    }
+    if(!Array.isArray(parsed.lab.deck)){
+      parsed.lab.deck = [];
+    }
+    if(typeof parsed.selectedWeek !== "number"){
+      parsed.selectedWeek = 0;
+    }
+    if(typeof parsed.activeTab !== "string"){
+      parsed.activeTab = "lesson";
+    }
+    if(typeof parsed.pro !== "boolean"){
+      parsed.pro = !!parsed.pro;
+    }
+
+    // Merge with defaults so new fields in future upgrades are still safe
+    return { ...base, ...parsed };
+  }catch(e){
+    return base;
+  }
+}
+
+/* =========================================================
+   FULL COURSE UNLOCK (Honor-based)
+   - auto unlock if URL contains ?pro=1, ?full=1, or ?access=1
+   ========================================================= */
+function checkProFromUrl(){
+  const p = new URLSearchParams(location.search);
+  if(
+    p.get("pro")==="1" ||
+    p.get("full")==="1" ||
+    p.get("access")==="1"
+  ){
+    state.pro = true;
+    saveState();
+    // clean URL (optional)
+    try{
+      const u = new URL(location.href);
+      u.searchParams.delete("pro");
+      u.searchParams.delete("full");
+      u.searchParams.delete("access");
+      history.replaceState({}, "", u.toString());
+    }catch(e){}
+  }
+}
+
+/* =========================================================
+   UI WIRING
+   ========================================================= */
+const weekListEl = document.getElementById("weekList");
+const contentEl = document.getElementById("content");
+const statusText = document.getElementById("statusText");
+const donateBtn = document.getElementById("donateBtn");
+const alreadyProBtn = document.getElementById("alreadyProBtn");
+const proPill = document.getElementById("proPill");
+
+if(donateBtn){
+  donateBtn.href = DONATION_URL;
+}
+
+checkProFromUrl();
+renderAll();
+
+document.querySelectorAll(".tab").forEach(t=>{
+  t.addEventListener("click", ()=>{
+    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+    t.classList.add("active");
+    activeTab = t.dataset.tab;
+    saveState();
+    renderRight();
+  });
+});
+
+document.getElementById("resetBtn").addEventListener("click", ()=>{
+  if(!confirm("Reset progress on this device?")) return;
+  localStorage.removeItem(LS_KEY);
+  location.reload();
+});
+
+document.getElementById("exportBtn").addEventListener("click", ()=>{
+  const blob = new Blob([JSON.stringify(state,null,2)], {type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "kha_esl_mastercourse_progress.json";
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+
+document.getElementById("importBtn").addEventListener("click", ()=>{
+  const inp = document.createElement("input");
+  inp.type="file"; inp.accept="application/json";
+  inp.onchange = ()=>{
+    const f = inp.files && inp.files[0]; if(!f) return;
+    const r = new FileReader();
+    r.onload = ()=>{
+      try{
+        const obj = JSON.parse(r.result);
+        // light validation
+        if(typeof obj !== "object") throw new Error("Invalid");
+        localStorage.setItem(LS_KEY, JSON.stringify(obj));
+        location.reload();
+      }catch(e){ alert("Import failed. Please choose a valid progress JSON."); }
+    };
+    r.readAsText(f);
+  };
+  inp.click();
+});
+
+alreadyProBtn.addEventListener("click", ()=>{
+  const ok = confirm(
+    "This course now runs on an honor system.\n\n" +
+    "If you have donated (or cannot donate right now but genuinely need this course), " +
+    "you may unlock the full course on THIS device.\n\n" +
+    "This app cannot see or verify donations — access is stored only in your browser.\n\n" +
+    "Activate full course on this device?"
+  );
+  if(!ok) return;
+  state.pro = true;
+  saveState();
+  renderAll();
+});
+
+function isWeekUnlocked(i){
+  if(i < FREE_WEEK_COUNT) return true;
+  return !!state.pro;
+}
+function weekDone(i){
+  return !!state.progress?.["w"+i]?.done;
+}
+function setWeekDone(i, done){
+  state.progress["w"+i] = state.progress["w"+i] || {};
+  state.progress["w"+i].done = !!done;
+  saveState();
+}
+
+function renderAll(){
+  proPill.classList.toggle("lock", !state.pro);
+  proPill.innerHTML = state.pro
+    ? "<strong>Full Course:</strong> Active on this device"
+    : "<strong>Full Course:</strong> Preview only";
+  renderLeft();
+  renderTabsActive();
+  renderRight();
+}
+function renderTabsActive(){
+  document.querySelectorAll(".tab").forEach(x=>{
+    x.classList.toggle("active", x.dataset.tab === activeTab);
+  });
+}
+function renderLeft(){
+  weekListEl.innerHTML = "";
+  COURSE.forEach((w,i)=>{
+    const item = document.createElement("div");
+    item.className = "weekitem" + (i===selectedWeek ? " active":"");
+    const unlocked = isWeekUnlocked(i);
+    const done = weekDone(i);
+    item.innerHTML = `
+      <div class="wk-left">
+        <div class="wk-num">${i+1}</div>
+        <div>
+          <div class="wk-title">${escapeHtml(w.title)}</div>
+          <div class="wk-meta">${escapeHtml(w.minutes || "")}</div>
+        </div>
+      </div>
+      <div class="wk-right">
+        ${i===0 ? `<div class="badge free">FREE</div>` : `<div class="badge ${unlocked?'':'lock'}">${unlocked?'FULL':'LOCKED'}</div>`}
+        ${done ? `<div class="badge done">DONE</div>` : ``}
+      </div>
+    `;
+    item.addEventListener("click", ()=>{
+      selectedWeek = i;
+      saveState();
+      renderLeft();
+      renderRight();
+    });
+    weekListEl.appendChild(item);
+  });
+
+  const doneCount = COURSE.filter((_,i)=>weekDone(i)).length;
+  statusText.textContent = `${doneCount}/${COURSE.length} weeks marked complete · Full course: ${state.pro ? "Active" : "Preview only"}`;
+}
+
+function renderRight(){
+  if(activeTab === "lesson") renderLesson();
+  else if(activeTab === "resources") renderResources();
+  else if(activeTab === "labs") renderLabs();
+  else if(activeTab === "portfolio") renderPortfolio();
+}
+
+function renderLesson(){
+  const w = COURSE[selectedWeek];
+  const unlocked = isWeekUnlocked(selectedWeek);
+
+  const flow = w.lessonFlow || {};
+  const flowBlock = (title, bodyArr, minutesHint) => `
+    <div class="box">
+      <h4>${title}${minutesHint ? ` <span class="small">(${minutesHint})</span>`:""}</h4>
+      ${Array.isArray(bodyArr) ? `<ul class="list">${bodyArr.map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul>` : `<p>${escapeHtml(bodyArr||"")}</p>`}
+    </div>
+  `;
+
+  const outcomes = (w.outcomes||[]).map(x=>`<li>${escapeHtml(x)}</li>`).join("");
+  const activities = (w.activities||[]).map(x=>`<li>${escapeHtml(x)}</li>`).join("");
+  const homework = (w.homework||[]).map(x=>`<li>${escapeHtml(x)}</li>`).join("");
+
+  contentEl.innerHTML = `
+    <h2>Week ${selectedWeek+1}: ${escapeHtml(w.title)}</h2>
+    <p class="kicker">
+      <b>Format:</b> self-paced workshop · <b>Estimated:</b> ${escapeHtml(w.minutes||"")} ·
+      <b>Access:</b> ${unlocked ? "Unlocked" : "Locked (full course)"}
+    </p>
+
+    <div class="two">
+      <div class="box">
+        <h4>Learning Outcomes</h4>
+        <ul class="list">${outcomes}</ul>
+      </div>
+      <div class="box">
+        <h4>What you will produce</h4>
+        <p>Each week ends with a short quiz and at least one portfolio artifact (paragraph, email, summary, outline, or plan).</p>
+        <div class="hr"></div>
+        <div class="row">
+          <button class="btn good" id="markDoneBtn">${weekDone(selectedWeek) ? "✓ Completed" : "Mark Week Complete"}</button>
+          <button class="btn" id="toPortfolioBtn">Add to Portfolio</button>
+        </div>
+      </div>
+    </div>
+
+    ${unlocked ? `
+      ${flowBlock("Opening Prayer", flow.openingPrayer, "1 min")}
+      ${flowBlock("Welcome", flow.welcome, "5 min")}
+      ${flowBlock("Read the passage out loud", flow.readAloud, "5 min")}
+      ${flowBlock("Observe — What does it say?", flow.observe, "10 min")}
+      ${flowBlock("Interpret — What did it mean?", flow.interpret, "15 min")}
+      ${flowBlock("Apply — What will I do this week?", flow.apply, "15 min")}
+      ${flowBlock("Pray", flow.pray, "10 min")}
+
+      <div class="two">
+        <div class="box">
+          <h4>Practice Activities</h4>
+          <ul class="list">${activities}</ul>
+        </div>
+        <div class="box">
+          <h4>Homework</h4>
+          <ul class="list">${homework}</ul>
+        </div>
+      </div>
+
+      <div class="box">
+        <h4>Homework Quiz (5 questions)</h4>
+        <div id="quizMount"></div>
+      </div>
+
+      ${w.proPrompt ? `
+        <div class="lockOverlay">
+          <h4>Honor-based Full Course Access</h4>
+          <div class="small" style="margin:6px 0 10px">
+            This course is offered on a giving model. If you are able, please consider a small monthly donation
+            to support the Academy and future ESL courses.
+          </div>
+          <div class="row">
+            <a class="btn primary" href="${DONATION_URL}" target="_blank" rel="noopener">💗 Make a Donation (Optional)</a>
+            <button class="btn good" id="iSubscribedInline">Activate full course on this device</button>
+          </div>
+          <div class="small" style="margin-top:10px">
+            Note: This page cannot see who donated. Access is honor-based and stored only on your device.
+          </div>
+        </div>
+      ` : ``}
+
+    ` : `
+      <div class="lockOverlay">
+        <h4>Full Course (Honor System)</h4>
+        <div class="small" style="margin:6px 0 10px">
+          Weeks 2–12, Skill Labs, and the full portfolio workflow are part of the full course.
+          If you are able, please consider a small donation (for example, <b>$11.11/month</b>) to support this work.
+        </div>
+        <div class="row">
+          <a class="btn primary" href="${DONATION_URL}" target="_blank" rel="noopener">💗 Make a Donation (Optional)</a>
+          <button class="btn good" id="iSubscribedInline">Activate full course on this device</button>
+        </div>
+        <div class="small" style="margin-top:10px">
+          This app cannot verify donations. When you press “Activate full course”, it unlocks on this device only.
+        </div>
+      </div>
+    `}
+  `;
+
+  // handlers
+  const markBtn = document.getElementById("markDoneBtn");
+  if(markBtn){
+    markBtn.addEventListener("click", ()=>{
+      setWeekDone(selectedWeek, !weekDone(selectedWeek));
+      renderLeft();
+      renderRight();
+    });
+  }
+  const toPortBtn = document.getElementById("toPortfolioBtn");
+  if(toPortBtn){
+    toPortBtn.addEventListener("click", ()=>{
+      activeTab = "portfolio";
+      saveState();
+      renderTabsActive();
+      renderRight();
+    });
+  }
+  const iSub = document.getElementById("iSubscribedInline");
+  if(iSub){
+    iSub.addEventListener("click", ()=> alreadyProBtn.click());
+  }
+
+  if(unlocked){
+    mountQuiz("quizMount", selectedWeek, w.quiz || []);
+  }
+}
+
+function mountQuiz(mountId, weekIndex, questions){
+  const mount = document.getElementById(mountId);
+  if(!mount) return;
+
+  state.progress["w"+weekIndex] = state.progress["w"+weekIndex] || {};
+  const store = state.progress["w"+weekIndex];
+  store.quiz = store.quiz || { answers:{} };
+  saveState();
+
+  const autoGradableTypes = new Set(["tf","mc"]);
+  function render(){
+    let html = "";
+    questions.forEach((q, idx)=>{
+      const key = "q"+idx;
+      const saved = store.quiz.answers[key];
+
+      html += `<div class="box" style="margin:10px 0">
+        <div style="font-weight:800;margin-bottom:8px">Q${idx+1}. ${escapeHtml(q.q)}</div>
+      `;
+
+      if(q.type === "tf"){
+        const val = (saved === undefined) ? null : !!saved;
+        html += `
+          <div class="row">
+            <button class="btn ${val===true?'good':''}" data-a="true" data-k="${key}">True</button>
+            <button class="btn ${val===false?'bad':''}" data-a="false" data-k="${key}">False</button>
+          </div>
+        `;
+      } else if(q.type === "mc"){
+        html += `<div class="row">` + q.options.map((opt, j)=>{
+          const sel = (saved === j);
+          return `<button class="btn ${sel?'good':''}" data-a="${j}" data-k="${key}">${escapeHtml(opt)}</button>`;
+        }).join("") + `</div>`;
+      } else if(q.type === "short"){
+        html += `<div class="small">Short answer (saved locally)</div>
+                 <textarea class="input" data-k="${key}" placeholder="Type your answer...">${escapeHtml(saved||"")}</textarea>`;
+      } else if(q.type === "essay"){
+        html += `<div class="small">Essay (saved locally). You can revise anytime.</div>
+                 <textarea class="input" data-k="${key}" placeholder="Write your essay...">${escapeHtml(saved||"")}</textarea>`;
+      }
+
+      html += `</div>`;
+    });
+
+    // score (TF + MC only)
+    const {score, total} = computeScore();
+    html += `
+      <div class="row" style="margin-top:10px">
+        <button class="btn good" id="saveQuizBtn">Save quiz</button>
+        <button class="btn warn" id="clearQuizBtn">Clear answers</button>
+        <div class="pill" style="margin-left:auto"><strong>Auto-score:</strong> ${score}/${total}</div>
+      </div>
+      <div class="small" style="margin-top:8px">
+        Auto-score counts True/False + Multiple Choice. Short/Essay are for reflection and portfolio use.
+      </div>
+    `;
+
+    mount.innerHTML = html;
+
+    // click handlers for TF/MC
+    mount.querySelectorAll("button[data-k][data-a]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const k = btn.getAttribute("data-k");
+        const aRaw = btn.getAttribute("data-a");
+        const qIdx = parseInt(k.replace("q",""),10);
+        const q = questions[qIdx];
+        if(q.type === "tf") store.quiz.answers[k] = (aRaw === "true");
+        else store.quiz.answers[k] = parseInt(aRaw,10);
+        saveState();
+        render();
+      });
+    });
+
+    // typing handlers for short/essay
+    mount.querySelectorAll("textarea[data-k]").forEach(t=>{
+      t.addEventListener("input", ()=>{
+        const k = t.getAttribute("data-k");
+        store.quiz.answers[k] = t.value;
+        saveState();
+      });
+    });
+
+    document.getElementById("saveQuizBtn").addEventListener("click", ()=>{
+      saveState();
+      alert("Quiz saved on this device.");
+    });
+    document.getElementById("clearQuizBtn").addEventListener("click", ()=>{
+      if(!confirm("Clear quiz answers for this week?")) return;
+      store.quiz.answers = {};
+      saveState();
+      render();
+    });
+  }
+
+  function computeScore(){
+    let score = 0, total = 0;
+    questions.forEach((q, idx)=>{
+      const k = "q"+idx;
+      const saved = store.quiz.answers[k];
+      if(autoGradableTypes.has(q.type)){
+        total++;
+        if(q.type === "tf" && typeof saved === "boolean" && saved === q.a) score++;
+        if(q.type === "mc" && typeof saved === "number" && saved === q.a) score++;
+      }
+    });
+    return {score, total};
+  }
+
+  render();
+}
+
+function renderResources(){
+  contentEl.innerHTML = `
+    <h2>Compare Resources (Free + Trusted)</h2>
+    <p class="kicker">These are excellent public resources. This course synthesizes methods across them, adds structure, weekly assessment, and a portfolio workflow.</p>
+    <div class="box">
+      <h4>Resource Links</h4>
+      <ul class="list">
+        ${RESOURCES.map(r=>`
+          <li>
+            <a class="link" href="${r.url}" target="_blank" rel="noopener">${escapeHtml(r.name)}</a>
+            <span class="small"> — ${escapeHtml((r.tags||[]).join(", "))}</span>
+          </li>
+        `).join("")}
+      </ul>
+    </div>
+    <div class="box">
+      <h4>How to use these alongside the course</h4>
+      <ul class="list">
+        <li><b>Listening:</b> use VOA / ELLLO for 5–10 minutes daily, then write key words + a 2-sentence summary.</li>
+        <li><b>Grammar:</b> use British Council / dictionaries to clarify rules, then apply them in your Portfolio writing.</li>
+        <li><b>Speaking:</b> use language exchange carefully—focus on polite phrases and practical situations.</li>
+      </ul>
+    </div>
+  `;
+}
+
+function renderLabs(){
+  const unlocked = !!state.pro;
+  contentEl.innerHTML = `
+    <h2>Skill Labs</h2>
+    <p class="kicker">Mini tools for daily practice. (Designed to be lightweight and Wix-friendly.)</p>
+
+    ${unlocked ? `
+      ${renderFlashcardsLab()}
+      ${renderPronunciationLab()}
+      ${renderWritingLab()}
+    ` : `
+      <div class="lockOverlay">
+        <h4>Skill Labs (Full Course)</h4>
+        <div class="small" style="margin:6px 0 10px">
+          Flashcards, pronunciation, and writing prompts live here. They are part of the full course.
+          Access is honor-based: if you’re able, please consider supporting the Academy with a small donation.
+        </div>
+        <div class="row">
+          <a class="btn primary" href="${DONATION_URL}" target="_blank" rel="noopener">💗 Make a Donation (Optional)</a>
+          <button class="btn good" id="iSubscribedInline">Activate full course on this device</button>
+        </div>
+      </div>
+    `}
+  `;
+
+  const iSub = document.getElementById("iSubscribedInline");
+  if(iSub){ iSub.addEventListener("click", ()=> alreadyProBtn.click()); }
+
+  if(unlocked){
+    wireFlashcardsLab();
+    wirePronunciationLab();
+    wireWritingLab();
+  }
+}
+
+function renderFlashcardsLab(){
+  return `
+    <div class="box">
+      <h4>Flashcards (Spaced Repetition — simple)</h4>
+      <p class="small">Add word + meaning. Review daily. Saved locally on your device.</p>
+      <div class="two">
+        <div>
+          <input class="input" id="fcWord" placeholder="Word or phrase (e.g., 'make a decision')" />
+        </div>
+        <div>
+          <input class="input" id="fcMeaning" placeholder="Meaning / example (e.g., 'choose something')" />
+        </div>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <button class="btn good" id="fcAdd">Add card</button>
+        <button class="btn" id="fcReview">Review</button>
+        <button class="btn warn" id="fcClear">Clear deck</button>
+        <div class="pill" style="margin-left:auto"><strong>Cards:</strong> <span id="fcCount">0</span></div>
+      </div>
+      <div class="hr"></div>
+      <div id="fcReviewArea"></div>
+    </div>
+  `;
+}
+function wireFlashcardsLab(){
+  state.lab = state.lab || {};
+  state.lab.deck = state.lab.deck || [];
+  const word = document.getElementById("fcWord");
+  const meaning = document.getElementById("fcMeaning");
+  const count = document.getElementById("fcCount");
+  const reviewArea = document.getElementById("fcReviewArea");
+
+  function refreshCount(){
+    count.textContent = state.lab.deck.length;
+    saveState();
+  }
+  refreshCount();
+
+  document.getElementById("fcAdd").addEventListener("click", ()=>{
+    const w = (word.value||"").trim();
+    const m = (meaning.value||"").trim();
+    if(!w || !m) return alert("Add both a word/phrase and meaning.");
+    state.lab.deck.push({w,m,box:1,last:Date.now()});
+    word.value=""; meaning.value="";
+    refreshCount();
+  });
+
+  document.getElementById("fcClear").addEventListener("click", ()=>{
+    if(!confirm("Clear your flashcard deck on this device?")) return;
+    state.lab.deck = [];
+    reviewArea.innerHTML = "";
+    refreshCount();
+  });
+
+  document.getElementById("fcReview").addEventListener("click", ()=>{
+    if(!state.lab.deck.length) return alert("Add a few cards first.");
+    const card = pickCardForReview(state.lab.deck);
+    reviewArea.innerHTML = `
+      <div class="box" style="background:rgba(255,255,255,0.04)">
+        <div style="font-weight:900;font-size:1.05rem">${escapeHtml(card.w)}</div>
+        <div class="small" style="margin-top:6px">${escapeHtml(card.m)}</div>
+        <div class="row" style="margin-top:10px">
+          <button class="btn good" id="knewIt">I knew it</button>
+          <button class="btn bad" id="missedIt">I missed it</button>
+        </div>
+      </div>
+    `;
+    document.getElementById("knewIt").addEventListener("click", ()=>{
+      card.box = Math.min(5, (card.box||1)+1);
+      card.last = Date.now(); refreshCount();
+      reviewArea.innerHTML = `<div class="small">Nice. Review again.</div>`;
+    });
+    document.getElementById("missedIt").addEventListener("click", ()=>{
+      card.box = 1;
+      card.last = Date.now(); refreshCount();
+      reviewArea.innerHTML = `<div class="small">Good catch. Review again soon.</div>`;
+    });
+  });
+
+  function pickCardForReview(deck){
+    // simple spaced repetition: prefer low box + older last
+    const now = Date.now();
+    const scored = deck.map(c=>{
+      const box = c.box||1;
+      const age = now - (c.last||0);
+      const need = (6-box) * 0.7 + Math.min(3, age / (1000*60*60*24)); // days weight
+      return {c, need};
+    }).sort((a,b)=> b.need - a.need);
+    return scored[0].c;
+  }
+}
+
+function renderPronunciationLab(){
+  return `
+    <div class="box">
+      <h4>Pronunciation Coach (browser-based)</h4>
+      <p class="small">
+        Click “Hear” to listen. If your browser supports speech recognition, “Speak” will give you a rough match check.
+        This is a learning helper—not a perfect evaluator.
+      </p>
+      <div class="row">
+        <input class="input" id="pronTarget" value="Please speak slowly. Thank you." />
+        <button class="btn" id="sayIt">🔊 Hear</button>
+        <button class="btn good" id="trySpeak">🎙️ Speak</button>
+      </div>
+      <div class="hr"></div>
+      <div id="pronOut" class="small"></div>
+    </div>
+  `;
+}
+function wirePronunciationLab(){
+  const target = document.getElementById("pronTarget");
+  const out = document.getElementById("pronOut");
+
+  document.getElementById("sayIt").addEventListener("click", ()=>{
+    if(!("speechSynthesis" in window)) return alert("Speech synthesis not supported on this browser.");
+    const u = new SpeechSynthesisUtterance(target.value);
+    u.rate = 1.0; u.pitch = 1.02;
+    speechSynthesis.cancel();
+    speechSynthesis.speak(u);
+  });
+
+  document.getElementById("trySpeak").addEventListener("click", ()=>{
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(!SR){
+      out.textContent = "Speech recognition not available here. Tip: record yourself (phone) and compare to the ‘Hear’ audio.";
+      return;
+    }
+    const rec = new SR();
+    rec.lang = "en-US";
+    rec.interimResults = false;
+    rec.maxAlternatives = 1;
+    out.textContent = "Listening… (speak now)";
+    rec.onresult = (e)=>{
+      const said = e.results[0][0].transcript || "";
+      const score = roughMatchScore(target.value, said);
+      out.innerHTML = `You said: <b>${escapeHtml(said)}</b><br>Match score: <b>${score}%</b> (rough)`;
+    };
+    rec.onerror = ()=> out.textContent = "Could not capture speech. Try again (or allow mic permissions).";
+    rec.start();
+  });
+
+  function roughMatchScore(a,b){
+    const norm = s=> (s||"").toLowerCase().replace(/[^a-z0-9\s]/g,"").replace(/\s+/g," ").trim();
+    const A = norm(a).split(" ").filter(Boolean);
+    const B = norm(b).split(" ").filter(Boolean);
+    if(!A.length) return 0;
+    let hit=0;
+    const bSet = new Set(B);
+    A.forEach(w=>{ if(bSet.has(w)) hit++; });
+    return Math.round((hit/A.length)*100);
+  }
+}
+
+function renderWritingLab(){
+  return `
+    <div class="box">
+      <h4>Writing Prompt Lab</h4>
+      <p class="small">Write 6–12 sentences. Save it into your Portfolio when finished.</p>
+      <div class="row">
+        <button class="btn" id="newPrompt">New prompt</button>
+        <button class="btn good" id="saveToPortfolio">Save to Portfolio</button>
+      </div>
+      <div class="hr"></div>
+      <div class="box" style="background:rgba(255,255,255,0.04)">
+        <div style="font-weight:900" id="promptText"></div>
+        <textarea class="input" id="promptAnswer" placeholder="Write here..."></textarea>
+      </div>
+    </div>
+  `;
+}
+function wireWritingLab(){
+  const prompts = [
+    "Write a professional email asking for information about a class schedule.",
+    "Describe your daily routine (present simple).",
+    "Tell a short story about yesterday (past simple).",
+    "Write your plan for next week (future forms).",
+    "Explain your learning goal and your practice schedule."
+  ];
+  const promptText = document.getElementById("promptText");
+  const answer = document.getElementById("promptAnswer");
+
+  function pick(){
+    const p = prompts[Math.floor(Math.random()*prompts.length)];
+    promptText.textContent = p;
+    answer.value = "";
+  }
+  pick();
+
+  document.getElementById("newPrompt").addEventListener("click", pick);
+
+  document.getElementById("saveToPortfolio").addEventListener("click", ()=>{
+    const title = "Writing Prompt";
+    const note = `Prompt: ${promptText.textContent}\n\nAnswer:\n${answer.value}`.trim();
+    if(note.length < 20) return alert("Write a bit more before saving.");
+    state.portfolio = state.portfolio || [];
+    state.portfolio.unshift({title, notes:note, ts:Date.now()});
+    saveState();
+    alert("Saved to Portfolio.");
+  });
+}
+
+function renderPortfolio(){
+  state.portfolio = state.portfolio || [];
+  contentEl.innerHTML = `
+    <h2>Portfolio</h2>
+    <p class="kicker">Your finished works (titles + notes). Keep it professional. This is saved locally on your device.</p>
+
+    <div class="box">
+      <h4>Add a new portfolio entry</h4>
+      <div class="two">
+        <div>
+          <label class="small">Title</label>
+          <input class="input" id="pfTitle" placeholder="e.g., Self-Introduction Paragraph" />
+        </div>
+        <div>
+          <label class="small">Notes</label>
+          <input class="input" id="pfNotesShort" placeholder="1-line description (optional)" />
+        </div>
+      </div>
+      <label class="small" style="display:block;margin-top:10px">Full notes / text</label>
+      <textarea class="input" id="pfBody" placeholder="Paste your paragraph/email/summary here..."></textarea>
+      <div class="row" style="margin-top:10px">
+        <button class="btn good" id="pfAdd">Add to Portfolio</button>
+        <button class="btn" id="pfExport">Export Portfolio</button>
+      </div>
+    </div>
+
+    <div class="box">
+      <h4>Entries</h4>
+      <div id="pfList"></div>
+    </div>
+  `;
+
+  document.getElementById("pfAdd").addEventListener("click", ()=>{
+    const t = (document.getElementById("pfTitle").value||"").trim();
+    const s = (document.getElementById("pfNotesShort").value||"").trim();
+    const b = (document.getElementById("pfBody").value||"").trim();
+    if(!t || b.length < 20) return alert("Add a title and at least a short body (20+ chars).");
+    state.portfolio.unshift({title:t, notes:(s ? s+"\n\n":"") + b, ts:Date.now()});
+    saveState();
+    renderPortfolio();
+  });
+
+  document.getElementById("pfExport").addEventListener("click", ()=>{
+    const blob = new Blob([JSON.stringify(state.portfolio,null,2)], {type:"application/json"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "kha_esl_portfolio.json";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+
+  renderPortfolioList();
+}
+
+function renderPortfolioList(){
+  const list = document.getElementById("pfList");
+  if(!list) return;
+  if(!state.portfolio.length){
+    list.innerHTML = `<div class="small">No entries yet. Add your first writing piece above.</div>`;
+    return;
+  }
+  list.innerHTML = state.portfolio.map((e, idx)=>{
+    const date = new Date(e.ts||Date.now()).toLocaleString();
+    return `
+      <div class="box" style="margin:10px 0;background:rgba(255,255,255,0.04)">
+        <div style="display:flex;gap:10px;align-items:center;justify-content:space-between">
+          <div>
+            <div style="font-weight:900">${escapeHtml(e.title||"Untitled")}</div>
+            <div class="small">${escapeHtml(date)}</div>
+          </div>
+          <button class="btn bad" data-del="${idx}">Delete</button>
+        </div>
+        <div class="hr"></div>
+        <div class="small" style="white-space:pre-wrap">${escapeHtml(e.notes||"")}</div>
+      </div>
+    `;
+  }).join("");
+
+  list.querySelectorAll("button[data-del]").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      const i = parseInt(b.getAttribute("data-del"),10);
+      if(!confirm("Delete this portfolio entry?")) return;
+      state.portfolio.splice(i,1);
+      saveState();
+      renderPortfolioList();
+    });
+  });
+}
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+function saveState(){
+  try{
+    localStorage.setItem(LS_KEY, JSON.stringify(state));
+  }catch(e){}
+}
+function clamp(v,min,max){
+  return Math.max(min, Math.min(max, v));
+}
+function escapeHtml(s){
+  return String(s ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+</script>
+</body>
+</html>
