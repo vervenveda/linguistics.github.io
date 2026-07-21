@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Numina Grove — Phase 2 Quiz & Memory</title>
+<style>
+:root{
+  --bg:#faf7ef;
+  --accent:#f9b24e;
+  --leaf:#73b56d;
+  --text:#2b2720;
+}
+*{
+  box-sizing:border-box;
+  font-family:'Segoe UI',sans-serif;
+}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  display:flex;
+  flex-direction:column;
+  min-height:100vh;
+}
+header{
+  background:var(--accent);
+  color:white;
+  text-align:center;
+  padding:10px 14px 8px;
+  box-shadow:0 7px 7px rgba(0,0,0,.15);
+}
+header h1{
+  margin:0;
+  font-size:1.4rem;
+  font-weight:600;
+}
+header p{
+  margin:4px auto 0;
+  max-width:480px;
+  font-size:.85rem;
+  opacity:.9;
+}
+#controls{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:16px;
+  padding:6px;
+  flex-wrap:wrap;
+  background:#fff9f0;
+}
+select,button{
+  padding:3px 6px;
+  border-radius:7px;
+  border:2px solid #ccc;
+  font-size:.9rem;
+  cursor:pointer;
+  background:white;
+}
+button:hover{
+  background:#fff3e0;
+}
+#progressBar{
+  width:222px;
+  height:14px;
+  background:#e6dfd1;
+  border-radius:12px;
+  overflow:hidden;
+}
+#progressFill{
+  height:100%;
+  width:0;
+  background:var(--leaf);
+  transition:width .4s;
+}
+#modeLabel{
+  font-size:.85rem;
+  padding:3px 7px;
+  border-radius:999px;
+  border:1px solid #e0d5c2;
+  background:#fff;
+}
+.phase-badge{
+  display:none;
+  font-size:.8rem;
+  padding:3px 7px;
+  border-radius:999px;
+  background:#e6ffed;
+  color:#166534;
+  border:1px solid #4ade80;
+  font-weight:500;
+}
+.lang-strip{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  font-size:.75rem;
+  color:#6b6357;
+  align-items:center;
+  flex-basis:100%;
+  justify-content:center;
+}
+.lang-pill{
+  padding:3px 7px;
+  border-radius:999px;
+  border:1px solid #e0d5c2;
+  background:#fff;
+}
+main{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(90px,1fr));
+  gap:12px;
+  max-width:600px;
+  width:100%;
+}
+.tile{
+  background:white;
+  border:2px solid #e2d8c5;
+  border-radius:16px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:14px;
+  cursor:pointer;
+  transition:all .25s;
+  box-shadow:0 3px 8px rgba(0,0,0,.05);
+}
+.tile:hover{
+  transform:translateY(-3px);
+  box-shadow:0 6px 12px rgba(0,0,0,.1);
+}
+.tile.active{
+  border-color:var(--leaf);
+  background:#f4ffee;
+}
+.tile.done{
+  background:#d4fdd4;
+}
+.tile span.num{
+  font-size:1.6rem;
+  font-weight:700;
+  color:var(--accent);
+}
+.tile span.word{
+  margin-top:4px;
+  font-size:.9rem;
+}
+.quiz{
+  max-width:540px;
+  width:100%;
+}
+.quiz h2{
+  font-size:1.2rem;
+  margin-bottom:10px;
+}
+.quiz p#quizStats{
+  font-size:.85rem;
+  color:#6b6357;
+  margin-top:0;
+  margin-bottom:10px;
+}
+.quiz .option{
+  background:white;
+  border:2px solid #e2d8c5;
+  border-radius:12px;
+  padding:8px 12px;
+  margin:6px auto;
+  width:100%;
+  max-width:260px;
+  text-align:center;
+  cursor:pointer;
+  transition:.2s;
+}
+.quiz .option:hover{
+  background:#fff3e0;
+}
+footer{
+  text-align:center;
+  padding:10px;
+  font-size:.85rem;
+  color:#777;
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>🌿 Numina Grove</h1>
+  <p>Phase 2: Learn numbers in four languages — then test yourself in Quiz and Memory modes.</p>
+</header>
+
+<div id="controls">
+  <label for="langSelect">Language:</label>
+  <select id="langSelect">
+    <option value="en">English</option>
+    <option value="fr">Français</option>
+    <option value="es">Español</option>
+    <option value="ar">العربية</option>
+  </select>
+  <button id="modeBtn">🎓 Switch Mode</button>
+  <span id="modeLabel">Mode: Learn</span>
+  <button id="soundBtn">🔊 Sound On</button>
+  <div id="progressBar"><div id="progressFill"></div></div>
+  <span id="phaseBadge" class="phase-badge">Phase Complete 🌟</span>
+  <div id="langProgressStrip" class="lang-strip"></div>
+</div>
+
+<main id="content"></main>
+<footer>© 2025 Khaemenes Academy · Numina Grove Phase 2</footer>
+
+<script>
+// ====================== Data (from Phase 1) ======================
+const NUMS = [
+  [1,"one","un","uno","واحد"],
+  [2,"two","deux","dos","اثنان"],
+  [3,"three","trois","tres","ثلاثة"],
+  [4,"four","quatre","cuatro","أربعة"],
+  [5,"five","cinq","cinco","خمسة"],
+  [6,"six","six","seis","ستة"],
+  [7,"seven","sept","siete","سبعة"],
+  [8,"eight","huit","ocho","ثمانية"],
+  [9,"nine","neuf","nueve","تسعة"],
+  [10,"ten","dix","diez","عشرة"],
+  [11,"eleven","onze","once","أحد عشر"],
+  [12,"twelve","douze","doce","اثنا عشر"],
+  [13,"thirteen","treize","trece","ثلاثة عشر"],
+  [14,"fourteen","quatorze","catorce","أربعة عشر"],
+  [15,"fifteen","quinze","quince","خمسة عشر"],
+  [16,"sixteen","seize","dieciséis","ستة عشر"],
+  [17,"seventeen","dix-sept","diecisiete","سبعة عشر"],
+  [18,"eighteen","dix-huit","dieciocho","ثمانية عشر"],
+  [19,"nineteen","dix-neuf","diecinueve","تسعة عشر"],
+  [20,"twenty","vingt","veinte","عشرون"],
+  [30,"thirty","trente","treinta","ثلاثون"],
+  [40,"forty","quarante","cuarenta","أربعون"],
+  [50,"fifty","cinquante","cincuenta","خمسون"],
+  [60,"sixty","soixante","sesenta","ستون"],
+  [70,"seventy","soixante-dix","setenta","سبعون"],
+  [80,"eighty","quatre-vingts","ochenta","ثمانون"],
+  [90,"ninety","quatre-vingt-dix","noventa","تسعون"],
+  [100,"one hundred","cent","cien","مائة"]
+];
+const langs = ["en","fr","es","ar"];
+const MODES = ["learn","quiz","memory"];
+const LANG_PROGRESS_KEY = "numina2_lang_progress";
+
+// ====================== State ======================
+let soundOn = true;
+let currentLang = "en";
+let mode = "learn"; // "learn" | "quiz" | "memory"
+let progress = JSON.parse(localStorage.getItem("numina2_progress") || "{}");
+if(!progress || typeof progress !== "object") progress = {};
+
+let languageProgress = loadLanguageProgress();
+const content = document.getElementById("content");
+const modeLabel = document.getElementById("modeLabel");
+
+// quiz stats
+let quizIndex = 0;
+let correctCount = 0;
+
+// ====================== Language progress helpers ======================
+function defaultLanguageProgress(){
+  const base = {};
+  langs.forEach(code=>{
+    base[code] = { learn:[], quiz:[], memory:[] };
+  });
+  return base;
+}
+function loadLanguageProgress(){
+  try{
+    const raw = localStorage.getItem(LANG_PROGRESS_KEY);
+    if(!raw) return defaultLanguageProgress();
+    const parsed = JSON.parse(raw);
+    const base = defaultLanguageProgress();
+    langs.forEach(code=>{
+      if(!parsed[code]) parsed[code] = { learn:[],quiz:[],memory:[] };
+      MODES.forEach(m=>{
+        if(!Array.isArray(parsed[code][m])) parsed[code][m] = [];
+      });
+    });
+    return parsed;
+  }catch(e){
+    console.warn("Lang progress load failed", e);
+    return defaultLanguageProgress();
+  }
+}
+function saveLanguageProgress(){
+  try{
+    localStorage.setItem(LANG_PROGRESS_KEY, JSON.stringify(languageProgress));
+  }catch(e){
+    console.warn("Lang progress save failed", e);
+  }
+}
+
+// ====================== Setup ======================
+document.getElementById("langSelect").onchange = e => {
+  currentLang = e.target.value;
+  render();
+};
+
+document.getElementById("soundBtn").onclick = () => {
+  soundOn = !soundOn;
+  document.getElementById("soundBtn").textContent = soundOn ? "🔊 Sound On" : "🔇 Sound Off";
+};
+
+document.getElementById("modeBtn").onclick = () => {
+  mode = mode === "learn" ? "quiz" : mode === "quiz" ? "memory" : "learn";
+
+  // reset quiz counters when entering quiz mode
+  if (mode === "quiz") {
+    quizIndex = 0;
+    correctCount = 0;
+  }
+
+  updateModeLabel();
+  render();
+};
+
+updateModeLabel();
+render();
+
+// ====================== Rendering ======================
+function updateModeLabel(){
+  if(mode === "learn"){
+    modeLabel.textContent = "Mode: Learn";
+  } else if(mode === "quiz"){
+    modeLabel.textContent = "Mode: Quiz";
+  } else {
+    modeLabel.textContent = "Mode: Memory";
+  }
+}
+
+function render(){
+  content.innerHTML = "";
+  if(mode === "learn")      renderLearn();
+  else if(mode === "quiz")  renderQuiz();
+  else                      renderMemory();
+  updateProgress();
+}
+
+function renderLearn(){
+  const grid = document.createElement("div");
+  grid.className = "grid";
+  NUMS.forEach(([n,en,fr,es,ar])=>{
+    const t = document.createElement("div");
+    t.className = "tile";
+    t.dataset.num = n;
+    const word = entryLang([n,en,fr,es,ar]);
+    t.innerHTML = `<span class="num">${n}</span><span class="word">${word}</span>`;
+    t.onclick = () => {
+      highlight(t);
+      speak(wordWithNumber(n, word));
+      mark("learn",n);
+    };
+    grid.appendChild(t);
+  });
+  content.appendChild(grid);
+}
+
+function entryLang(a){
+  return a[langs.indexOf(currentLang)+1];
+}
+
+function wordWithNumber(n, word){
+  if(currentLang === "en"){
+    return `${n} — ${word}`;
+  }
+  return word;
+}
+
+// ====================== Quiz ======================
+
+function renderQuiz(){
+  const wrap = document.createElement("div");
+  wrap.className = "quiz";
+  wrap.style.textAlign = "center";
+
+  quizIndex++;
+
+  const current = NUMS[Math.floor(Math.random()*NUMS.length)];
+  const langTo = currentLang;
+
+  const q = document.createElement("h2");
+  const question = `How do you say ${current[0]} in ${langLabel(langTo)}?`;
+  q.textContent = question;
+  wrap.appendChild(q);
+
+  const stats = document.createElement("p");
+  stats.id = "quizStats";
+  stats.textContent = `Question ${quizIndex} · Correct so far: ${correctCount}`;
+  wrap.appendChild(stats);
+
+  const answers = shuffle(NUMS).slice(0,3).concat([current]);
+  shuffle(answers);
+  answers.forEach(a=>{
+    const opt = document.createElement("div");
+    opt.className = "option";
+    opt.textContent = a[langs.indexOf(langTo)+1];
+    opt.onclick = () => {
+      if(a === current){
+        opt.style.background = "#d4fdd4";
+        speak("Correct!");
+        correctCount++;
+        mark("quiz",current[0]);
+      }else{
+        opt.style.background = "#ffd5d5";
+        speak("Try again");
+      }
+      setTimeout(render, 900);
+    };
+    wrap.appendChild(opt);
+  });
+  content.appendChild(wrap);
+}
+
+function langLabel(code){
+  return code === "fr" ? "French" :
+         code === "es" ? "Spanish" :
+         code === "ar" ? "Arabic" : "English";
+}
+
+function shuffle(a){
+  return [...a].sort(()=>Math.random()-.5);
+}
+
+// ====================== Memory ======================
+let flipped = [];
+let lock = false;
+
+function renderMemory(){
+  const grid = document.createElement("div");
+  grid.className = "grid";
+  let cards = [];
+
+  // first 10 numbers as a focused memory set
+  NUMS.slice(0,10).forEach(([n,en,fr,es,ar])=>{
+    cards.push({n,text:n.toString()});
+    cards.push({n,text:entryLang([n,en,fr,es,ar])});
+  });
+
+  shuffle(cards).forEach(c=>{
+    const card = document.createElement("div");
+    card.className = "tile";
+    card.textContent = "❔";
+    card.onclick = () => flip(card,c);
+    grid.appendChild(card);
+  });
+
+  content.appendChild(grid);
+}
+
+function flip(card,c){
+  if(lock || card.classList.contains("done")) return;
+  card.textContent = c.text;
+  card.dataset.n = c.n;
+  flipped.push(card);
+
+  if(flipped.length === 2){
+    lock = true;
+    setTimeout(()=>{
+      if(flipped[0].dataset.n === flipped[1].dataset.n){
+        flipped.forEach(f=>{
+          f.classList.add("done");
+          f.style.background = "#d4fdd4";
+        });
+        mark("memory",c.n);
+      }else{
+        flipped.forEach(f=>{
+          f.textContent = "❔";
+        });
+      }
+      flipped = [];
+      lock = false;
+    },600);
+  }
+}
+
+// ====================== Helpers ======================
+function highlight(t){
+  t.classList.add("active");
+  setTimeout(()=>t.classList.remove("active"),400);
+}
+
+function speak(text){
+  if(!soundOn || !("speechSynthesis" in window)) return;
+  const u = new SpeechSynthesisUtterance(text);
+  if(currentLang === "fr"){
+    const voices = speechSynthesis.getVoices();
+    const frVoice = voices.find(v=>v.lang && v.lang.startsWith("fr")) || voices[0];
+    u.voice = frVoice;
+    u.lang = "fr-FR";
+  } else if(currentLang === "en"){
+    u.lang = "en-US";
+  } else if(currentLang === "es"){
+    u.lang = "es-ES";
+  } else if(currentLang === "ar"){
+    u.lang = "ar-SA";
+  }
+  speechSynthesis.cancel(); // clear queue
+  speechSynthesis.speak(u);
+}
+
+function mark(modeName,n){
+  // overall phase progress
+  if(!progress[modeName]) progress[modeName] = [];
+  if(!progress[modeName].includes(n)) progress[modeName].push(n);
+
+  // per-language progress
+  if(!languageProgress[currentLang]){
+    languageProgress[currentLang] = { learn:[],quiz:[],memory:[] };
+  }
+  if(!languageProgress[currentLang][modeName]){
+    languageProgress[currentLang][modeName] = [];
+  }
+  if(!languageProgress[currentLang][modeName].includes(n)){
+    languageProgress[currentLang][modeName].push(n);
+  }
+
+  localStorage.setItem("numina2_progress", JSON.stringify(progress));
+  saveLanguageProgress();
+  updateProgress();
+}
+
+function isPhaseComplete(){
+  // each number must appear in all three mode lists at least once
+  return NUMS.every(([n])=>{
+    return MODES.every(modeName=>{
+      const arr = progress[modeName] || [];
+      return arr.includes(n);
+    });
+  });
+}
+
+function updatePhaseBadge(){
+  const badge = document.getElementById("phaseBadge");
+  if(!badge) return;
+  if(isPhaseComplete()){
+    badge.style.display = "inline-flex";
+  }else{
+    badge.style.display = "none";
+  }
+}
+
+function updateLangProgressStrip(){
+  const strip = document.getElementById("langProgressStrip");
+  if(!strip) return;
+  const totalPerLang = NUMS.length * MODES.length;
+  let html = "";
+  langs.forEach(code=>{
+    const lp = languageProgress[code] || { learn:[],quiz:[],memory:[] };
+    let doneLang = 0;
+    MODES.forEach(m=>{
+      const arr = lp[m] || [];
+      doneLang += arr.length;
+    });
+    const pct = totalPerLang ? Math.round(doneLang / totalPerLang * 100) : 0;
+    const label = code === "en" ? "EN" :
+                  code === "fr" ? "FR" :
+                  code === "es" ? "ES" : "AR";
+    html += `<span class="lang-pill">${label} ${pct}%</span>`;
+  });
+  strip.innerHTML = html;
+}
+
+function updateProgress(){
+  const total = NUMS.length * MODES.length;
+  let done = 0;
+  MODES.forEach(m=>{
+    const arr = progress[m] || [];
+    done += arr.length;
+  });
+  document.getElementById("progressFill").style.width = (total ? (done/total*100) : 0) + "%";
+  updatePhaseBadge();
+  updateLangProgressStrip();
+}
+</script>
+</body>
+</html>
