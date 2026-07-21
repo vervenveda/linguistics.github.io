@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>NoorAI Darib – Memory Path</title>
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Cinzel:wght@600&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg1:#ffb56b;
+  --bg2:#f46b45;
+  --gold:#ffd27a;
+  --gold-deep:#b89252;
+  --ink:#fdfaf3;
+  --panel:#10091f;
+  --radius:21px;
+  --shadow:0 24px 72px rgba(0,0,0,0.55);
+}
+
+/* Page layout */
+*{box-sizing:border-box;}
+
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:'Poppins',system-ui,-apple-system,Segoe UI,sans-serif;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(255,255,255,0.24), transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(0,0,0,0.4), transparent 55%),
+    linear-gradient(135deg,var(--bg1),var(--bg2));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  color:var(--ink);
+  text-align:center;
+}
+
+/* Game card */
+.game{
+  position:relative;
+  width:100%;
+  max-width:880px;
+  background:radial-gradient(circle at 10% 0%, #261642 0%, #130a24 38%, #0b0617 100%);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:32px 28px 26px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,0.14);
+}
+
+/* Soft glow frame */
+.game::before{
+  content:"";
+  position:absolute;
+  inset:-1px;
+  border-radius:inherit;
+  background:linear-gradient(135deg,rgba(255,255,255,0.12),rgba(255,255,255,0.03));
+  mix-blend-mode:soft-light;
+  opacity:0.8;
+  pointer-events:none;
+}
+
+/* Content wrapper to keep text above the glow */
+.game-inner{
+  position:relative;
+  z-index:1;
+}
+
+/* Title & subtitle */
+h1{
+  font-family:'Cinzel',"Times New Roman",serif;
+  font-size:32px;
+  letter-spacing:0.12em;
+  margin:0 0 8px;
+  text-transform:uppercase;
+}
+
+.subtitle{
+  margin:0 0 18px;
+  font-size:16px;
+  opacity:0.88;
+}
+
+/* Level label */
+#levelLabel{
+  display:inline-block;
+  margin-bottom:18px;
+  padding:6px 16px;
+  border-radius:999px;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.16);
+  font-size:15px;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--gold);
+}
+
+/* Grid */
+.grid{
+  display:grid;
+  gap:16px;
+  justify-content:center;
+  margin:0 auto 12px;
+}
+
+/* Memory tiles */
+.cell{
+  width:88px;
+  height:88px;
+  border-radius:18px;
+  background:
+    radial-gradient(circle at 30% 0%, rgba(255,255,255,0.25), rgba(255,255,255,0.05));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:"Scheherazade New","Amiri",serif;
+  font-size:42px;
+  cursor:pointer;
+  transition:
+    transform 0.18s ease-out,
+    box-shadow 0.18s ease-out,
+    background 0.18s ease-out,
+    filter 0.18s ease-out;
+  box-shadow:0 10px 22px rgba(0,0,0,0.45);
+  color:var(--ink);
+}
+.cell:hover{
+  transform:translateY(-4px) scale(1.03);
+  box-shadow:0 18px 36px rgba(0,0,0,0.6);
+  filter:brightness(1.08);
+}
+
+/* Sequence highlight / correct */
+.correct{
+  background:radial-gradient(circle at 30% 0%, rgba(111,241,178,0.95), rgba(12,68,45,0.95));
+  box-shadow:0 0 26px rgba(111,241,178,0.8);
+}
+
+/* Wrong pick */
+.wrong{
+  background:radial-gradient(circle at 30% 0%, rgba(245,101,101,0.95), rgba(120,17,17,0.95));
+  box-shadow:0 0 24px rgba(245,101,101,0.75);
+}
+
+/* Hidden state (for memory phase) */
+.hidden{
+  color:transparent;
+  text-shadow:none;
+}
+
+/* Score & controls */
+#score{
+  margin-top:8px;
+  margin-bottom:8px;
+  font-size:18px;
+  color:var(--gold);
+}
+#score span{
+  font-weight:700;
+}
+
+/* Button */
+button{
+  border:none;
+  border-radius:999px;
+  padding:11px 26px;
+  font-size:16px;
+  background:linear-gradient(135deg,var(--gold),var(--gold-deep));
+  color:#1c1526;
+  font-weight:700;
+  cursor:pointer;
+  margin-top:10px;
+  box-shadow:0 10px 26px rgba(0,0,0,0.55);
+  transition:transform 0.18s ease-out, box-shadow 0.18s ease-out, filter 0.18s ease-out;
+}
+button:hover{
+  transform:translateY(-2px) scale(1.04);
+  box-shadow:0 16px 34px rgba(0,0,0,0.7);
+  filter:brightness(1.03);
+}
+button:active{
+  transform:translateY(0) scale(0.98);
+  box-shadow:0 8px 18px rgba(0,0,0,0.55);
+}
+
+/* Responsive tweaks */
+@media (max-width:640px){
+  h1{font-size:26px;}
+  .subtitle{font-size:14px;}
+  #levelLabel{font-size:13px;}
+  .cell{
+    width:72px;
+    height:72px;
+    font-size:34px;
+  }
+}
+</style>
+</head>
+<body>
+<div class="game">
+  <div class="game-inner">
+    <h1>Memory Path</h1>
+    <p class="subtitle">
+      Watch the glowing tiles and listen to the words.  
+      Then tap them from memory in the same order.
+    </p>
+    <div id="levelLabel">Level 1 – Beginner</div>
+
+    <div class="grid" id="grid"></div>
+
+    <div id="score">
+      Score: <span id="scoreVal">0</span>
+    </div>
+
+    <button id="nextBtn">Next Level ▶</button>
+  </div>
+</div>
+
+<script>
+const numbers = [
+  {digit:"٠",word:"صفر"},{digit:"١",word:"واحد"},{digit:"٢",word:"اثنان"},
+  {digit:"٣",word:"ثلاثة"},{digit:"٤",word:"أربعة"},{digit:"٥",word:"خمسة"},
+  {digit:"٦",word:"ستة"},{digit:"٧",word:"سبعة"},{digit:"٨",word:"ثمانية"},{digit:"٩",word:"تسعة"}
+];
+
+let level = 1;
+let score = 0;
+let sequenceIndices = [];  // indexes of the correct path in the grid
+let gridCells = [];        // current DOM cells
+
+const grid       = document.getElementById("grid");
+const scoreVal   = document.getElementById("scoreVal");
+const levelLabel = document.getElementById("levelLabel");
+const nextBtn    = document.getElementById("nextBtn");
+
+const levelNames = [
+  "Beginner",
+  "Apprentice",
+  "Adept",
+  "Scholar",
+  "Navigator",
+  "Master",
+  "Sage",
+  "Ascendant",
+  "Oracle",
+  "Eternal Path"
+];
+const maxLevel = levelNames.length;
+
+function updateLevelLabel(){
+  levelLabel.textContent = `Level ${level} – ${levelNames[level-1] || "Traveler"}`;
+}
+
+// Grid size scales with level:
+// 1–2: 3×3, 3–6: 4×4, 7–10: 5×5
+function gridSize(){
+  if(level <= 2) return 3;
+  if(level <= 6) return 4;
+  return 5;
+}
+
+// Path length scales with level:
+// 1–2: 3, 3–4: 4, 5–6: 5, 7–8: 6, 9–10: 7
+function pathLength(){
+  if(level <= 2) return 3;
+  if(level <= 4) return 4;
+  if(level <= 6) return 5;
+  if(level <= 8) return 6;
+  return 7;
+}
+
+// Reveal window shrinks as level increases (harder)
+function revealTime(){
+  const base = 1300;          // ms
+  const step = 80;            // shrink per level
+  const reduction = Math.min((level - 1) * step, 800);
+  return base - reduction;    // between ~1300 and ~500 ms
+}
+
+// Simple confetti burst
+function confettiBurst(){
+  for(let i = 0; i < 25; i++){
+    const c = document.createElement("div");
+    c.style.cssText = `
+      position:fixed;
+      width:7px;height:7px;
+      top:${Math.random()*100}vh;
+      left:${Math.random()*100}vw;
+      background:hsl(${Math.random()*360},80%,60%);
+      border-radius:50%;
+      opacity:1;
+      z-index:99;
+      transition:all 1s ease-out;
+      pointer-events:none;
+    `;
+    document.body.appendChild(c);
+    setTimeout(()=>{
+      c.style.transform = \`translateY(${72+Math.random()*72}px)\`;
+      c.style.opacity = 0;
+    },50);
+    setTimeout(()=>c.remove(),1000);
+  }
+}
+
+// Arabic speech
+function playSound(word){
+  if(!word) return;
+  const u = new SpeechSynthesisUtterance(word);
+  u.lang = "ar-SA";
+  speechSynthesis.speak(u);
+}
+
+function buildGrid(){
+  grid.innerHTML = "";
+  gridCells = [];
+  sequenceIndices = [];
+
+  const size       = gridSize();
+  const cellsCount = size * size;
+  grid.style.gridTemplateColumns = `repeat(${size}, auto)`;
+
+  // Fill grid with random digits
+  for(let i = 0; i < cellsCount; i++){
+    const num = numbers[Math.floor(Math.random()*numbers.length)];
+    const d   = document.createElement("div");
+    d.className    = "cell";
+    d.textContent  = num.digit;
+    d.dataset.word = num.word;
+    gridCells.push(d);
+    grid.appendChild(d);
+  }
+
+  // Choose a random path (unique tiles) to remember
+  const needed = pathLength();
+  const used = new Set();
+  while(sequenceIndices.length < needed){
+    const idx = Math.floor(Math.random()*cellsCount);
+    if(!used.has(idx)){
+      used.add(idx);
+      sequenceIndices.push(idx);
+    }
+  }
+
+  // Make sure all digits visible before sequence starts
+  gridCells.forEach(c => c.classList.remove("hidden","correct","wrong"));
+
+  // Short pause then reveal sequence
+  setTimeout(revealSequence, 500);
+}
+
+function revealSequence(){
+  let i = 0;
+  const total = sequenceIndices.length;
+  const stepDelay = 700; // time between highlights
+
+  const interval = setInterval(()=>{
+    if(i < total){
+      const idx  = sequenceIndices[i];
+      const cell = gridCells[idx];
+
+      // show digit & highlight
+      cell.classList.remove("hidden");
+      cell.classList.add("correct");
+      playSound(cell.dataset.word);
+
+      // fade highlight but leave digit until hiding phase
+      setTimeout(()=>cell.classList.remove("correct"), stepDelay - 200);
+
+      i++;
+    } else {
+      clearInterval(interval);
+    }
+  }, stepDelay);
+
+  // Hide all digits after the sequence + a view window
+  const totalRevealWindow = stepDelay * total + revealTime();
+  setTimeout(()=>{
+    gridCells.forEach(c => {
+      c.classList.add("hidden");
+      c.classList.remove("correct","wrong");
+    });
+    enableGuess();
+  }, totalRevealWindow);
+}
+
+function enableGuess(){
+  let progress = 0;
+
+  gridCells.forEach((c, idx)=>{
+    c.onclick = ()=>{
+      // Only allow clicking tiles that are currently hidden (in memory phase)
+      if(!c.classList.contains("hidden")) return;
+
+      const expectedIndex = sequenceIndices[progress];
+
+      if(idx === expectedIndex){
+        // Correct step in the path
+        c.classList.remove("hidden");
+        c.classList.add("correct");
+        score += 5;
+        scoreVal.textContent = score;
+        playSound(c.dataset.word);
+
+        progress++;
+        if(progress === sequenceIndices.length){
+          // Completed the whole path
+          confettiBurst();
+          setTimeout(buildGrid, 900);
+        }
+      } else {
+        // Wrong pick
+        c.classList.add("wrong");
+        score = Math.max(score - 3, 0);
+        scoreVal.textContent = score;
+        setTimeout(()=>c.classList.remove("wrong"), 450);
+      }
+    };
+  });
+}
+
+// Level up button
+nextBtn.onclick = ()=>{
+  if(level < maxLevel){
+    level += 1;
+  } else {
+    level = maxLevel; // stay at top level, just rebuild
+  }
+  updateLevelLabel();
+  buildGrid();
+};
+
+// Initial state
+updateLevelLabel();
+buildGrid();
+</script>
+</body>
+</html>
