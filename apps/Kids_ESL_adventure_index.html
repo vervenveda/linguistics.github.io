@@ -1,0 +1,1513 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Khaemenes Kids — ESL Adventure (6 Weeks)</title>
+<style>
+  :root{
+    --bg:#f0f8ff;
+    --card:#ffffff;
+    --card2:#fdfcfb;
+    --text:#102a43;
+    --muted:#5a7184;
+    --muted2:#7b8ba1;
+    --accent:#ff9f1c;
+    --accent2:#2ec4b6;
+    --accent3:#e71d36;
+    --ring:rgba(46,196,182,0.35);
+    --radius:18px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    background:
+      radial-gradient(circle at 0 0, rgba(255,159,28,0.18), transparent 55%),
+      radial-gradient(circle at 100% 0, rgba(46,196,182,0.15), transparent 55%),
+      linear-gradient(180deg,#f0f9ff,#eff6ff 60%,#e0f2fe);
+    color:var(--text);
+    padding:14px;
+  }
+  .app{max-width:1120px;margin:0 auto}
+  header{
+    display:flex;gap:12px;align-items:flex-start;justify-content:space-between;
+    padding:10px 8px 14px;
+  }
+  .brand h1{margin:0;font-size:1.35rem;letter-spacing:0.02em}
+  .brand .sub{color:var(--muted);margin-top:6px;font-size:0.95rem;line-height:1.4}
+  .tagrow{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;align-items:center}
+  .pill{
+    padding:7px 11px;border-radius:999px;
+    border:1px solid rgba(15,23,42,0.08);
+    background:rgba(255,255,255,0.9);
+    font-size:0.86rem;color:var(--muted2);
+    display:inline-flex;align-items:center;gap:6px;
+  }
+  .pill strong{color:var(--text)}
+  .pill.kids{
+    border-color:rgba(46,196,182,0.5);
+    box-shadow:0 0 0 3px rgba(46,196,182,0.18);
+  }
+  .pill.free{
+    border-color:rgba(16,185,129,0.6);
+    background:rgba(209,250,229,0.92);
+  }
+  .grid{
+    display:grid;gap:12px;
+    grid-template-columns:320px 1fr;
+  }
+  @media(max-width:900px){
+    .grid{grid-template-columns:1fr}
+  }
+  .card{
+    background:var(--card);
+    border-radius:var(--radius);
+    box-shadow:0 18px 40px rgba(15,23,42,0.12);
+    border:1px solid rgba(15,23,42,0.06);
+    overflow:hidden;
+  }
+  .card-soft{
+    background:var(--card2);
+  }
+  .panel-header{
+    padding:12px 14px;
+    background:linear-gradient(135deg,rgba(46,196,182,0.12),rgba(255,159,28,0.10));
+    border-bottom:1px solid rgba(15,23,42,0.05);
+  }
+  .panel-header h2{margin:0;font-size:1.02rem}
+  .panel-header p{margin:4px 0 0 0;font-size:0.9rem;color:var(--muted)}
+  .weeks{padding:10px 10px 14px}
+  .weeks h3{margin:0 0 8px 0;font-size:0.98rem}
+  .weeklist{display:flex;flex-direction:column;gap:8px}
+  .weekitem{
+    display:flex;justify-content:space-between;gap:10px;
+    padding:9px 9px;
+    border-radius:14px;
+    border:1px solid rgba(15,23,42,0.06);
+    background:rgba(255,255,255,0.96);
+    cursor:pointer;
+    transition:box-shadow 0.12s, transform 0.05s, border-color 0.12s, background 0.12s, opacity 0.12s;
+  }
+  .weekitem:hover{
+    border-color:rgba(46,196,182,0.45);
+    box-shadow:0 8px 20px rgba(15,23,42,0.08);
+  }
+  .weekitem.active{
+    border-color:rgba(46,196,182,0.7);
+    box-shadow:0 0 0 2px rgba(46,196,182,0.15) inset;
+    background:linear-gradient(135deg,#ffffff, #ecfeff);
+  }
+  .weekitem.locked{
+    opacity:0.55;
+    cursor:not-allowed;
+  }
+  .wk-left{display:flex;gap:8px;align-items:flex-start}
+  .wk-num{
+    min-width:30px;height:30px;border-radius:11px;
+    background:rgba(46,196,182,0.12);
+    border:1px solid rgba(46,196,182,0.5);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:0.88rem;
+  }
+  .wk-title{font-weight:800;font-size:0.93rem}
+  .wk-meta{margin-top:2px;color:var(--muted2);font-size:0.8rem}
+  .wk-right{display:flex;flex-direction:column;gap:4px;align-items:flex-end}
+  .badge{
+    padding:4px 8px;border-radius:999px;
+    font-size:0.75rem;font-weight:700;
+    border:1px solid rgba(15,23,42,0.06);
+    color:var(--muted2);
+  }
+  .badge.done{
+    border-color:rgba(16,185,129,0.6);
+    background:rgba(16,185,129,0.08);
+    color:#047857;
+  }
+  .badge.lock{
+    border-color:rgba(148,163,184,0.8);
+    background:rgba(148,163,184,0.15);
+  }
+
+  .tabs{
+    display:flex;flex-wrap:wrap;gap:8px;
+    padding:10px 10px 8px;
+    border-bottom:1px solid rgba(15,23,42,0.06);
+    background:rgba(248,250,252,0.9);
+  }
+  .tab{
+    padding:7px 11px;
+    border-radius:999px;
+    border:1px solid rgba(15,23,42,0.08);
+    background:#ffffff;
+    color:var(--muted2);
+    cursor:pointer;
+    font-size:0.86rem;
+    font-weight:700;
+  }
+  .tab.active{
+    color:#0f172a;
+    border-color:rgba(46,196,182,0.7);
+    box-shadow:0 0 0 2px rgba(46,196,182,0.18);
+  }
+
+  .content{padding:12px 14px 14px}
+  .content h2{margin:0 0 6px 0;font-size:1.1rem}
+  .content .kicker{
+    margin:0 0 10px 0;
+    font-size:0.9rem;
+    color:var(--muted);
+  }
+
+  .two{
+    display:grid;grid-template-columns:1.1fr 1fr;gap:10px;
+  }
+  @media(max-width:900px){
+    .two{grid-template-columns:1fr}
+  }
+  .box{
+    padding:10px 11px;
+    border-radius:14px;
+    background:rgba(248,250,252,0.98);
+    border:1px solid rgba(148,163,184,0.35);
+  }
+  .box h4{margin:0 0 6px 0;font-size:0.95rem}
+  .box p{margin:0;font-size:0.9rem;color:var(--muted)}
+  .list{
+    margin:4px 0 0 0;
+    padding-left:18px;
+    font-size:0.9rem;
+    color:var(--muted);
+    line-height:1.45;
+  }
+  .chips{
+    display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;
+  }
+  .chip{
+    padding:4px 8px;border-radius:999px;
+    font-size:0.8rem;
+    border:1px dashed rgba(148,163,184,0.75);
+    background:#ffffff;
+  }
+  .chant{
+    font-size:0.9rem;
+    white-space:pre-wrap;
+    margin-top:4px;
+  }
+  .hr{height:1px;background:rgba(148,163,184,0.45);margin:10px 0}
+  .row{
+    display:flex;flex-wrap:wrap;
+    gap:8px;align-items:center;
+  }
+  .btn{
+    border:none;cursor:pointer;
+    padding:7px 11px;
+    border-radius:999px;
+    font-size:0.86rem;
+    font-weight:700;
+    display:inline-flex;align-items:center;gap:6px;
+    background:#e5edf5;
+    color:#0f172a;
+    box-shadow:0 4px 10px rgba(15,23,42,0.15);
+    transition:transform 0.05s, box-shadow 0.12s, background 0.12s;
+  }
+  .btn:hover{
+    background:#dce4f2;
+  }
+  .btn:active{transform:translateY(1px);box-shadow:0 2px 5px rgba(15,23,42,0.19);}
+  .btn.good{
+    background:#bbf7d0;
+    color:#064e3b;
+  }
+  .btn.warn{
+    background:#fed7aa;
+    color:#7c2d12;
+  }
+  .btn.small{font-size:0.8rem;padding:5px 9px;box-shadow:none}
+  textarea,input{
+    width:100%;
+    padding:8px 9px;
+    border-radius:12px;
+    border:1px solid rgba(148,163,184,0.7);
+    font:inherit;
+    outline:none;
+    background:#ffffff;
+    color:var(--text);
+  }
+  textarea{min-height:90px;resize:vertical}
+  .small{font-size:0.86rem;color:var(--muted2)}
+  .statusbar{
+    padding:9px 12px;
+    border-top:1px solid rgba(15,23,42,0.06);
+    background:rgba(248,250,252,0.96);
+    font-size:0.84rem;
+    color:var(--muted2);
+    display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center;
+  }
+  .statusbar strong{color:var(--text)}
+  .mono{
+    font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+    font-size:0.82rem;
+  }
+
+  /* Print styles for certificate */
+  @media print{
+    body{background:#ffffff;padding:0;margin:0;}
+    .app{max-width:none;margin:0;padding:0;}
+    header,.grid>.card.card-soft,.tabs,.statusbar{display:none !important;}
+    #certificatePrint{
+      box-shadow:none !important;
+      border:2px solid #0f172a !important;
+      margin:0 !important;
+      border-radius:0 !important;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">
+      <h1>Khaemenes Kids — ESL Adventure</h1>
+      <div class="sub">
+        A 6-week English journey for children. Short friendly lessons, practice prompts,
+        and mini quizzes — all saved on this device only. Each week unlocks the next.
+      </div>
+    </div>
+    <div class="tagrow">
+      <div class="pill kids"><strong>Ages:</strong> about 7–11</div>
+      <div class="pill free">Free · 6 weeks + Final Exam</div>
+    </div>
+  </header>
+
+  <div class="grid">
+    <!-- LEFT: weeks -->
+    <div class="card card-soft">
+      <div class="panel-header">
+        <h2>Course Map</h2>
+        <p>Finish a week (quiz ≥ 80% + mark complete) to unlock the next.</p>
+      </div>
+      <div class="weeks">
+        <h3>Weeks</h3>
+        <div id="weekList" class="weeklist"></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: content -->
+    <div class="card">
+      <div class="tabs">
+        <button class="tab active" data-tab="lesson">Lesson</button>
+        <button class="tab" data-tab="practice">Practice</button>
+        <button class="tab" data-tab="parents">Parents</button>
+        <button class="tab" data-tab="final">Final Exam & Certificate</button>
+      </div>
+      <div class="content" id="content"></div>
+      <div class="statusbar">
+        <div id="statusText"></div>
+        <div>Progress is local only (<span class="mono">localStorage</span>).</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===============================
+   CONFIG & COURSE DATA (6 weeks)
+   =============================== */
+const LS_KEY = "kha_kids_esl_v1";
+
+const COURSE = [
+  {
+    title: "Hello & Classroom English",
+    minutes: "30–35 minutes",
+    age: "Ages 7–11",
+    focus: "Greetings, names, simple classroom words",
+    outcomes: [
+      "Say hello and goodbye politely.",
+      "Ask and answer “What is your name?”",
+      "Understand and use basic classroom words (book, pencil, desk, teacher)."
+    ],
+    vocab: ["hello","goodbye","name","teacher","student","book","pencil","desk","chair","friend"],
+    phrases: [
+      "Hello, my name is ___.",
+      "Nice to meet you.",
+      "May I borrow a pencil, please?",
+      "Can I go to the bathroom, please?"
+    ],
+    chant:
+      "Hello, hello, what’s your name?\n" +
+      "Hello, hello, we’re glad you came!\n" +
+      "I’m ____, I’m here to learn,\n" +
+      "Every day it’s my turn!",
+    story:
+      "My name is Lina. I am a new student.\n" +
+      "I walk into the classroom and smile.\n" +
+      "“Hello, my name is Lina,” I say.\n" +
+      "The teacher smiles. “Welcome, Lina!”\n" +
+      "Now I feel brave and ready to learn.",
+    activities: [
+      "Name circle: students stand in a circle and say “Hello, my name is ___.”",
+      "Desk scavenger hunt: point to classroom items when the teacher says the word.",
+      "Role-play: one child is the teacher, one is the student; practice asking for a pencil politely."
+    ],
+    homePractice: [
+      "Teach a family member to say “Hello, my name is ___” in English.",
+      "Draw your classroom and label 5–7 objects in English.",
+      "Practice saying “Nice to meet you” in front of a mirror 3 times."
+    ],
+    quiz: [
+      {type:"tf", q:"It is polite to say 'Nice to meet you' when you learn someone’s name.", a:true},
+      {type:"mc", q:"Which sentence is best?", options:[
+        "Give me pencil.",
+        "I want pencil.",
+        "May I borrow a pencil, please?"
+      ], a:2},
+      {type:"short", q:"Write a short greeting you can use on the first day of class."}
+    ]
+  },
+  {
+    title: "Colors, Numbers & Feelings",
+    minutes: "30–35 minutes",
+    age: "Ages 7–11",
+    focus: "Basic colors, numbers 1–20, simple feelings",
+    outcomes: [
+      "Name common colors and numbers 1–20.",
+      "Ask and answer “How many…?”",
+      "Use simple feeling words like happy, sad, tired."
+    ],
+    vocab: [
+      "red","blue","yellow","green","black","white",
+      "one","two","three","four","five","six","seven","eight","nine","ten",
+      "happy","sad","tired","excited"
+    ],
+    phrases: [
+      "How many books do you have?",
+      "I have three books.",
+      "I feel happy today.",
+      "This pencil is blue."
+    ],
+    chant:
+      "One, two, eyes on you.\n" +
+      "Three, four, feet on the floor.\n" +
+      "Five, six, pick up sticks.\n" +
+      "Seven, eight, learning’s great!",
+    story:
+      "Amir has a red backpack and a blue notebook.\n" +
+      "He counts his pencils. “One, two, three, four!”\n" +
+      "Today he feels excited because there is a game in class.\n" +
+      "He says, “I feel happy! I love English time.”",
+    activities: [
+      "Color hunt: find something red, blue, yellow, and green in the room.",
+      "Count and tell: count classroom objects and say the number in English.",
+      "Feelings chart: point to a face that shows how you feel and say it aloud."
+    ],
+    homePractice: [
+      "Count 10 things in your bedroom in English (books, toys, etc.).",
+      "Draw 4 faces with different feelings and label them in English.",
+      "Tell a family member: “I feel ___ today because ___.”"
+    ],
+    quiz: [
+      {type:"tf", q:"The color of the sky on a clear day is usually blue.", a:true},
+      {type:"mc", q:"Which sentence is correct?", options:[
+        "I have three book.",
+        "I have three books.",
+        "I has three books."
+      ], a:1},
+      {type:"short", q:"Write one sentence about how you feel today and why."}
+    ]
+  },
+  {
+    title: "My Family & Myself",
+    minutes: "30–35 minutes",
+    age: "Ages 7–11",
+    focus: "Family words, age, simple “I have / I am” sentences",
+    outcomes: [
+      "Name basic family members (mother, father, sister, brother, etc.).",
+      "Say your age and talk about your family.",
+      "Use “I am…” and “I have…” correctly in simple sentences."
+    ],
+    vocab: [
+      "mother","father","mom","dad","sister","brother","grandma","grandpa",
+      "family","home","age","years"
+    ],
+    phrases: [
+      "This is my mother.",
+      "I am ten years old.",
+      "I have one sister and one brother.",
+      "We live in a small house."
+    ],
+    chant:
+      "This is my family, big or small,\n" +
+      "We care for each other, one and all.\n" +
+      "Mother, father, sister, brother,\n" +
+      "We love and help each other.",
+    story:
+      "My name is Tomas. I am nine years old.\n" +
+      "I live with my mother, father, and little sister.\n" +
+      "Every evening we eat dinner together.\n" +
+      "After dinner, my dad helps me with homework.\n" +
+      "I love my family very much.",
+    activities: [
+      "Family tree: draw your family and label each person in English.",
+      "Partner talk: tell a partner about one family member.",
+      "Sentence building: make sentences with 'I am ___ years old.' and 'I have ___.'"
+    ],
+    homePractice: [
+      "Teach a family member to say “This is my ___” in English.",
+      "Write three sentences about your family in your notebook.",
+      "Show your family tree drawing and read the labels aloud."
+    ],
+    quiz: [
+      {type:"tf", q:"We say 'I am ten years old,' not 'I have ten years.'", a:true},
+      {type:"mc", q:"Which sentence is best?", options:[
+        "This my mother.",
+        "This is my mother.",
+        "This are my mother."
+      ], a:1},
+      {type:"short", q:"Write two sentences: one with “I am…” and one with “I have…” about yourself."}
+    ]
+  },
+  {
+    title: "School Day & Daily Routines",
+    minutes: "30–35 minutes",
+    age: "Ages 7–11",
+    focus: "Everyday actions with simple present tense",
+    outcomes: [
+      "Talk about your school day and simple routines.",
+      "Use verbs like get up, eat, go, study in “I” sentences.",
+      "Ask and answer “What time…?” in a basic way."
+    ],
+    vocab: [
+      "get up","eat","go","study","read","play",
+      "morning","afternoon","evening","school","home"
+    ],
+    phrases: [
+      "I get up at seven o’clock.",
+      "I go to school in the morning.",
+      "I eat lunch at school.",
+      "After school, I play or do homework."
+    ],
+    chant:
+      "Wake up, get up, start the day,\n" +
+      "Brush my teeth, I’m on my way.\n" +
+      "Off to school, I read and write,\n" +
+      "Home again by evening light.",
+    story:
+      "Sara gets up at seven o’clock.\n" +
+      "She eats breakfast and then goes to school.\n" +
+      "At school she reads, writes, and plays with friends.\n" +
+      "In the evening, she does her homework.\n" +
+      "She goes to bed at nine o’clock.",
+    activities: [
+      "Daily routine chart: draw pictures for morning, school, and evening.",
+      "Order the story: put actions in the correct order.",
+      "Tell a partner three things you do every day."
+    ],
+    homePractice: [
+      "Write a mini schedule for your day (3–5 actions).",
+      "Tell a family member about your school day in English.",
+      "Choose one action word (like 'read') and use it in 3 sentences."
+    ],
+    quiz: [
+      {type:"tf", q:"We usually say 'I go to school,' not 'I go school.'", a:true},
+      {type:"mc", q:"Which sentence is correct?", options:[
+        "I get up at seven.",
+        "I gets up at seven.",
+        "I getting up at seven."
+      ], a:0},
+      {type:"short", q:"Write three sentences about what you do in the morning."}
+    ]
+  },
+  {
+    title: "Food, Likes & Simple Questions",
+    minutes: "30–35 minutes",
+    age: "Ages 7–11",
+    focus: "Food words, like/don’t like, yes/no questions",
+    outcomes: [
+      "Name common foods and drinks.",
+      "Say what you like and don’t like politely.",
+      "Ask and answer simple yes/no questions with 'Do you like…?'"
+    ],
+    vocab: [
+      "rice","bread","chicken","fish","apple","banana",
+      "water","juice","milk","pizza","soup","salad",
+      "like","don’t like","favorite"
+    ],
+    phrases: [
+      "Do you like apples?",
+      "Yes, I do. / No, I don’t.",
+      "My favorite food is ___.",
+      "I don’t like ____, but it’s okay."
+    ],
+    chant:
+      "Do you like apples? Yes, I do!\n" +
+      "Do you like pizza? Me and you!\n" +
+      "Fruits and veggies help us grow,\n" +
+      "Strong and healthy, off we go!",
+    story:
+      "Leo likes apples and rice.\n" +
+      "He does not like fish, but he tries a little.\n" +
+      "His favorite drink is orange juice.\n" +
+      "At lunch he asks his friend, “Do you like soup?”\n" +
+      "They talk and share their favorite foods.",
+    activities: [
+      "Food picture sort: group foods into 'fruits', 'meals', and 'drinks'.",
+      "Class survey: walk and ask three friends “Do you like ___?” and record their answers.",
+      "Favorite plate: draw your favorite meal and label it in English."
+    ],
+    homePractice: [
+      "Tell a family member three foods you like and one you don’t like in English.",
+      "Help write a small shopping list in English (3–5 foods).",
+      "Draw and label your 'healthy snack plate'."
+    ],
+    quiz: [
+      {type:"tf", q:"We answer 'Do you like pizza?' with 'Yes, I do.' or 'No, I don’t.'", a:true},
+      {type:"mc", q:"Which question is correct?", options:[
+        "You like apples?",
+        "Do you like apples?",
+        "Like you apples?"
+      ], a:1},
+      {type:"short", q:"Write two sentences: one about a food you like and one you don’t like."}
+    ]
+  },
+  {
+    title: "Review & Show-What-You-Know Project",
+    minutes: "35–40 minutes",
+    age: "Ages 7–11",
+    focus: "Review greetings, family, routines, and food in one project",
+    outcomes: [
+      "Review key words and phrases from Weeks 1–5.",
+      "Create a small 'All About Me' project in English.",
+      "Read or present your project with simple confidence."
+    ],
+    vocab: [
+      "hello","family","school","favorite","breakfast","lunch",
+      "friend","happy","learn","English","project"
+    ],
+    phrases: [
+      "Hello, my name is ___.",
+      "I am ___ years old.",
+      "I live with ___.",
+      "I go to school in the ___.",
+      "My favorite food is ___."
+    ],
+    chant:
+      "Hello world, it’s time to show,\n" +
+      "All the words we’ve come to know.\n" +
+      "Step by step and day by day,\n" +
+      "We learn, we laugh, we find our way.",
+    story:
+      "Today is project day.\n" +
+      "Each child makes a poster: 'All About Me.'\n" +
+      "They draw their family, school, and favorite food.\n" +
+      "One by one, they stand up and share.\n" +
+      "Everyone claps and celebrates their English.",
+    activities: [
+      "Project planning: write a short outline with your name, age, family, school, and favorite food.",
+      "Poster or mini-book: draw and write your 'All About Me' story.",
+      "Partner presentation: practice reading your project to a partner."
+    ],
+    homePractice: [
+      "Share your project with your family in English.",
+      "Hang your project in a place you can see every day.",
+      "Choose one English sentence from your project and say it every morning this week."
+    ],
+    quiz: [
+      {type:"tf", q:"This week is a review of many things you have already learned.", a:true},
+      {type:"mc", q:"Which is a good first sentence for your project?", options:[
+        "Pizza is good.",
+        "I like school.",
+        "Hello, my name is ___."
+      ], a:2},
+      {type:"short", q:"Write three sentences that you want to include in your project."}
+    ]
+  }
+];
+
+/* ===============================
+   FINAL EXAM (AUTO-SCORED PART)
+   =============================== */
+const FINAL_EXAM = [
+  {type:"tf", q:"You can say 'Hello, my name is ___' when you meet someone new.", a:true},
+  {type:"mc", q:"Which sentence is most polite?", options:[
+    "Give me pencil.",
+    "I want pencil.",
+    "May I borrow a pencil, please?"
+  ], a:2},
+  {type:"mc", q:"Which sentence is correct?", options:[
+    "I am ten years old.",
+    "I have ten years.",
+    "I am years ten."
+  ], a:0},
+  {type:"mc", q:"What question matches this answer: 'Yes, I do.'?", options:[
+    "Do you like apples?",
+    "How old are you?",
+    "Where do you live?"
+  ], a:0},
+  {type:"tf", q:"We say 'I go to school' instead of 'I go school.'", a:true},
+  {type:"mc", q:"Which word is a feeling?", options:[
+    "happy",
+    "pencil",
+    "breakfast"
+  ], a:0},
+  {type:"mc", q:"Choose the best greeting for the start of your project.", options:[
+    "Pizza is tasty.",
+    "Hello, my name is ___.",
+    "I don't like homework."
+  ], a:1},
+  {type:"tf", q:"It is okay to make mistakes while learning a new language.", a:true},
+  {type:"mc", q:"Which question is correct?", options:[
+    "Do you like milk?",
+    "Like you milk?",
+    "You like milk?"
+  ], a:0},
+  {type:"mc", q:"Which sentence uses 'have' correctly?", options:[
+    "I have one sister.",
+    "I am one sister.",
+    "I have years ten."
+  ], a:0}
+];
+
+/* ===============================
+   STATE
+   =============================== */
+const state = loadState();
+let selectedWeek = clamp(state.selectedWeek ?? 0, 0, COURSE.length-1);
+let activeTab = state.activeTab || "lesson";
+
+function loadState(){
+  const base = {
+    selectedWeek: 0,
+    activeTab: "lesson",
+    progress: {},
+    finalExam: {answers:{},score:0,total:FINAL_EXAM.length,passed:false},
+    studentName: ""
+  };
+  try{
+    const raw = localStorage.getItem(LS_KEY);
+    if(!raw) return base;
+    const parsed = JSON.parse(raw) || {};
+    if(typeof parsed !== "object" || parsed === null) return base;
+
+    if(typeof parsed.progress !== "object" || !parsed.progress){
+      parsed.progress = {};
+    }
+    if(typeof parsed.selectedWeek !== "number"){
+      parsed.selectedWeek = 0;
+    }
+    if(typeof parsed.activeTab !== "string"){
+      parsed.activeTab = "lesson";
+    }
+    if(typeof parsed.finalExam !== "object" || !parsed.finalExam){
+      parsed.finalExam = {};
+    }
+    parsed.finalExam = {
+      answers:{},
+      score:0,
+      total:FINAL_EXAM.length,
+      passed:false,
+      ...parsed.finalExam
+    };
+    if(typeof parsed.finalExam.answers !== "object" || !parsed.finalExam.answers){
+      parsed.finalExam.answers = {};
+    }
+    if(typeof parsed.studentName !== "string"){
+      parsed.studentName = "";
+    }
+    return {...base, ...parsed};
+  }catch(e){
+    return base;
+  }
+}
+function saveState(){
+  state.selectedWeek = selectedWeek;
+  state.activeTab = activeTab;
+  localStorage.setItem(LS_KEY, JSON.stringify(state));
+}
+function clamp(n,min,max){ return Math.max(min, Math.min(max,n)); }
+
+/* ===============================
+   DOM REFS & INITIAL RENDER
+   =============================== */
+const weekListEl = document.getElementById("weekList");
+const contentEl = document.getElementById("content");
+const statusText = document.getElementById("statusText");
+
+document.querySelectorAll(".tab").forEach(tab=>{
+  tab.addEventListener("click", ()=>{
+    document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+    tab.classList.add("active");
+    activeTab = tab.dataset.tab;
+    saveState();
+    renderRight();
+  });
+});
+
+renderAll();
+
+/* ===============================
+   RENDER ROOT
+   =============================== */
+function renderAll(){
+  renderLeft();
+  renderTabsActive();
+  renderRight();
+}
+function renderTabsActive(){
+  document.querySelectorAll(".tab").forEach(t=>{
+    t.classList.toggle("active", t.dataset.tab === activeTab);
+  });
+}
+
+/* ===============================
+   PROGRESS HELPERS
+   =============================== */
+function ensureWeekState(i){
+  const key = "w" + i;
+  if(!state.progress[key]) state.progress[key] = {};
+  return state.progress[key];
+}
+function weekDone(i){
+  const w = state.progress["w"+i];
+  return !!(w && w.done);
+}
+function setWeekDone(i, done){
+  const ws = ensureWeekState(i);
+  ws.done = !!done;
+  saveState();
+}
+function weekPassed(i){
+  const ws = state.progress["w"+i];
+  if(!ws || !ws.quiz) return false;
+  const total = ws.quiz.total || 0;
+  const score = ws.quiz.score || 0;
+  const passedQuiz = total>0 && (score/total) >= 0.8;
+  return !!ws.done && passedQuiz;
+}
+function isWeekUnlocked(i){
+  if(i === 0) return true;
+  return weekPassed(i-1);
+}
+function allWeeksPassed(){
+  return COURSE.every((_,i)=>weekPassed(i));
+}
+function pendingWeeks(){
+  const arr = [];
+  COURSE.forEach((_,i)=>{
+    if(!weekPassed(i)) arr.push(i+1);
+  });
+  return arr;
+}
+
+/* ===============================
+   LEFT PANEL: WEEKS
+   =============================== */
+function renderLeft(){
+  weekListEl.innerHTML = "";
+  COURSE.forEach((w,i)=>{
+    const unlocked = isWeekUnlocked(i);
+    const done = weekDone(i);
+    const item = document.createElement("div");
+    item.className = "weekitem" +
+      (unlocked ? "" : " locked") +
+      (i===selectedWeek ? " active" : "");
+    item.innerHTML = `
+      <div class="wk-left">
+        <div class="wk-num">${i+1}</div>
+        <div>
+          <div class="wk-title">${escapeHtml(w.title)}</div>
+          <div class="wk-meta">${escapeHtml(w.focus || "")}</div>
+        </div>
+      </div>
+      <div class="wk-right">
+        ${unlocked
+          ? (done ? `<div class="badge done">DONE</div>` : `<div class="badge">IN PROGRESS</div>`)
+          : `<div class="badge lock">LOCKED</div>`
+        }
+      </div>
+    `;
+    item.addEventListener("click", ()=>{
+      if(!unlocked){
+        alert("This week is locked.\n\nTo unlock Week "+(i+1)+", complete Week "+i+" and pass the quiz with at least 80%.\n\nTip: Mark the week complete after a good review.");
+        return;
+      }
+      selectedWeek = i;
+      saveState();
+      renderLeft();
+      renderRight();
+    });
+    weekListEl.appendChild(item);
+  });
+
+  const doneCount = COURSE.filter((_,i)=>weekDone(i)).length;
+  const passedCount = COURSE.filter((_,i)=>weekPassed(i)).length;
+  statusText.innerHTML = `
+    <strong>${doneCount}/${COURSE.length}</strong> weeks marked complete ·
+    <strong>${passedCount}/${COURSE.length}</strong> weeks passed (≥ 80% quiz)
+  `;
+}
+
+/* ===============================
+   RIGHT PANEL ROUTER
+   =============================== */
+function renderRight(){
+  if(activeTab === "lesson") renderLesson();
+  else if(activeTab === "practice") renderPractice();
+  else if(activeTab === "parents") renderParents();
+  else renderFinal();
+}
+
+/* ===============================
+   LESSON TAB
+   =============================== */
+function renderLesson(){
+  const w = COURSE[selectedWeek];
+  const outcomes = (w.outcomes||[]).map(x=>`<li>${escapeHtml(x)}</li>`).join("");
+  const vocabChips = (w.vocab||[]).map(v=>`<span class="chip">${escapeHtml(v)}</span>`).join("");
+  const phraseList = (w.phrases||[]).map(p=>`<li>${escapeHtml(p)}</li>`).join("");
+  const activityList = (w.activities||[]).map(p=>`<li>${escapeHtml(p)}</li>`).join("");
+  const homeList = (w.homePractice||[]).map(p=>`<li>${escapeHtml(p)}</li>`).join("");
+
+  contentEl.innerHTML = `
+    <h2>Week ${selectedWeek+1}: ${escapeHtml(w.title)}</h2>
+    <p class="kicker">
+      <b>Focus:</b> ${escapeHtml(w.focus || "")}
+      · <b>Time:</b> ${escapeHtml(w.minutes || "")}
+      · <b>Age:</b> ${escapeHtml(w.age || "7–11")}
+    </p>
+
+    <div class="two">
+      <div class="box">
+        <h4>Learning Goals</h4>
+        <ul class="list">${outcomes}</ul>
+      </div>
+      <div class="box">
+        <h4>Key Words</h4>
+        <p>Use these words during the lesson and in home practice.</p>
+        <div class="chips">${vocabChips}</div>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div class="two">
+      <div class="box">
+        <h4>Useful Phrases</h4>
+        <ul class="list">${phraseList}</ul>
+      </div>
+      <div class="box">
+        <h4>Classroom Chant</h4>
+        <div class="chant">${escapeHtml(w.chant || "")}</div>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div class="box">
+      <h4>Short Story (Read Aloud)</h4>
+      <p style="white-space:pre-wrap">${escapeHtml(w.story || "")}</p>
+    </div>
+
+    <div class="two" style="margin-top:8px">
+      <div class="box">
+        <h4>In-Class Activities</h4>
+        <ul class="list">${activityList}</ul>
+      </div>
+      <div class="box">
+        <h4>Home Practice</h4>
+        <ul class="list">${homeList}</ul>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div class="box">
+      <h4>Mini Quiz</h4>
+      <div id="quizMount"></div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div class="row">
+      <button class="btn good" id="markDoneBtn">${weekDone(selectedWeek) ? "✓ Marked Complete" : "Mark Week Complete"}</button>
+      <button class="btn" id="toPracticeBtn">Go to Practice Tab</button>
+    </div>
+  `;
+
+  const markBtn = document.getElementById("markDoneBtn");
+  if(markBtn){
+    markBtn.addEventListener("click", ()=>{
+      const newVal = !weekDone(selectedWeek);
+      setWeekDone(selectedWeek, newVal);
+      renderLeft();
+      renderLesson();
+    });
+  }
+  const toPractice = document.getElementById("toPracticeBtn");
+  if(toPractice){
+    toPractice.addEventListener("click", ()=>{
+      activeTab = "practice";
+      saveState();
+      renderTabsActive();
+      renderRight();
+    });
+  }
+
+  const wQuiz = COURSE[selectedWeek].quiz || [];
+  mountQuiz("quizMount", selectedWeek, wQuiz);
+}
+
+/* ===============================
+   PRACTICE TAB
+   =============================== */
+function renderPractice(){
+  const w = COURSE[selectedWeek];
+  const ws = ensureWeekState(selectedWeek);
+  const practiceText = ws.practice || "";
+  const vocabChips = (w.vocab||[]).map(v=>`<span class="chip">${escapeHtml(v)}</span>`).join("");
+  const phraseList = (w.phrases||[]).map(p=>`<li>${escapeHtml(p)}</li>`).join("");
+
+  contentEl.innerHTML = `
+    <h2>Practice Space — Week ${selectedWeek+1}</h2>
+    <p class="kicker">
+      Use this space to write sentences, copy phrases, or plan your project.
+      Everything is saved only on this device.
+    </p>
+
+    <div class="two">
+      <div class="box">
+        <h4>Word & Phrase Bank</h4>
+        <p class="small">These can be used to build your own sentences.</p>
+        <div class="chips">${vocabChips}</div>
+        <div class="hr"></div>
+        <ul class="list">${phraseList}</ul>
+      </div>
+      <div class="box">
+        <h4>Your Writing Area</h4>
+        <textarea id="practiceText" placeholder="Write 3–6 sentences using today’s words and phrases...">${escapeHtml(practiceText)}</textarea>
+        <div class="row" style="margin-top:8px">
+          <button class="btn good" id="savePracticeBtn">Save Practice</button>
+          <button class="btn warn" id="clearPracticeBtn">Clear</button>
+        </div>
+        <p class="small" style="margin-top:6px">
+          Tip: Parents or teachers can help children read their writing aloud after saving.
+        </p>
+      </div>
+    </div>
+  `;
+
+  const ta = document.getElementById("practiceText");
+  document.getElementById("savePracticeBtn").addEventListener("click", ()=>{
+    const ws = ensureWeekState(selectedWeek);
+    ws.practice = ta.value || "";
+    saveState();
+    alert("Practice saved on this device.");
+  });
+  document.getElementById("clearPracticeBtn").addEventListener("click", ()=>{
+    if(!confirm("Clear this week’s practice text on this device?")) return;
+    const ws = ensureWeekState(selectedWeek);
+    ws.practice = "";
+    saveState();
+    renderPractice();
+  });
+}
+
+/* ===============================
+   PARENTS TAB
+   =============================== */
+function renderParents(){
+  const lockedNext = pendingWeeks().length > 0;
+  contentEl.innerHTML = `
+    <h2>Guide for Parents & Helpers</h2>
+    <p class="kicker">
+      This 6-week children’s ESL path is designed to be simple and flexible. You do not need
+      to speak perfect English — your kindness and presence are more important.
+    </p>
+
+    <div class="box">
+      <h4>How the progressive unlocking works</h4>
+      <ul class="list">
+        <li>Children begin at <b>Week 1</b>. Only Week 1 is open at the start.</li>
+        <li>To unlock the next week, they must:
+          <ul style="margin-top:4px">
+            <li>Complete the mini quiz with at least <b>80% correct</b>, and</li>
+            <li>Click <b>“Mark Week Complete”</b> when you feel it’s honest.</li>
+          </ul>
+        </li>
+        <li>After all 6 weeks are passed, the <b>Final Exam</b> and <b>Certificate</b> become active.</li>
+      </ul>
+    </div>
+
+    <div class="box" style="margin-top:8px">
+      <h4>Suggested weekly rhythm</h4>
+      <ul class="list">
+        <li><b>Day 1:</b> Read the story, practice the chant, explore key words.</li>
+        <li><b>Day 2:</b> Try one or two in-class style activities at home.</li>
+        <li><b>Day 3:</b> Use the Practice tab to write a few sentences together.</li>
+        <li><b>Day 4:</b> Do the mini quiz aloud or in writing.</li>
+        <li><b>Day 5:</b> Review and celebrate — mark the week complete when it feels honest.</li>
+      </ul>
+    </div>
+
+    <div class="two" style="margin-top:8px">
+      <div class="box">
+        <h4>Encouragement tips</h4>
+        <ul class="list">
+          <li>Celebrate effort more than “correctness.” Mistakes are part of learning.</li>
+          <li>Let children move, draw, and act while they use English words.</li>
+          <li>Keep sessions short (10–20 minutes) and end with something positive.</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h4>About privacy & data</h4>
+        <p class="small">
+          This mini-app stores progress only inside your browser using <span class="mono">localStorage</span>.
+          There are no accounts, no uploads, and no servers. If you clear your browser data,
+          the progress and notes will be erased.
+        </p>
+      </div>
+    </div>
+  `;
+}
+
+/* ===============================
+   FINAL EXAM & CERTIFICATE TAB
+   =============================== */
+function renderFinal(){
+  const unlocked = allWeeksPassed();
+  const fe = state.finalExam || {answers:{},score:0,total:FINAL_EXAM.length,passed:false};
+  const pct = fe.total ? Math.round((fe.score/fe.total)*100) : 0;
+
+  if(!unlocked){
+    const pend = pendingWeeks();
+    contentEl.innerHTML = `
+      <h2>Final Exam & Certificate</h2>
+      <p class="kicker">
+        The Final Exam becomes available after your child completes and passes all six weeks
+        (quiz score at least 80% and “Mark Week Complete” pressed for each week).
+      </p>
+      <div class="box">
+        <h4>Not ready yet</h4>
+        <p class="small">
+          The following weeks are not fully passed yet (either quiz score below 80% or not marked complete):
+        </p>
+        <ul class="list">
+          ${pend.map(n=>`<li>Week ${n}</li>`).join("") || "<li>All weeks appear passed. If this message shows, try refreshing the page.</li>"}
+        </ul>
+        <p class="small" style="margin-top:6px">
+          When every week shows as <b>DONE</b> and the quiz score is at least 80%, come back here to unlock
+          the Final Exam and reward certificate.
+        </p>
+      </div>
+    `;
+    return;
+  }
+
+  contentEl.innerHTML = `
+    <h2>Final Exam & Certificate</h2>
+    <p class="kicker">
+      This short final exam reviews key ideas from all six weeks. When the automatic score reaches
+      at least 80%, the reward certificate will unlock and can be printed.
+    </p>
+
+    <div class="box">
+      <h4>Final Exam</h4>
+      <div id="finalExamMount"></div>
+      <div id="finalExamScore" class="small" style="margin-top:6px">
+        ${fe.total ? `Current score: <strong>${fe.score}/${fe.total}</strong> (~${pct}%)` : `No answers saved yet.`}
+      </div>
+    </div>
+
+    <div class="box" id="certificateBox" data-status="${fe.passed ? "unlocked" : "locked"}">
+      ${fe.passed ? unlockedCertInnerHtml() : lockedCertInnerHtml()}
+    </div>
+  `;
+
+  mountFinalExam("finalExamMount");
+  wireCertificateBox();
+}
+
+/* ===============================
+   MINI QUIZ ENGINE (PER WEEK)
+   =============================== */
+function mountQuiz(mountId, weekIndex, questions){
+  const mount = document.getElementById(mountId);
+  if(!mount || !questions || !questions.length) {
+    if(mount) mount.innerHTML = "<p class='small'>No quiz for this week.</p>";
+    return;
+  }
+
+  const ws = ensureWeekState(weekIndex);
+  ws.quiz = ws.quiz || { answers:{} };
+  const store = ws.quiz;
+
+  function computeScore(){
+    let score = 0, total = 0;
+    questions.forEach((q, idx)=>{
+      const k = "q"+idx;
+      const saved = store.answers[k];
+      if(q.type === "tf"){
+        total++;
+        if(typeof saved === "boolean" && saved === q.a) score++;
+      }else if(q.type === "mc"){
+        total++;
+        if(typeof saved === "number" && saved === q.a) score++;
+      }
+    });
+    ws.quiz.score = score;
+    ws.quiz.total = total;
+    ws.quiz.passed = total>0 && (score/total) >= 0.8;
+    saveState();
+    return {score,total};
+  }
+
+  function render(){
+    let html = "";
+    questions.forEach((q, idx)=>{
+      const key = "q"+idx;
+      const saved = store.answers[key];
+      html += `
+        <div class="box" style="margin:6px 0">
+          <div style="font-weight:800;margin-bottom:6px">Q${idx+1}. ${escapeHtml(q.q)}</div>
+      `;
+      if(q.type === "tf"){
+        const val = saved === undefined ? null : !!saved;
+        html += `
+          <div class="row">
+            <button class="btn small ${val===true?"good":""}" data-k="${key}" data-a="true">True</button>
+            <button class="btn small ${val===false?"warn":""}" data-k="${key}" data-a="false">False</button>
+          </div>
+        `;
+      }else if(q.type === "mc"){
+        html += `<div class="row">` + q.options.map((opt,j)=>{
+          const sel = saved === j;
+          return `<button class="btn small ${sel?"good":""}" data-k="${key}" data-a="${j}">${escapeHtml(opt)}</button>`;
+        }).join("") + `</div>`;
+      }else if(q.type === "short"){
+        html += `
+          <div class="small" style="margin-bottom:4px">Short answer (saved locally on this device).</div>
+          <textarea data-k="${key}" placeholder="Write your answer here...">${escapeHtml(saved || "")}</textarea>
+        `;
+      }
+      html += `</div>`;
+    });
+
+    const {score,total} = computeScore();
+    html += `
+      <div class="row" style="margin-top:8px">
+        <button class="btn good small" id="saveQuizBtn">Save Quiz</button>
+        <button class="btn warn small" id="clearQuizBtn">Clear Answers</button>
+        <div style="margin-left:auto" class="small">
+          Auto-score (True/False + Multiple Choice): <strong>${score}/${total}</strong>
+          ${total ? ` (~${Math.round((score/total)*100)}%)` : ""}
+        </div>
+      </div>
+      <p class="small" style="margin-top:4px">
+        Tip: Talk about the answers out loud together, not just in writing.
+      </p>
+    `;
+    mount.innerHTML = html;
+
+    // TF / MC buttons
+    mount.querySelectorAll("button[data-k][data-a]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const k = btn.getAttribute("data-k");
+        const aRaw = btn.getAttribute("data-a");
+        const idx = parseInt(k.replace("q",""),10);
+        const q = questions[idx];
+        if(q.type === "tf"){
+          store.answers[k] = (aRaw === "true");
+        }else if(q.type === "mc"){
+          store.answers[k] = parseInt(aRaw,10);
+        }
+        saveState();
+        render();
+        renderLeft(); // refresh unlock states if quiz score changed
+      });
+    });
+    // short answers
+    mount.querySelectorAll("textarea[data-k]").forEach(t=>{
+      t.addEventListener("input", ()=>{
+        const k = t.getAttribute("data-k");
+        store.answers[k] = t.value;
+        saveState();
+      });
+    });
+    // save / clear
+    const saveBtn = document.getElementById("saveQuizBtn");
+    const clearBtn = document.getElementById("clearQuizBtn");
+    if(saveBtn){
+      saveBtn.addEventListener("click", ()=>{
+        saveState();
+        renderLeft();
+        alert("Quiz saved on this device.");
+      });
+    }
+    if(clearBtn){
+      clearBtn.addEventListener("click", ()=>{
+        if(!confirm("Clear quiz answers for this week on this device?")) return;
+        store.answers = {};
+        saveState();
+        render();
+        renderLeft();
+      });
+    }
+  }
+
+  render();
+}
+
+/* ===============================
+   FINAL EXAM ENGINE
+   =============================== */
+function mountFinalExam(mountId){
+  const mount = document.getElementById(mountId);
+  if(!mount) return;
+  state.finalExam = state.finalExam || {answers:{},score:0,total:FINAL_EXAM.length,passed:false};
+  const store = state.finalExam;
+  if(!store.answers) store.answers = {};
+
+  function computeScore(){
+    let score = 0, total = 0;
+    FINAL_EXAM.forEach((q, idx)=>{
+      const k = "q"+idx;
+      const saved = store.answers[k];
+      if(q.type === "tf"){
+        total++;
+        if(typeof saved === "boolean" && saved === q.a) score++;
+      }else if(q.type === "mc"){
+        total++;
+        if(typeof saved === "number" && saved === q.a) score++;
+      }
+    });
+    store.score = score;
+    store.total = total || FINAL_EXAM.length;
+    store.passed = total>0 && (score/total) >= 0.8;
+    saveState();
+
+    const scoreEl = document.getElementById("finalExamScore");
+    if(scoreEl){
+      const pct = total ? Math.round((score/total)*100) : 0;
+      scoreEl.innerHTML = total
+        ? `Current score: <strong>${score}/${total}</strong> (~${pct}%)`
+        : `No answers saved yet.`;
+    }
+
+    const certBox = document.getElementById("certificateBox");
+    if(certBox){
+      if(store.passed && certBox.dataset.status !== "unlocked"){
+        certBox.dataset.status = "unlocked";
+        certBox.innerHTML = unlockedCertInnerHtml();
+        wireCertificateBox();
+      }else if(!store.passed && certBox.dataset.status !== "locked"){
+        certBox.dataset.status = "locked";
+        certBox.innerHTML = lockedCertInnerHtml();
+      }
+    }
+    return {score,total};
+  }
+
+  function render(){
+    let html = "";
+    FINAL_EXAM.forEach((q, idx)=>{
+      const key = "q"+idx;
+      const saved = store.answers[key];
+      html += `
+        <div class="box" style="margin:6px 0">
+          <div style="font-weight:800;margin-bottom:6px">Q${idx+1}. ${escapeHtml(q.q)}</div>
+      `;
+      if(q.type === "tf"){
+        const val = saved === undefined ? null : !!saved;
+        html += `
+          <div class="row">
+            <button class="btn small ${val===true?"good":""}" data-k="${key}" data-a="true">True</button>
+            <button class="btn small ${val===false?"warn":""}" data-k="${key}" data-a="false">False</button>
+          </div>
+        `;
+      }else if(q.type === "mc"){
+        html += `<div class="row">` + q.options.map((opt,j)=>{
+          const sel = saved === j;
+          return `<button class="btn small ${sel?"good":""}" data-k="${key}" data-a="${j}">${escapeHtml(opt)}</button>`;
+        }).join("") + `</div>`;
+      }
+      html += `</div>`;
+    });
+
+    const {score,total} = computeScore();
+    html += `
+      <div class="row" style="margin-top:8px">
+        <button class="btn good small" id="saveFinalBtn">Save Final Exam</button>
+        <button class="btn warn small" id="clearFinalBtn">Clear Answers</button>
+        <div style="margin-left:auto" class="small">
+          Auto-score: <strong>${score}/${total}</strong>
+          ${total ? ` (~${Math.round((score/total)*100)}%)` : ""}
+        </div>
+      </div>
+      <p class="small" style="margin-top:4px">
+        Short written practice can be done separately in a notebook if you wish — this exam focuses on basic
+        understanding. Aim for at least <b>80%</b> before printing the certificate.
+      </p>
+    `;
+    mount.innerHTML = html;
+
+    mount.querySelectorAll("button[data-k][data-a]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const k = btn.getAttribute("data-k");
+        const aRaw = btn.getAttribute("data-a");
+        const idx = parseInt(k.replace("q",""),10);
+        const q = FINAL_EXAM[idx];
+        if(q.type === "tf"){
+          store.answers[k] = (aRaw === "true");
+        }else if(q.type === "mc"){
+          store.answers[k] = parseInt(aRaw,10);
+        }
+        saveState();
+        render();
+      });
+    });
+
+    const saveBtn = document.getElementById("saveFinalBtn");
+    const clearBtn = document.getElementById("clearFinalBtn");
+    if(saveBtn){
+      saveBtn.addEventListener("click", ()=>{
+        saveState();
+        alert("Final exam saved on this device.");
+      });
+    }
+    if(clearBtn){
+      clearBtn.addEventListener("click", ()=>{
+        if(!confirm("Clear all final exam answers on this device?")) return;
+        store.answers = {};
+        saveState();
+        render();
+      });
+    }
+  }
+
+  render();
+}
+
+/* ===============================
+   CERTIFICATE HELPERS
+   =============================== */
+function lockedCertInnerHtml(){
+  return `
+    <h4>Reward Certificate</h4>
+    <p class="small">
+      The reward certificate unlocks after your child scores at least <b>80%</b> on the Final Exam.
+      Check the score above, and try again if needed. When the exam is passed, this box will
+      change and a “Print Certificate” button will appear.
+    </p>
+  `;
+}
+function unlockedCertInnerHtml(){
+  const safeName = escapeHtml(state.studentName || "");
+  const today = new Date().toLocaleDateString();
+  return `
+    <h4>Reward Certificate</h4>
+    <p class="small">
+      Fill in the name, then click <b>“Print Certificate”</b>. The page will switch to a print-friendly view.
+    </p>
+    <div class="row" style="margin-top:6px">
+      <input id="studentNameInput" placeholder="Student name for certificate" />
+      <button class="btn small" id="saveNameBtn">Save Name</button>
+      <button class="btn good small" id="printCertBtn">Print Certificate</button>
+    </div>
+    <div class="hr"></div>
+    <div id="certificatePrint" style="
+      max-width:700px;
+      margin:8px auto 0;
+      padding:20px 24px;
+      border-radius:16px;
+      border:2px solid #0f172a;
+      background:#ffffff;
+      box-shadow:0 10px 30px rgba(15,23,42,0.25);
+      text-align:center;
+      ">
+      <div style="font-size:0.85rem;letter-spacing:0.18em;text-transform:uppercase;color:#64748b;margin-bottom:8px;">
+        Khaemenes Kids — ESL Adventure
+      </div>
+      <div style="font-size:1.6rem;font-weight:800;margin-bottom:10px;">
+        Certificate of English Adventure
+      </div>
+      <div style="font-size:0.9rem;color:#6b7280;margin-bottom:16px;">
+        This certificate is proudly presented to
+      </div>
+      <div style="
+        font-size:1.4rem;
+        font-weight:800;
+        padding:6px 10px;
+        border-bottom:1px solid #0f172a;
+        display:inline-block;
+        min-width:260px;
+        ">
+        <span data-student-name>${safeName || "________________"}</span>
+      </div>
+      <div style="font-size:0.95rem;color:#4b5563;margin-top:12px;margin-bottom:18px;max-width:480px;margin-left:auto;margin-right:auto;">
+        for completing the 6-week Khaemenes Kids ESL Adventure and passing the Final Exam
+        with care, courage, and steady practice.
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:18px;font-size:0.9rem;">
+        <div style="text-align:left;">
+          <div>Date</div>
+          <div style="border-top:1px solid #0f172a;padding-top:2px;margin-top:4px;">${today}</div>
+        </div>
+        <div style="text-align:right;">
+          <div>Guide / Teacher</div>
+          <div style="border-top:1px solid #0f172a;padding-top:2px;margin-top:4px;min-width:160px;">
+            ______________________
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+function wireCertificateBox(){
+  const nameInput = document.getElementById("studentNameInput");
+  const saveBtn = document.getElementById("saveNameBtn");
+  const printBtn = document.getElementById("printCertBtn");
+
+  if(nameInput){
+    nameInput.value = state.studentName || "";
+    nameInput.addEventListener("input", ()=>{
+      state.studentName = nameInput.value;
+      const spans = document.querySelectorAll("[data-student-name]");
+      spans.forEach(span=>{
+        span.textContent = state.studentName || "________________";
+      });
+      saveState();
+    });
+  }
+  if(saveBtn){
+    saveBtn.addEventListener("click", ()=>{
+      state.studentName = (nameInput.value || "").trim();
+      const spans = document.querySelectorAll("[data-student-name]");
+      spans.forEach(span=>{
+        span.textContent = state.studentName || "________________";
+      });
+      saveState();
+      alert("Name saved for certificate.");
+    });
+  }
+  if(printBtn){
+    printBtn.addEventListener("click", ()=>{
+      window.print();
+    });
+  }
+}
+
+/* ===============================
+   HELPER: ESCAPE HTML
+   =============================== */
+function escapeHtml(s){
+  return String(s ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+</script>
+</body>
+</html>
