@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>French 101 — Sovereign Edition</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<style>
+:root{
+  --bg-light:#f7f2e8; --text-light:#1b130a; --accent:#c7a85b;
+  --bg-dark:#0f1a26;  --text-dark:#f5f5f5;  --accent-dark:#4da3ff;
+  --radius:12px; --transition:.6s ease;
+}
+*{box-sizing:border-box;font-family:"Segoe UI",system-ui,sans-serif;}
+html,body{margin:0;height:100%;overflow:hidden;}
+body{
+  background:var(--bg-light);color:var(--text-light);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:background var(--transition),color var(--transition);
+}
+body.dark{
+  background:var(--bg-dark);color:var(--text-dark);
+}
+button{
+  background:var(--accent);color:#fff;border:none;border-radius:var(--radius);
+  padding:10px 20px;font-size:1rem;cursor:pointer;margin:4px;
+  transition:opacity .3s;
+}
+body.dark button{background:var(--accent-dark);}
+button:hover{opacity:.8;}
+.hidden{display:none;}
+h1,h2,h3{margin:.3em 0;}
+#app{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}
+#splash{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;z-index:10;
+  background:linear-gradient(135deg,#002654,#fff,#ed2939);
+  background-size:600% 600%;animation:bgShift 20s ease infinite;
+  color:#fff;text-shadow:0 0 12px rgba(0,0,0,.4);
+}
+@keyframes bgShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+#themeToggle{position:absolute;top:12px;right:12px;padding:8px 14px;font-size:.9rem;}
+.level-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:16px;margin-top:20px;}
+.level{
+  width:80px;height:80px;border-radius:50%;border:3px solid var(--accent);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:bold;cursor:pointer;transition:transform .3s,background .3s;
+}
+body.dark .level{border-color:var(--accent-dark);}
+.level.locked{opacity:.3;cursor:not-allowed;}
+.level.unlocked:hover{transform:scale(1.08);}
+.level.completed{background:var(--accent);color:#fff;}
+body.dark .level.completed{background:var(--accent-dark);}
+#lesson,#quiz,#exam,#certificate{max-width:700px;padding:20px;}
+.vocab{display:flex;align-items:center;justify-content:space-between;margin:6px 0;padding:8px;border-radius:8px;background:rgba(0,0,0,.05);}
+body.dark .vocab{background:rgba(255,255,255,.1);}
+.speaker{cursor:pointer;font-size:1.2rem;}
+#certificate{border:4px solid var(--accent);border-radius:var(--radius);padding:40px;}
+body.dark #certificate{border-color:var(--accent-dark);}
+@keyframes confetti{0%{transform:translateY(0) rotate(0);}100%{transform:translateY(100vh) rotate(720deg);}}
+.confetti{
+  position:fixed;top:-10px;width:10px;height:10px;background:var(--accent);
+  animation:confetti 5s linear infinite;opacity:.8;z-index:9999;
+}
+body.dark .confetti{background:var(--accent-dark);}
+</style>
+</head>
+
+<body>
+<div id="splash">
+  <h1>Bienvenue à French 101</h1>
+  <h3>Sovereign Edition</h3>
+  <p style="max-width:420px;">A language journey guided by your own light.</p>
+  <button onclick="startApp()">Commencer / Start Journey</button>
+</div>
+
+<div id="app" class="hidden">
+  <button id="themeToggle">🌙 Mode</button>
+  <h1 id="title">French 101</h1>
+  <div id="menu">
+    <p>Choose your Level — progress saves automatically.</p>
+    <div class="level-grid" id="levelGrid"></div>
+  </div>
+
+  <div id="lesson" class="hidden"></div>
+  <div id="quiz" class="hidden"></div>
+  <div id="exam" class="hidden"></div>
+  <div id="certificate" class="hidden">
+    <h2>🎓 Certificate of Completion</h2>
+    <p>Félicitations ! You have completed all 12 levels of French 101.</p>
+    <button onclick="print()">Print Certificate</button>
+  </div>
+</div>
+
+<script>
+/* ==========================================================
+   GLOBAL STATE
+========================================================== */
+const totalLevels=12;
+let progress=JSON.parse(localStorage.getItem("french101_progress")||"{}");
+let currentLevel=null;
+const $=id=>document.getElementById(id);
+function saveProgress(){localStorage.setItem("french101_progress",JSON.stringify(progress));}
+
+/* ==========================================================
+   STARTUP & THEME
+========================================================== */
+function startApp(){
+  $("splash").style.display="none";
+  $("app").classList.remove("hidden");
+  buildLevelGrid();
+  applyTheme();
+}
+$("themeToggle").onclick=()=>{
+  document.body.classList.toggle("dark");
+  applyTheme();
+  localStorage.setItem("theme",document.body.classList.contains("dark")?"dark":"light");
+};
+function applyTheme(){
+  const dark=localStorage.getItem("theme")==="dark";
+  if(dark)document.body.classList.add("dark");else document.body.classList.remove("dark");
+}
+
+/* ==========================================================
+   LEVEL GRID & LOCK LOGIC
+========================================================== */
+function buildLevelGrid(){
+  const grid=$("levelGrid");grid.innerHTML="";
+  for(let i=1;i<=totalLevels;i++){
+    const div=document.createElement("div");
+    div.className="level";
+    const state=progress[i]||"locked";
+    if(state!=="locked")div.classList.add("unlocked");
+    if(state==="completed")div.classList.add("completed");
+    if(state==="locked")div.classList.add("locked");
+    div.textContent="L"+i;
+    div.onclick=()=>{if(state!=="locked")openLesson(i);};
+    grid.appendChild(div);
+  }
+  // unlock next
+  for(let i=1;i<=totalLevels;i++){
+    if(progress[i]==="completed"&&i<totalLevels&&!progress[i+1]){
+      progress[i+1]="unlocked";
+    }
+  }
+  saveProgress();
+}
+
+/* ==========================================================
+   LESSON CONTENT & AUDIO
+========================================================== */
+const LESSONS={
+1:[
+  {fr:"Bonjour",en:"Hello"},
+  {fr:"Merci",en:"Thank you"},
+  {fr:"Au revoir",en:"Goodbye"},
+  {fr:"S’il vous plaît",en:"Please"},
+  {fr:"Oui / Non",en:"Yes / No"}
+],
+2:[
+  {fr:"Comment ça va ?",en:"How are you ?"},
+  {fr:"Je vais bien",en:"I’m fine"},
+  {fr:"Enchanté(e)",en:"Nice to meet you"},
+  {fr:"Bienvenue",en:"Welcome"},
+  {fr:"À bientôt",en:"See you soon"}
+],
+3:[
+  {fr:"Un",en:"One"},
+  {fr:"Deux",en:"Two"},
+  {fr:"Trois",en:"Three"},
+  {fr:"Quatre",en:"Four"},
+  {fr:"Cinq",en:"Five"}
+]
+// ... Add levels 4-12 similarly with phrases
+};
+
+/* Speech */
+function speakFR(text){
+  try{
+    const u=new SpeechSynthesisUtterance(text);
+    u.lang="fr-FR";
+    speechSynthesis.speak(u);
+  }catch(e){console.warn("Speech error",e);}
+}
+
+/* ==========================================================
+   LESSON VIEW
+========================================================== */
+function openLesson(level){
+  currentLevel=level;
+  $("menu").classList.add("hidden");
+  const box=$("lesson");
+  box.innerHTML=`<h2>Level ${level}</h2><p>Listen and repeat each phrase :</p>`;
+  const list=LESSONS[level]||[];
+  list.forEach(v=>{
+    const row=document.createElement("div");
+    row.className="vocab";
+    row.innerHTML=`<span><strong>${v.fr}</strong><br><small>${v.en}</small></span>
+                   <span class="speaker" onclick="speakFR('${v.fr}')">🔊</span>`;
+    box.appendChild(row);
+  });
+  const nextBtn=document.createElement("button");
+  nextBtn.textContent="Take Quiz";
+  nextBtn.onclick=()=>openQuiz(level);
+  box.appendChild(nextBtn);
+  box.classList.remove("hidden");
+}
+
+/* ==========================================================
+   QUIZ / EXAM / CERTIFICATE
+========================================================== */
+function openQuiz(level){
+  $("lesson").classList.add("hidden");
+  const box=$("quiz");
+  const qset=LESSONS[level]||[];
+  let score=0,i=0;
+  box.innerHTML=`<h2>Quiz Level ${level}</h2><p>Translate each word :</p>`;
+  const q=document.createElement("div");q.id="qtext";box.appendChild(q);
+  const input=document.createElement("input");input.type="text";input.placeholder="English meaning";input.style.padding="8px";input.style.fontSize="1rem";
+  const btn=document.createElement("button");btn.textContent="Submit";
+  const res=document.createElement("div");res.style.marginTop="10px";
+  box.appendChild(input);box.appendChild(btn);box.appendChild(res);
+  function ask(){if(i>=qset.length){finish();return;}q.textContent=qset[i].fr;}
+  function finish(){
+    progress[level]="completed";saveProgress();
+    res.innerHTML=`<p>Your score ${score}/${qset.length}</p>`;
+    const next=document.createElement("button");
+    next.textContent=(level<totalLevels)?"Next Level":"Final Exam";
+    next.onclick=()=>{
+      box.classList.add("hidden");
+      if(level<totalLevels)openLesson(level+1);else openExam();
+      buildLevelGrid();
+    };
+    res.appendChild(next);
+  }
+  btn.onclick=()=>{
+    if(input.value.trim().toLowerCase()===(qset[i].en.toLowerCase())){
+      score++;res.textContent="✅ Correct!";
+    }else res.textContent=`❌ ${qset[i].en}`;
+    i++;input.value="";setTimeout(ask,700);
+  };
+  ask();
+  box.classList.remove("hidden");
+}
+
+function openExam(){
+  $("quiz").classList.add("hidden");
+  const box=$("exam");
+  box.innerHTML=`<h2>Final Exam</h2><p>Answer 5 random questions from all lessons.</p>`;
+  const pool=Object.values(LESSONS).flat();
+  const qs=[];while(qs.length<5)qs.push(pool[Math.floor(Math.random()*pool.length)]);
+  let i=0,score=0;
+  const q=document.createElement("div");q.id="eq";box.appendChild(q);
+  const input=document.createElement("input");input.type="text";box.appendChild(input);
+  const btn=document.createElement("button");btn.textContent="Submit";box.appendChild(btn);
+  const res=document.createElement("div");box.appendChild(res);
+  function ask(){if(i>=qs.length){end();return;}q.textContent=qs[i].fr;}
+  function end(){
+    res.innerHTML=`Final Score: ${score}/5`;
+    if(score>=3){
+      res.innerHTML+=`<br>✨ You passed!`;
+      setTimeout(openCertificate,1200);
+    }else{
+      res.innerHTML+=`<br>Try again.`;
+    }
+  }
+  btn.onclick=()=>{
+    if(input.value.trim().toLowerCase()===(qs[i].en.toLowerCase()))score++;
+    i++;input.value="";ask();
+  };
+  ask();
+  box.classList.remove("hidden");
+}
+
+function openCertificate(){
+  $("exam").classList.add("hidden");
+  $("certificate").classList.remove("hidden");
+  launchConfetti();
+}
+
+/* ==========================================================
+   CONFETTI
+========================================================== */
+function launchConfetti(){
+  for(let i=0;i<80;i++){
+    const c=document.createElement("div");
+    c.className="confetti";
+    c.style.left=Math.random()*100+"vw";
+    c.style.animationDelay=(Math.random()*3)+"s";
+    c.style.background=`hsl(${Math.random()*360},80%,60%)`;
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),5000);
+  }
+}
+
+/* ==========================================================
+   INIT
+========================================================== */
+applyTheme();
+</script>
+</body>
+</html>
