@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Qur’anic Root Explorer — Temple of Letters</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<!-- Arabic-friendly serif + Cinzel -->
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+    body {
+        background: #0b1020;
+        font-family: "Cinzel", serif;
+        color: #FFFDF5;
+        margin: 0;
+        padding: 40px 16px;
+        text-align: center;
+    }
+    h1 {
+        font-size: 44px;
+        letter-spacing: 1px;
+        color: #e8d5a4;
+        margin-top: 0;
+        margin-bottom: 12px;
+    }
+    #subtitle {
+        font-size: 15px;
+        color: #e8d5a4;
+        opacity: 0.8;
+        margin-bottom: 22px;
+    }
+    #searchBox {
+        width: 90%;
+        max-width: 720px;
+        padding: 15px;
+        font-size: 20px;
+        border-radius: 14px;
+        border: 2px solid #b89252;
+        background: #091020;
+        color: #FFFDF5;
+        margin-bottom: 16px;
+        text-align: center;
+    }
+    #searchBox::placeholder {
+        color: #7d7f96;
+    }
+
+    /* Quick root chips */
+    #rootChips {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+        margin-bottom: 24px;
+    }
+    .chip {
+        border: 1px solid #b89252;
+        border-radius: 999px;
+        padding: 4px 12px;
+        font-size: 13px;
+        background: #10172b;
+        color: #e8d5a4;
+        cursor: pointer;
+        transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .chip:hover {
+        background: #1a2340;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+    }
+
+    /* Deck section */
+    #deckSection {
+        width: 90%;
+        max-width: 960px;
+        margin: 0 auto 32px auto;
+    }
+    #deckHeading {
+        font-size: 20px;
+        color: #d9b878;
+        margin-bottom: 10px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+    }
+    #deckControls {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 14px;
+        font-size: 13px;
+        color: #e8d5a4;
+    }
+    .deckBtn {
+        border-radius: 999px;
+        border: 1px solid #b89252;
+        background: #10172b;
+        color: #e8d5a4;
+        padding: 6px 14px;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .deckBtn:hover {
+        background: #b89252;
+        color: #0b1020;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+    }
+    #deckCounter {
+        opacity: 0.85;
+    }
+    #deckCard {
+        margin-bottom: 18px;
+    }
+
+    /* Deck journal */
+    #deckJournalBox {
+        width: 100%;
+        max-width: 960px;
+        margin: 0 auto 26px auto;
+        text-align: left;
+    }
+    #deckJournalLabel {
+        font-size: 14px;
+        color: #d9b878;
+        margin-bottom: 6px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+    #deckJournal {
+        width: 100%;
+        min-height: 80px;
+        border-radius: 12px;
+        border: 1px solid rgba(255,255,255,0.25);
+        background: rgba(0,0,0,0.25);
+        padding: 9px 11px;
+        color: #FFFDF5;
+        font-family: "Cinzel", serif;
+        font-size: 13px;
+        resize: vertical;
+    }
+    #deckJournal:focus {
+        outline: none;
+        border-color: #d9b878;
+        box-shadow: 0 0 0 1px rgba(217,184,120,0.6);
+    }
+    #deckJournalHint {
+        font-size: 11px;
+        color: #e8d5a4;
+        opacity: 0.8;
+        margin-top: 4px;
+    }
+
+    .resultCard {
+        width: 100%;
+        margin: 0 auto 24px auto;
+        padding: 33px;
+        border-radius: 22px;
+        background: #0f162b;
+        border: 3px solid #b89252;
+        box-shadow: 0 0 30px #000;
+        text-align: left;
+    }
+    .root {
+        font-size: 55px;
+        color: #d9b878;
+        margin-bottom: 7px;
+        text-align: center;
+        font-family: "Scheherazade New","Amiri",serif;
+    }
+    .translit {
+        font-size: 24px;
+        color: #e8d5a4;
+        text-align: center;
+        margin-bottom: 4px;
+    }
+    .meaning {
+        font-size: 22px;
+        margin-top: 14px;
+        text-align: center;
+    }
+    .sectionTitle {
+        font-size: 24px;
+        margin-top: 28px;
+        margin-bottom: 10px;
+        color: #d9b878;
+        text-decoration: underline;
+    }
+    .derived-list div {
+        font-size: 18px;
+        margin: 4px 0;
+    }
+    .ayah {
+        margin: 10px 0 16px 0;
+        font-size: 21px;
+        line-height: 1.6;
+    }
+    .ayah-header {
+        font-size: 16px;
+        margin-bottom: 4px;
+        color: #e8d5a4;
+    }
+    .ayah-text {
+        direction: rtl;
+        font-family: "Scheherazade New","Amiri",serif;
+        font-size: 24px;
+        margin-bottom: 6px;
+    }
+    .ayah-tools {
+        font-size: 13px;
+    }
+    .copyAyahBtn {
+        border-radius: 999px;
+        border: 1px solid #b89252;
+        background: transparent;
+        color: #e8d5a4;
+        padding: 3px 10px;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 12px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        transition: background 0.2s, color 0.2s;
+    }
+    .copyAyahBtn:hover {
+        background: #b89252;
+        color: #0b1020;
+    }
+
+    .notes {
+        font-size: 18px;
+        line-height: 1.5;
+    }
+    .emptyMsg {
+        margin-top: 18px;
+        font-size: 20px;
+        color: #e8d5a4;
+    }
+
+    .rootHighlight {
+        background: rgba(217,184,120,0.24);
+        padding: 0 2px;
+        border-radius: 4px;
+    }
+
+    #results {
+        margin-top: 10px;
+    }
+
+    @media (max-width: 600px){
+        h1 { font-size: 32px; }
+        .resultCard { padding: 24px; }
+        .root { font-size: 42px; }
+        .meaning { font-size: 20px; }
+    }
+</style>
+</head>
+<body>
+
+<h1>🔍 Qur’anic Root Explorer</h1>
+<div id="subtitle">
+  Type an Arabic root (كتب), a pattern like K-T-B, or an English meaning ("write").
+</div>
+
+<input id="searchBox" placeholder="Search Arabic root — e.g. كتب / K-T-B / knowledge">
+
+<div id="rootChips"></div>
+
+<!-- Root card viewer deck -->
+<div id="deckSection">
+  <div id="deckHeading">Root Card Viewer — Reading Circle</div>
+  <div id="deckControls">
+    <button type="button" class="deckBtn" id="prevDeckBtn">◀ Previous</button>
+    <span id="deckCounter">0 / 0</span>
+    <button type="button" class="deckBtn" id="randomDeckBtn">Random ✦</button>
+    <button type="button" class="deckBtn" id="nextDeckBtn">Next ▶</button>
+  </div>
+  <div id="deckCard"></div>
+
+  <div id="deckJournalBox">
+    <div id="deckJournalLabel">Reflection Journal</div>
+    <textarea id="deckJournal" placeholder="Write reflections, patterns, or connections you notice with this root..."></textarea>
+    <div id="deckJournalHint">Saved locally per root on this device — perfect for reading circles and private study.</div>
+  </div>
+</div>
+
+<div id="results"></div>
+
+<script>
+/* ==========================================================
+   Qur’anic Root Dataset — Placeholder Version
+   Replace "dataset" with your full quranic_1000_roots.json
+   ========================================================== */
+const dataset = [
+  {
+    "root": "كتب",
+    "transliteration": "K-T-B",
+    "meaning": "to write",
+    "notes": "One of the most common trilateral roots in the Qur’an.",
+    "derived": [
+      {"form": "kataba", "meaning": "he wrote"},
+      {"form": "yaktubu", "meaning": "he writes"},
+      {"form": "kitāb", "meaning": "book"},
+      {"form": "maktūb", "meaning": "written"}
+    ],
+    "ayahs": [
+      {"ref": "2:2", "text": "ذَٰلِكَ الْكِتَابُ لَا رَيْبَ ۛ فِيهِ"},
+      {"ref": "96:4", "text": "الَّذِي عَلَّمَ بِالْقَلَمِ"}
+    ]
+  },
+  {
+    "root": "علم",
+    "transliteration": "ʿ-L-M",
+    "meaning": "to know, to have knowledge",
+    "notes": "Core concept of knowledge, learning, awareness.",
+    "derived": [
+      {"form": "ʿalima", "meaning": "he knew"},
+      {"form": "yaʿlamu", "meaning": "he knows"},
+      {"form": "ʿilm", "meaning": "knowledge"},
+      {"form": "ʿallama", "meaning": "he taught"}
+    ],
+    "ayahs": [
+      {"ref": "2:32", "text": "سُبْحَانَكَ لَا عِلْمَ لَنَا"},
+      {"ref": "96:5", "text": "عَلَّمَ الْإِنسَانَ مَا لَمْ يَعْلَمْ"}
+    ]
+  }
+]; // END DATASET
+
+/* ==========================================================
+   DOM references
+   ========================================================== */
+const searchInput     = document.getElementById("searchBox");
+const resultsDiv      = document.getElementById("results");
+const chipsDiv        = document.getElementById("rootChips");
+
+const deckCard        = document.getElementById("deckCard");
+const deckCounter     = document.getElementById("deckCounter");
+const prevDeckBtn     = document.getElementById("prevDeckBtn");
+const nextDeckBtn     = document.getElementById("nextDeckBtn");
+const randomDeckBtn   = document.getElementById("randomDeckBtn");
+
+const deckJournalBox  = document.getElementById("deckJournalBox");
+const deckJournal     = document.getElementById("deckJournal");
+
+let deckIndex = 0;
+
+/* ==========================================================
+   Helpers
+   ========================================================== */
+
+// Normalize latin input: remove spaces/hyphens, lowercase
+function normalizeLatin(str){
+  return str
+    .toLowerCase()
+    .replace(/[\s\-]/g, "");
+}
+
+// Normalize Arabic-ish: just trim for now
+function normalizeArabic(str){
+  return str.trim();
+}
+
+// Highlight root letters in text
+function highlightRootInText(text, root){
+  if(!root) return text;
+  try{
+    const safeRoot = root.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return text.replace(new RegExp(safeRoot, "g"), `<span class="rootHighlight">${root}</span>`);
+  }catch(e){
+    return text;
+  }
+}
+
+/* ==========================================================
+   Card building utilities
+   ========================================================== */
+
+// builds the inner content of a root card (without the outer .resultCard)
+function buildCardInnerHTML(item){
+  return `
+    <div class="root">${item.root}</div>
+    <div class="translit">${item.transliteration || ""}</div>
+    <div class="meaning">${item.meaning || ""}</div>
+
+    <div class="sectionTitle">Derived Forms</div>
+    <div class="derived-list">
+      ${
+        (item.derived && item.derived.length)
+          ? item.derived.map(d =>
+              `<div>${d.form} — <i>${d.meaning}</i></div>`
+            ).join("")
+          : `<div class="notes">No derived forms recorded in this entry.</div>`
+      }
+    </div>
+
+    <div class="sectionTitle">Āyah References</div>
+    ${
+      (item.ayahs && item.ayahs.length)
+        ? item.ayahs.map(a => `
+            <div class="ayah">
+              <div class="ayah-header"><b>${a.ref}</b></div>
+              <div class="ayah-text">${highlightRootInText(a.text, item.root)}</div>
+              <div class="ayah-tools">
+                <button type="button" class="copyAyahBtn">Copy</button>
+              </div>
+            </div>
+          `).join("")
+        : `<div class="notes">No sample āyāt recorded in this entry.</div>`
+    }
+
+    <div class="sectionTitle">Notes</div>
+    <div class="notes">${item.notes || "—"}</div>
+  `;
+}
+
+// wires up copy buttons within a specific card container for a given item
+function wireCopyButtons(containerEl, item){
+  const copyButtons = containerEl.querySelectorAll(".copyAyahBtn");
+  if(item.ayahs && copyButtons.length){
+    copyButtons.forEach((btn, idx) => {
+      btn.addEventListener("click", () => {
+        if(!item.ayahs[idx]) return;
+        const t = `${item.ayahs[idx].text} (${item.ayahs[idx].ref})`;
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(t).then(()=>{
+            const oldLabel = btn.textContent;
+            btn.textContent = "Copied!";
+            setTimeout(()=>btn.textContent = oldLabel, 1200);
+          }).catch(()=>{
+            alert("Copied: " + t);
+          });
+        }else{
+          alert("Copied: " + t);
+        }
+      });
+    });
+  }
+}
+
+/* ==========================================================
+   Journal helpers (per root)
+   ========================================================== */
+function journalKeyFor(item){
+  return `rootJournal_${item.root}`;
+}
+
+function loadJournalFor(item){
+  let saved = "";
+  try{
+    saved = localStorage.getItem(journalKeyFor(item)) || "";
+  }catch(e){
+    saved = "";
+  }
+  deckJournal.value = saved;
+}
+
+/* ==========================================================
+   Search logic
+   ========================================================== */
+
+function performSearch(raw){
+  const q = raw.trim();
+  resultsDiv.innerHTML = "";
+
+  if (!q) return;
+
+  const latinNorm = normalizeLatin(q);
+  const matches = dataset.filter(item => {
+    const rootNorm      = normalizeArabic(item.root);
+    const translitNorm  = normalizeLatin(item.transliteration || "");
+    const meaningNorm   = (item.meaning || "").toLowerCase();
+    const queryLower    = q.toLowerCase();
+
+    return (
+      rootNorm.includes(q) ||                 // Arabic substring
+      translitNorm.includes(latinNorm) ||     // K-T-B / KTB
+      meaningNorm.includes(queryLower)        // English meaning
+    );
+  });
+
+  if (matches.length === 0) {
+    resultsDiv.innerHTML =
+      `<div class="emptyMsg">No results found. Try another spelling or root form.</div>`;
+    return;
+  }
+
+  matches.forEach(showResult);
+}
+
+searchInput.addEventListener("input", () => {
+  performSearch(searchInput.value);
+});
+
+searchInput.addEventListener("keydown", (e) => {
+  if(e.key === "Enter"){
+    e.preventDefault();
+    performSearch(searchInput.value);
+  }
+});
+
+function showResult(item) {
+  const c = document.createElement("div");
+  c.className = "resultCard";
+  c.innerHTML = buildCardInnerHTML(item);
+  resultsDiv.appendChild(c);
+
+  wireCopyButtons(c, item);
+}
+
+/* ==========================================================
+   Root card viewer (deck)
+   ========================================================== */
+
+function renderDeckCard(){
+  deckCard.innerHTML = "";
+  if(!dataset.length){
+    deckCounter.textContent = "0 / 0";
+    deckJournalBox.style.display = "none";
+    return;
+  }
+  deckJournalBox.style.display = "block";
+
+  if(deckIndex < 0) deckIndex = 0;
+  if(deckIndex >= dataset.length) deckIndex = dataset.length - 1;
+
+  const item = dataset[deckIndex];
+  deckCounter.textContent = `${deckIndex + 1} / ${dataset.length}`;
+
+  const wrapper = document.createElement("div");
+  wrapper.className = "resultCard";
+  wrapper.innerHTML = buildCardInnerHTML(item);
+
+  deckCard.appendChild(wrapper);
+  wireCopyButtons(wrapper, item);
+  loadJournalFor(item);
+}
+
+prevDeckBtn.addEventListener("click", () => {
+  if(!dataset.length) return;
+  deckIndex = (deckIndex - 1 + dataset.length) % dataset.length;
+  renderDeckCard();
+});
+
+nextDeckBtn.addEventListener("click", () => {
+  if(!dataset.length) return;
+  deckIndex = (deckIndex + 1) % dataset.length;
+  renderDeckCard();
+});
+
+randomDeckBtn.addEventListener("click", () => {
+  if(!dataset.length) return;
+  deckIndex = Math.floor(Math.random() * dataset.length);
+  renderDeckCard();
+});
+
+/* Save journal on input */
+deckJournal.addEventListener("input", () => {
+  const item = dataset[deckIndex];
+  if(!item) return;
+  try{
+    localStorage.setItem(journalKeyFor(item), deckJournal.value);
+  }catch(e){}
+});
+
+/* ==========================================================
+   Build quick root chips from dataset
+   ========================================================== */
+dataset.forEach(item => {
+  const chip = document.createElement("button");
+  chip.className = "chip";
+  chip.type = "button";
+  chip.textContent = `${item.root} · ${item.transliteration || ""}`;
+  chip.addEventListener("click", () => {
+    searchInput.value = item.root;
+    performSearch(item.root);
+    searchInput.focus();
+  });
+  chipsDiv.appendChild(chip);
+});
+
+/* init deck */
+renderDeckCard();
+</script>
+
+</body>
+</html>
