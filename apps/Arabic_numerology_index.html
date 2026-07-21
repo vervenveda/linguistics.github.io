@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>NoorAI Darib – Numerology Quest</title>
+
+<!-- Sacred font stack -->
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@400;600&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg1:#ffb56b;
+  --bg2:#f46b45;
+  --gold:#d9b878;
+  --ink:#fdfaf3;
+  --panel:#1c1526;
+  --radius:21px;
+  --shadow:0 18px 72px rgba(0,0,0,0.45);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+
+body{
+  font-family:'Poppins',system-ui,-apple-system,'Segoe UI',sans-serif;
+  margin:0;
+  min-height:100vh;
+  background:linear-gradient(135deg,var(--bg1),var(--bg2));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--ink);
+}
+
+.quest{
+  background:rgba(28,21,38,0.9);
+  padding:33px;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  max-width:720px;
+  width:90%;
+  text-align:center;
+  border:1px solid rgba(0,0,0,0.35);
+}
+
+h1{
+  font-family:"Cinzel","Times New Roman",serif;
+  font-size:27px;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  margin:0 0 12px;
+}
+
+#levelLabel{
+  font-size:13px;
+  color:var(--gold);
+  margin-bottom:9px;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+}
+
+/* Mode toggle */
+.mode-bar{
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  margin-bottom:12px;
+  flex-wrap:wrap;
+}
+.mode-btn{
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.25);
+  padding:5px 12px;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  background:transparent;
+  color:var(--ink);
+  cursor:pointer;
+  transition:background .2s,color .2s,box-shadow .2s,transform .2s;
+}
+.mode-btn.active{
+  background:linear-gradient(135deg,var(--gold),#b89252);
+  color:#1c1526;
+  box-shadow:0 6px 14px rgba(0,0,0,0.45);
+}
+.mode-btn:hover{
+  transform:translateY(-1px);
+}
+
+/* Question + quiz toggle */
+#question{
+  font-size:17px;
+  color:var(--gold);
+  margin-bottom:10px;
+}
+
+.quiz-toggle{
+  font-size:12px;
+  margin-bottom:14px;
+  color:var(--ink);
+  opacity:0.85;
+  display:flex;
+  justify-content:center;
+}
+.quiz-toggle label{
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.quiz-toggle input{
+  accent-color:var(--gold);
+}
+
+/* Grid */
+.grid{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:12px;
+}
+
+.cell{
+  width:72px;
+  height:72px;
+  border-radius:18px;
+  background:rgba(255,255,255,0.05);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:"Scheherazade New","Amiri",serif;
+  font-size:36px;
+  cursor:pointer;
+  transition:background .2s,transform .2s,box-shadow .2s;
+  box-shadow:0 0 0 rgba(0,0,0,0);
+}
+
+.cell:hover{
+  background:rgba(255,255,255,0.1);
+  transform:translateY(-2px);
+  box-shadow:0 9px 18px rgba(0,0,0,0.45);
+}
+
+.correct{
+  background:rgba(111,241,178,0.25)!important;
+  box-shadow:0 0 12px rgba(111,241,178,0.6);
+}
+
+.wrong{
+  background:rgba(245,101,101,0.25)!important;
+}
+
+/* Meaning box (quiz) */
+#meaningBox{
+  margin-top:18px;
+  padding:18px;
+  border-radius:14px;
+  background:rgba(255,255,255,0.05);
+  display:none;
+  text-align:left;
+}
+
+#meaningBox h3{
+  margin:0 0 6px;
+  color:var(--gold);
+  font-size:16px;
+}
+
+#meaningBox p{
+  font-size:13px;
+  color:var(--ink);
+  margin:0;
+  line-height:1.7;
+}
+
+/* Lore mode */
+.lore{
+  margin-top:18px;
+  padding:18px;
+  border-radius:14px;
+  background:rgba(255,255,255,0.04);
+  text-align:left;
+  display:none;
+}
+.lore h3{
+  margin:0 0 6px;
+  color:var(--gold);
+  font-size:16px;
+}
+.lore p{
+  font-size:13px;
+  color:var(--ink);
+  margin:0 0 10px;
+  line-height:1.7;
+}
+.lore textarea{
+  width:100%;
+  min-height:90px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,0.25);
+  background:rgba(0,0,0,0.25);
+  padding:9px 11px;
+  color:var(--ink);
+  font-family:'Poppins',system-ui,sans-serif;
+  font-size:13px;
+  resize:vertical;
+}
+.lore textarea:focus{
+  outline:none;
+  border-color:var(--gold);
+  box-shadow:0 0 0 1px rgba(217,184,120,0.6);
+}
+.lore-hint{
+  font-size:11px;
+  color:var(--gold);
+  opacity:0.8;
+  margin-top:6px;
+}
+
+/* Qur'an mode */
+.ayah{
+  margin-top:18px;
+  padding:18px;
+  border-radius:14px;
+  background:rgba(255,255,255,0.04);
+  text-align:left;
+  display:none;
+}
+.ayah h3{
+  margin:0 0 6px;
+  color:var(--gold);
+  font-size:16px;
+}
+.ayah-arabic{
+  font-family:"Scheherazade New","Amiri",serif;
+  font-size:20px;
+  direction:rtl;
+  text-align:right;
+  margin:4px 0 6px;
+}
+.ayah-translation{
+  font-size:13px;
+  color:var(--ink);
+  margin-bottom:4px;
+  line-height:1.7;
+}
+.ayah-ref{
+  font-size:12px;
+  color:var(--gold);
+  opacity:0.9;
+}
+
+/* Score row */
+#score{
+  margin-top:12px;
+  font-size:15px;
+  color:var(--gold);
+}
+#score span{
+  font-weight:600;
+}
+#score .divider{
+  margin:0 6px;
+  opacity:0.75;
+}
+
+/* Controls row for buttons */
+.controls{
+  margin-top:16px;
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+/* Buttons */
+button{
+  border:none;
+  border-radius:999px;
+  padding:9px 18px;
+  background:linear-gradient(135deg,var(--gold),#b89252);
+  color:#1c1526;
+  font-weight:bold;
+  cursor:pointer;
+  transition:transform .2s,box-shadow .2s;
+  font-size:14px;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+}
+
+button:hover{
+  transform:scale(1.05);
+  box-shadow:0 9px 18px rgba(0,0,0,0.45);
+}
+
+/* Secondary button variant */
+button.secondary{
+  background:transparent;
+  color:var(--gold);
+  border:1px solid rgba(217,184,120,0.7);
+  box-shadow:none;
+}
+button.secondary:hover{
+  box-shadow:0 6px 12px rgba(0,0,0,0.35);
+}
+
+/* Override for mode buttons – defined AFTER main button style */
+.mode-btn{
+  background:transparent;
+  color:var(--ink);
+  box-shadow:none;
+  padding:5px 12px;
+}
+
+/* Lore button inherits main style but within lore box we want smaller margin */
+.lore button{
+  margin-top:12px;
+}
+
+/* Reference scroll */
+#refBox{
+  margin-top:16px;
+  padding:16px;
+  border-radius:14px;
+  background:rgba(0,0,0,0.28);
+  text-align:left;
+  max-height:220px;
+  overflow:auto;
+  display:none;
+}
+#refBox h3{
+  margin:0 0 8px;
+  font-size:15px;
+  color:var(--gold);
+}
+.ref-row{
+  display:grid;
+  grid-template-columns:auto 80px minmax(0,1fr);
+  gap:8px;
+  padding:6px 0;
+  border-top:1px solid rgba(255,255,255,0.06);
+}
+.ref-row:first-of-type{
+  border-top:none;
+}
+.ref-num{
+  font-family:"Scheherazade New","Amiri",serif;
+  font-size:20px;
+}
+.ref-name{
+  font-size:12px;
+  color:var(--gold);
+}
+.ref-meaning{
+  font-size:12px;
+  color:var(--ink);
+  opacity:0.9;
+}
+
+audio{display:none;}
+</style>
+</head>
+<body>
+<div class="quest">
+  <h1>Numerology Quest</h1>
+  <div id="levelLabel">Level 1 — Creation</div>
+
+  <div class="mode-bar">
+    <button id="quizModeBtn" type="button" class="mode-btn active">Quiz Mode</button>
+    <button id="loreModeBtn" type="button" class="mode-btn">Lore Mode</button>
+    <button id="ayahModeBtn" type="button" class="mode-btn">Qur’an Mode</button>
+  </div>
+
+  <div id="question" aria-live="polite"></div>
+
+  <div class="quiz-toggle">
+    <label>
+      <input type="checkbox" id="showWesternToggle">
+      Show Western digits in choices
+    </label>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <div id="meaningBox">
+    <h3 id="meaningTitle"></h3>
+    <p id="meaningText"></p>
+  </div>
+
+  <div id="loreBox" class="lore">
+    <h3 id="loreTitle"></h3>
+    <p id="loreBody"></p>
+    <textarea id="loreJournal" placeholder="Write your reflection with this number..."></textarea>
+    <div class="lore-hint">Saved locally per number on this device.</div>
+    <button id="loreNextBtn" type="button">Next Lore Card ▶</button>
+  </div>
+
+  <div id="ayahBox" class="ayah">
+    <h3 id="ayahTitle"></h3>
+    <div id="ayahArabic" class="ayah-arabic"></div>
+    <div id="ayahTranslation" class="ayah-translation"></div>
+    <div id="ayahReference" class="ayah-ref"></div>
+    <button id="ayahNextBtn" type="button">Next Ayah ▶</button>
+  </div>
+
+  <div id="score">
+    Score: <span id="scoreVal">0</span>
+    <span class="divider">·</span>
+    Streak: <span id="streakVal">0</span>
+    <span class="divider">·</span>
+    Best Streak: <span id="bestStreakVal">0</span>
+  </div>
+
+  <div class="controls">
+    <button id="nextBtn" type="button">Next Question ▶</button>
+    <button id="refToggleBtn" type="button" class="secondary">Reference Scroll</button>
+  </div>
+
+  <div id="refBox">
+    <h3>Number Reference Scroll</h3>
+    <div id="refRows"></div>
+  </div>
+
+  <audio id="chime" src="https://cdn.pixabay.com/download/audio/2023/03/02/audio_0d3db1c992.mp3?filename=celestial-chime-143163.mp3"></audio>
+</div>
+
+<script>
+const data = [
+  {
+    num:"١", western:"1", name:"One",
+    meaning:"Unity, Source, Oneness of All",
+    realm:"Creation",
+    ayah:{
+      theme:"Divine Oneness (Tawḥīd)",
+      arabic:"قُلْ هُوَ اللَّهُ أَحَدٌ",
+      translation:"Say, He is Allah, One.",
+      reference:"Qur'an 112:1"
+    }
+  },
+  {
+    num:"٢", western:"2", name:"Two",
+    meaning:"Duality, Reflection, Relationship",
+    realm:"Balance",
+    ayah:{
+      theme:"Creation in pairs",
+      arabic:"وَمِنْ كُلِّ شَيْءٍ خَلَقْنَا زَوْجَيْنِ",
+      translation:"And of all things We created [two] mates.",
+      reference:"Qur'an 51:49 (part)"
+    }
+  },
+  {
+    num:"٣", western:"3", name:"Three",
+    meaning:"Creation, Expression, Triunity",
+    realm:"Expansion",
+    ayah:{
+      theme:"Signs in creation",
+      arabic:"إِنَّ فِي خَلْقِ السَّمَاوَاتِ وَالْأَرْضِ",
+      translation:"Indeed, in the creation of the heavens and the earth are signs...",
+      reference:"Qur'an 3:190 (part)"
+    }
+  },
+  {
+    num:"٤", western:"4", name:"Four",
+    meaning:"Foundation, Law, Structure",
+    realm:"Stability",
+    ayah:{
+      theme:"Provision measured in four days",
+      arabic:"وَقَدَّرَ فِيهَا أَقْوَاتَهَا فِي أَرْبَعَةِ أَيَّامٍ",
+      translation:"He apportioned therein its sustenance in four days.",
+      reference:"Qur'an 41:10 (part)"
+    }
+  },
+  {
+    num:"٥", western:"5", name:"Five",
+    meaning:"Movement, Freedom, Life Breath",
+    realm:"Transformation",
+    ayah:{
+      theme:"Prayer as living rhythm",
+      arabic:"أَقِمِ الصَّلَاةَ إِنَّ الصَّلَاةَ تَنْهَىٰ عَنِ الْفَحْشَاءِ وَالْمُنكَرِ",
+      translation:"Establish prayer; indeed, prayer restrains from shameful and unjust deeds.",
+      reference:"Qur'an 29:45 (part)"
+    }
+  },
+  {
+    num:"٦", western:"6", name:"Six",
+    meaning:"Harmony, Love, Service",
+    realm:"Union",
+    ayah:{
+      theme:"Creation in six days",
+      arabic:"إِنَّ رَبَّكُمُ اللَّهُ الَّذِي خَلَقَ السَّمَاوَاتِ وَالْأَرْضَ فِي سِتَّةِ أَيَّامٍ",
+      translation:"Indeed, your Lord is Allah, who created the heavens and the earth in six days.",
+      reference:"Qur'an 7:54 (part)"
+    }
+  },
+  {
+    num:"٧", western:"7", name:"Seven",
+    meaning:"Completion, Perfection, Cosmic Rhythm",
+    realm:"Harmony",
+    ayah:{
+      theme:"Seven heavens",
+      arabic:"اللَّهُ الَّذِي خَلَقَ سَبْعَ سَمَاوَاتٍ",
+      translation:"Allah is the One who created seven heavens.",
+      reference:"Qur'an 67:3 (part)"
+    }
+  },
+  {
+    num:"٨", western:"8", name:"Eight",
+    meaning:"Infinity, Power, Manifestation",
+    realm:"Abundance",
+    ayah:{
+      theme:"Throne carried by eight",
+      arabic:"وَيَحْمِلُ عَرْشَ رَبِّكَ فَوْقَهُمْ يَوْمَئِذٍ ثَمَانِيَةٌ",
+      translation:"And there will bear the Throne of your Lord above them, that Day, eight.",
+      reference:"Qur'an 69:17"
+    }
+  },
+  {
+    num:"٩", western:"9", name:"Nine",
+    meaning:"Truth, Fulfillment, Return to Source",
+    realm:"Wisdom",
+    ayah:{
+      theme:"Nine clear signs",
+      arabic:"وَلَقَدْ آتَيْنَا مُوسَىٰ تِسْعَ آيَاتٍ بَيِّنَاتٍ",
+      translation:"We certainly gave Moses nine clear signs.",
+      reference:"Qur'an 17:101 (part)"
+    }
+  },
+  {
+    num:"٠", western:"0", name:"Zero",
+    meaning:"Void, Eternal Potential",
+    realm:"Origin",
+    ayah:{
+      theme:"The First and the Last",
+      arabic:"هُوَ الْأَوَّلُ وَالْآخِرُ وَالظَّاهِرُ وَالْبَاطِنُ",
+      translation:"He is the First and the Last, the Ascendant and the Intimate.",
+      reference:"Qur'an 57:3 (part)"
+    }
+  }
+];
+
+let level = 1;
+let score = 0;
+let streak = 0;
+let bestStreak = 0;
+let current = null;
+let questionActive = true;
+let mode = "quiz";       // "quiz" | "lore" | "ayah"
+let currentLore = null;
+let currentAyah = null;
+
+const grid           = document.getElementById("grid");
+const question       = document.getElementById("question");
+const meaningBox     = document.getElementById("meaningBox");
+const meaningTitle   = document.getElementById("meaningTitle");
+const meaningText    = document.getElementById("meaningText");
+const scoreVal       = document.getElementById("scoreVal");
+const streakVal      = document.getElementById("streakVal");
+const bestStreakVal  = document.getElementById("bestStreakVal");
+const levelLabel     = document.getElementById("levelLabel");
+const chime          = document.getElementById("chime");
+const nextBtn        = document.getElementById("nextBtn");
+
+const quizModeBtn    = document.getElementById("quizModeBtn");
+const loreModeBtn    = document.getElementById("loreModeBtn");
+const ayahModeBtn    = document.getElementById("ayahModeBtn");
+const showWesternToggle = document.getElementById("showWesternToggle");
+
+const loreBox        = document.getElementById("loreBox");
+const loreTitle      = document.getElementById("loreTitle");
+const loreBody       = document.getElementById("loreBody");
+const loreJournal    = document.getElementById("loreJournal");
+const loreNextBtn    = document.getElementById("loreNextBtn");
+
+const ayahBox        = document.getElementById("ayahBox");
+const ayahTitle      = document.getElementById("ayahTitle");
+const ayahArabic     = document.getElementById("ayahArabic");
+const ayahTranslation= document.getElementById("ayahTranslation");
+const ayahReference  = document.getElementById("ayahReference");
+const ayahNextBtn    = document.getElementById("ayahNextBtn");
+
+const refBox         = document.getElementById("refBox");
+const refRows        = document.getElementById("refRows");
+const refToggleBtn   = document.getElementById("refToggleBtn");
+
+let refBuilt = false;
+
+function shuffle(arr){
+  return arr.sort(()=>Math.random()-0.5);
+}
+
+function updateScoreDisplay(){
+  scoreVal.textContent     = score;
+  streakVal.textContent    = streak;
+  bestStreakVal.textContent= bestStreak;
+}
+
+function loadBestStreak(){
+  try{
+    const stored = localStorage.getItem("daribNumerologyBestStreak");
+    if(stored !== null){
+      bestStreak = parseInt(stored,10) || 0;
+    }
+  }catch(e){
+    bestStreak = 0;
+  }
+  bestStreakVal.textContent = bestStreak;
+}
+
+function saveBestStreak(){
+  if(streak > bestStreak){
+    bestStreak = streak;
+    bestStreakVal.textContent = bestStreak;
+    try{
+      localStorage.setItem("daribNumerologyBestStreak", String(bestStreak));
+    }catch(e){}
+  }
+}
+
+function confetti(){
+  for(let i=0;i<27;i++){
+    const d = document.createElement("div");
+    d.style.cssText = `
+      position:fixed;
+      width:7px;height:7px;
+      top:${Math.random()*100}vh;
+      left:${Math.random()*100}vw;
+      background:hsl(${Math.random()*360},80%,60%);
+      border-radius:50%;
+      opacity:1;
+      z-index:99;
+      transition:all 1s ease-out;
+    `;
+    document.body.appendChild(d);
+    setTimeout(()=>{
+      d.style.transform = `translateY(${72+Math.random()*72}px)`;
+      d.style.opacity = "0";
+    },50);
+    setTimeout(()=>d.remove(),1000);
+  }
+}
+
+function askQuestion(){
+  meaningBox.style.display = "none";
+  grid.innerHTML = "";
+  questionActive = true;
+
+  const choices = shuffle([...data]).slice(0,4);
+  current = choices[Math.floor(Math.random()*choices.length)];
+
+  const qType = Math.random() < 0.5 ? "meaning" : "realm";
+  question.textContent = qType === "meaning"
+    ? `Which number symbolizes ${current.meaning.split(",")[0].toLowerCase()}?`
+    : `Which number belongs to the realm of ${current.realm}?`;
+
+  const showWestern = showWesternToggle.checked;
+
+  choices.forEach(opt=>{
+    const div = document.createElement("div");
+    div.className = "cell";
+    div.textContent = showWestern ? `${opt.num} / ${opt.western}` : opt.num;
+    div.setAttribute("role","button");
+    div.setAttribute("aria-label", opt.name);
+
+    div.onclick = () => {
+      if(!questionActive || mode !== "quiz") return;
+
+      if(opt === current){
+        questionActive = false;
+        div.classList.add("correct");
+
+        chime.currentTime = 0;
+        chime.play();
+
+        confetti();
+        meaningBox.style.display = "block";
+        meaningTitle.textContent = `${current.name} (${current.num} / ${current.western})`;
+
+        if(current.ayah){
+          meaningText.innerHTML = `
+            <strong>${current.meaning}</strong> — Realm: ${current.realm}.<br>
+            <span style="font-size:12px;opacity:0.9;display:block;margin-top:4px;">
+              Qur’an tie-in: <em>${current.ayah.theme}</em><br>
+              <span dir="rtl" style="font-family:'Scheherazade New','Amiri',serif;">${current.ayah.arabic}</span>
+              — <span>${current.ayah.reference}</span>
+            </span>
+          `;
+        }else{
+          meaningText.textContent = `${current.meaning} — Realm: ${current.realm}.`;
+        }
+
+        score  += 10;
+        streak += 1;
+        saveBestStreak();
+        updateScoreDisplay();
+      }else{
+        div.classList.add("wrong");
+        score  = Math.max(score - 5, 0);
+        streak = 0;
+        updateScoreDisplay();
+      }
+    };
+
+    grid.appendChild(div);
+  });
+}
+
+/* Lore mode */
+function showRandomLoreCard(){
+  const entry = data[Math.floor(Math.random()*data.length)];
+  currentLore = entry;
+
+  loreTitle.textContent = `${entry.name} — ${entry.num} / ${entry.western}`;
+  loreBody.textContent  = `${entry.name} (${entry.num} / ${entry.western}) is aligned with the realm of ${entry.realm}. It carries the themes of: ${entry.meaning}.`;
+
+  const key = `numerologyLore_${entry.num}`;
+  let saved = "";
+  try{
+    saved = localStorage.getItem(key) || "";
+  }catch(e){
+    saved = "";
+  }
+  loreJournal.value = saved;
+}
+
+loreJournal.addEventListener("input", ()=>{
+  if(!currentLore) return;
+  const key = `numerologyLore_${currentLore.num}`;
+  try{
+    localStorage.setItem(key, loreJournal.value);
+  }catch(e){}
+});
+
+/* Qur'an mode */
+function showRandomAyahCard(){
+  const entry = data[Math.floor(Math.random()*data.length)];
+  currentAyah = entry;
+  const a = entry.ayah || {};
+
+  ayahTitle.textContent = `${entry.name} — ${entry.num} / ${entry.western} · ${a.theme || ""}`;
+  ayahArabic.textContent = a.arabic || "";
+  ayahTranslation.textContent = a.translation || "";
+  ayahReference.textContent = a.reference || "";
+}
+
+/* Reference scroll */
+function buildReference(){
+  if(refBuilt) return;
+  refBuilt = true;
+  data.forEach(entry=>{
+    const row = document.createElement("div");
+    row.className = "ref-row";
+
+    const num = document.createElement("div");
+    num.className = "ref-num";
+    num.textContent = `${entry.num} / ${entry.western}`;
+
+    const name = document.createElement("div");
+    name.className = "ref-name";
+    name.textContent = entry.name;
+
+    const meaning = document.createElement("div");
+    meaning.className = "ref-meaning";
+    let txt = `${entry.meaning} — Realm: ${entry.realm}`;
+    if(entry.ayah){
+      txt += ` · Qur’an: ${entry.ayah.theme}`;
+    }
+    meaning.textContent = txt;
+
+    row.appendChild(num);
+    row.appendChild(name);
+    row.appendChild(meaning);
+    refRows.appendChild(row);
+  });
+}
+
+/* Mode switching */
+function setMode(newMode){
+  mode = newMode;
+
+  quizModeBtn.classList.remove("active");
+  loreModeBtn.classList.remove("active");
+  ayahModeBtn.classList.remove("active");
+
+  // Base visibility
+  grid.style.display       = "none";
+  meaningBox.style.display = "none";
+  loreBox.style.display    = "none";
+  ayahBox.style.display    = "none";
+  nextBtn.style.display    = "none";
+
+  if(newMode === "quiz"){
+    quizModeBtn.classList.add("active");
+    question.style.display = "block";
+    grid.style.display = "flex";
+    nextBtn.style.display = "inline-block";
+    askQuestion();
+  }else if(newMode === "lore"){
+    loreModeBtn.classList.add("active");
+    question.style.display = "block";
+    question.textContent = "Lore Mode — sit with this number and write your reflections.";
+    loreBox.style.display = "block";
+    // Hide reference in Lore to keep it minimal
+    refBox.style.display = "none";
+    refToggleBtn.textContent = "Reference Scroll";
+    showRandomLoreCard();
+  }else if(newMode === "ayah"){
+    ayahModeBtn.classList.add("active");
+    question.style.display = "block";
+    question.textContent = "Qur’an Mode — each number carries a theme and ayah mapping.";
+    ayahBox.style.display = "block";
+    showRandomAyahCard();
+  }
+}
+
+/* Events */
+nextBtn.onclick = () => {
+  if(mode !== "quiz") return;
+  level = Math.min(level + 1, 9); // 1–9 for visible levels
+  const realmName = data[Math.max(0, level-1)].realm;
+  levelLabel.textContent = `Level ${level} — ${realmName}`;
+  askQuestion();
+};
+
+quizModeBtn.addEventListener("click", ()=>setMode("quiz"));
+loreModeBtn.addEventListener("click", ()=>setMode("lore"));
+ayahModeBtn.addEventListener("click", ()=>setMode("ayah"));
+
+showWesternToggle.addEventListener("change", ()=>{
+  if(mode === "quiz"){
+    askQuestion();
+  }
+});
+
+loreNextBtn.addEventListener("click", ()=>{
+  showRandomLoreCard();
+});
+
+ayahNextBtn.addEventListener("click", ()=>{
+  showRandomAyahCard();
+});
+
+refToggleBtn.addEventListener("click", ()=>{
+  if(refBox.style.display === "block"){
+    refBox.style.display = "none";
+    refToggleBtn.textContent = "Reference Scroll";
+  }else{
+    buildReference();
+    refBox.style.display = "block";
+    refToggleBtn.textContent = "Hide Reference";
+  }
+});
+
+/* init */
+loadBestStreak();
+updateScoreDisplay();
+setMode("quiz");
+</script>
+</body>
+</html>
