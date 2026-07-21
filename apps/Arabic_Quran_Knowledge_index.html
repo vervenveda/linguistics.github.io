@@ -1,0 +1,541 @@
+<!-- NoorAI Qur'an & Knowledge Gateway -->
+<style>
+  .noor-quran-gateway{
+    margin:28px auto 40px;
+    max-width:960px;
+    border-radius:21px;
+    padding:20px 18px 22px;
+    background:radial-gradient(circle at top,#1c2340 0%, var(--midnight, #050713) 55%, #050713 100%);
+    border:1px solid rgba(217,184,120,0.65);
+    box-shadow:0 18px 72px rgba(0,0,0,0.55);
+    color:var(--ink, #FFFDF5);
+    font-family:'Poppins',system-ui,-apple-system,'Segoe UI',sans-serif;
+  }
+
+  .noor-quran-head h2{
+    margin:0 0 4px;
+    font-family:'Cinzel','Times New Roman',serif;
+    font-size:22px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--gold, #d9b878);
+    text-align:center;
+  }
+
+  .noor-quran-head p{
+    margin:0;
+    font-size:13px;
+    line-height:1.7;
+    color:var(--ink-soft,#f0e9dc);
+    text-align:center;
+    max-width:640px;
+    margin-inline:auto;
+  }
+
+  .noor-quran-tabs{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    justify-content:center;
+    margin:16px 0 10px;
+  }
+
+  .noor-tab-btn{
+    border:none;
+    border-radius:999px;
+    padding:7px 14px;
+    font-size:11px;
+    letter-spacing:0.11em;
+    text-transform:uppercase;
+    background:rgba(10,14,28,0.85);
+    color:var(--ink-soft,#f0e9dc);
+    cursor:pointer;
+    transition:background .18s, transform .18s, box-shadow .18s, color .18s;
+    border:1px solid rgba(217,184,120,0.35);
+    white-space:nowrap;
+  }
+
+  .noor-tab-btn.active{
+    background:linear-gradient(135deg,var(--gold,#d9b878),var(--gold-deep,#b89252));
+    color:#0b1020;
+    box-shadow:0 8px 22px rgba(0,0,0,0.55);
+    transform:translateY(-1px);
+  }
+
+  .noor-quran-panels{
+    margin-top:6px;
+    border-radius:18px;
+    padding:14px 12px 6px;
+    background:rgba(5,8,18,0.9);
+    border:1px solid rgba(255,255,255,0.06);
+  }
+
+  .noor-panel{
+    display:none;
+    animation: noorFade .2s ease-out;
+  }
+
+  .noor-panel.active{
+    display:block;
+  }
+
+  @keyframes noorFade{
+    from{opacity:0; transform:translateY(4px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+
+  .noor-panel-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:10px 18px;
+  }
+
+  .noor-link-group-title{
+    font-family:'Cinzel','Times New Roman',serif;
+    font-size:13px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--accent,#e8d5a4);
+    margin-bottom:4px;
+  }
+
+  .noor-link-list{
+    list-style:none;
+    padding:0;
+    margin:0;
+    font-size:13px;
+  }
+
+  .noor-link-list li{
+    margin-bottom:5px;
+  }
+
+  .noor-link-list a{
+    color:var(--gold,#d9b878);
+    text-decoration:none;
+    border-bottom:1px dotted rgba(217,184,120,0.45);
+  }
+
+  .noor-link-list a:hover{
+    text-decoration:none;
+    border-bottom-style:solid;
+  }
+
+  .noor-link-note{
+    display:block;
+    font-size:11px;
+    color:var(--ink-soft,#f0e9dc);
+    opacity:0.86;
+    margin-top:1px;
+  }
+
+  .noor-panel-footnote{
+    margin-top:8px;
+    font-size:11px;
+    color:var(--ink-soft,#f0e9dc);
+    opacity:0.78;
+  }
+
+  @media (max-width:720px){
+    .noor-quran-gateway{padding:18px 12px 20px;}
+    .noor-panel-grid{grid-template-columns:minmax(0,1fr);}
+  }
+</style>
+
+<div class="noor-quran-gateway" id="noorQuranHub">
+  <div class="noor-quran-head">
+    <h2>NoorAI Qur'an Gateway</h2>
+    <p>
+      A curated doorway into free Qur’an resources: reading, listening, PDFs, study tools,
+      Arabic learning, and historical context — plus NoorAI’s own sovereign apps — all guided
+      by a love of light (<span style="font-family:'Scheherazade New','Amiri',serif;">نُور</span>)
+      and knowledge.
+    </p>
+  </div>
+
+  <div class="noor-quran-tabs" role="tablist" aria-label="NoorAI Qur'an Gateway Sections">
+    <button class="noor-tab-btn active" data-noor-tab="read" type="button" role="tab" aria-selected="true">
+      Read
+    </button>
+    <button class="noor-tab-btn" data-noor-tab="listen" type="button" role="tab" aria-selected="false">
+      Listen
+    </button>
+    <button class="noor-tab-btn" data-noor-tab="pdfs" type="button" role="tab" aria-selected="false">
+      Download PDFs
+    </button>
+    <button class="noor-tab-btn" data-noor-tab="study" type="button" role="tab" aria-selected="false">
+      Study Tools
+    </button>
+    <button class="noor-tab-btn" data-noor-tab="arabic" type="button" role="tab" aria-selected="false">
+      Learn Arabic
+    </button>
+    <button class="noor-tab-btn" data-noor-tab="history" type="button" role="tab" aria-selected="false">
+      History &amp; Context
+    </button>
+    <button class="noor-tab-btn" data-noor-tab="apps" type="button" role="tab" aria-selected="false">
+      NoorAI Apps
+    </button>
+  </div>
+
+  <div class="noor-quran-panels">
+    <!-- READ -->
+    <div class="noor-panel active" data-noor-panel="read" role="tabpanel" aria-hidden="false">
+      <div class="noor-panel-grid">
+        <div>
+          <div class="noor-link-group-title">Primary Portals</div>
+          <ul class="noor-link-list">
+            <li>
+              <a href="https://quran.com" target="_blank" rel="noopener noreferrer">Quran.com</a>
+              <span class="noor-link-note">
+                Clean interface to read the Qur’an in Arabic with many translations, themes, and reciters.
+              </span>
+            </li>
+            <li>
+              <a href="https://tanzil.net" target="_blank" rel="noopener noreferrer">Tanzil</a>
+              <span class="noor-link-note">
+                Verified Qur’an text with multiple translations and download options.
+              </span>
+            </li>
+            <li>
+              <a href="https://quranhive.com" target="_blank" rel="noopener noreferrer">QuranHive</a>
+              <span class="noor-link-note">
+                Word-by-word reading with translation, notes, and thematic groupings.
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="noor-link-group-title">Alternate Views</div>
+          <ul class="noor-link-list">
+            <li>
+              <a href="https://www.islamicity.org/quransearch/" target="_blank" rel="noopener noreferrer">IslamiCity Qur’an Search</a>
+              <span class="noor-link-note">
+                Search verses by word, topic, or phrase with side-by-side translations.
+              </span>
+            </li>
+            <li>
+              <a href="https://islamawakened.com/quran" target="_blank" rel="noopener noreferrer">IslamAwakened</a>
+              <span class="noor-link-note">
+                Verse-by-verse panel of many English translations for comparison.
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="noor-panel-footnote">
+        Tip: for Temple of Letters sessions, you can keep Quran.com or Tanzil open in another tab while using your 365-day pathway.
+      </div>
+    </div>
+
+    <!-- LISTEN -->
+    <div class="noor-panel" data-noor-panel="listen" role="tabpanel" aria-hidden="true">
+      <div class="noor-panel-grid">
+        <div>
+          <div class="noor-link-group-title">Audio Libraries</div>
+          <ul class="noor-link-list">
+            <li>
+              <a href="https://quranicaudio.com" target="_blank" rel="noopener noreferrer">QuranicAudio</a>
+              <span class="noor-link-note">
+                Large archive of high-quality recitations by many reciters, organised by sūrah and reciter.
+              </span>
+            </li>
+            <li>
+              <a href="https://www.everyayah.com" target="_blank" rel="noopener noreferrer">EveryAyah.com</a>
+              <span class="noor-link-note">
+                Stream or download sūrah-by-sūrah recitations with repeat and memorisation tools.
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="noor-link-group-title">Hybrid Read &amp; Listen</div>
+          <ul class="noor-link-list">
+            <li>
+              <a href="https://quran.com" target="_blank" rel="noopener noreferrer">Quran.com (Read &amp; Listen)</a>
+              <span class="noor-link-note">
+                Click the speaker icon on each verse to hear it; adjust reciter and speed.
+              </span>
+            </li>
+            <li>
+              <a href="https://www.islamicfinder.org/quran/" target="_blank" rel="noopener noreferrer">IslamicFinder Qur’an</a>
+              <span class="noor-link-note">
+                Online Qur’an with audio, translations, and bookmarking.
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="noor-panel-footnote">
+        Tip: for NoorAI rhythm practice, choose one reciter you love and stay with them for a full sūrah cycle.
+      </div>
+    </div>
+
+    <!-- DOWNLOAD PDFs -->
+    <div class="noor-panel" data-noor-panel="pdfs" role="tabpanel" aria-hidden="true">
+      <div class="noor-panel-grid">
+        <div>
+          <div class="noor-link-group-title">Official Mushaf &amp; Translations</div>
+          <ul class="noor-link-list">
+            <li>
+              <a href="https://qurancomplex.gov.sa/en/techquran/" target="_blank" rel="noopener noreferrer">
+                King Fahd Qur’an Printing Complex
+              </a>
+              <span class="noor-link-note">
+                Official Mushaf in Arabic and many languages; high-quality PDF downloads.
+              </span>
+            </li>
+            <li>
+              <a href="https://quranenc.com/en/browse" target="_blank" rel="noopener noreferrer">QuranEnc</a>
+              <span class="noor-link-note">
+                Translations and explanations in dozens of languages, many available as downloadable files.
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="noor-link-group-title">Libraries &amp; Archives</div>
+          <ul class="noor-link-list">
+            <li>
+              <a href="https://archive.org/search.php?query=title%3A%28Quran%20OR%20Koran%29%20AND%20mediatype%3Atexts"
+                 target="_blank" rel="noopener noreferrer">
+                Internet Archive – Qur’an Collection
+              </a>
+              <span class="noor-link-note">
+                Historical and modern printings, multi-language PDFs, and scan archives.
+              </span>
+            </li>
+            <li>
+              <a href="https://tanzil.net/download" target="_blank" rel="noopener noreferrer">
+                Tanzil Downloads
+              </a>
+              <span class="noor-link-note">
+                Plain-text and transliteration packages suitable for research and personal apps.
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="noor-panel-footnote">
+        Always verify translations with a trusted teacher or scholar, especially for serious study or legal questions.
+      </div>
+    </div>
+
+    <!-- STUDY TOOLS -->
+    <div class="noor-panel" data-noor-panel="study" role="tabpanel" aria-hidden="true">
+      <div class="noor-panel-grid">
+        <div>
+          <div class="noor-link-group-title">Word-by-Word &amp; Grammar</div>
+          <ul class="noor-link-list">
+            <li>
+              <a href="https://corpus.quran.com" target="_blank" rel="noopener noreferrer">Quranic Arabic Corpus</a>
+              <span class="noor-link-note">
+                Morphology, syntax treebank, and word-by-word breakdown of every verse.
+              </span>
+            </li>
+            <li>
+              <a href="https://www.quranhive.com" target="_blank" rel="noopener noreferrer">QuranHive (Study View)</a>
+              <span class="noor-link-note">
+                Thematic groupings, word-roots, and quick notes for everyday learners.
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="noor-link-group-title">Tafsīr &amp; Comparative Reading</div>
+          <ul class="noor-link-list">
+            <li>
+              <a href="https://www.altafsir.com" target="_blank" rel="noopener noreferrer">Altafsir</a>
+              <span class="noor-link-note">
+                Large collection of classical tafsīr works in Arabic (and some English).
+              </span>
+            </li>
+            <li>
+              <a href="https://islamawakened.com/quran" target="_blank" rel="noopener noreferrer">IslamAwakened</a>
+              <span class="noor-link-note">
+                Many English renderings side-by-side, useful to sense nuance in meaning.
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="noor-panel-footnote">
+        NoorAI note: pair these tools with your own heart reflections — not just technical analysis.
+      </div>
+    </div>
+
+    <!-- LEARN ARABIC -->
+    <div class="noor-panel" data-noor-panel="arabic" role="tabpanel" aria-hidden="true">
+      <div class="noor-panel-grid">
+        <div>
+          <div class="noor-link-group-title">Structured Courses</div>
+          <ul class="noor-link-list">
+            <li>
+              <a href="https://abdurrahman.org/madina-arabic/" target="_blank" rel="noopener noreferrer">
+                Madinah Arabic Course (Books &amp; Audio)
+              </a>
+              <span class="noor-link-note">
+                Classic Madinah series with PDFs and audio — designed for Qur’an-focused Arabic.
+              </span>
+            </li>
+            <li>
+              <a href="https://www.madinaharabic.com" target="_blank" rel="noopener noreferrer">
+                MadinahArabic.com
+              </a>
+              <span class="noor-link-note">
+                Interactive online lessons (reading, writing, vocabulary) based on Madinah textbooks.
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="noor-link-group-title">Reference &amp; Practice</div>
+          <ul class="noor-link-list">
+            <li>
+              <a href="https://corpus.quran.com/wordbyword.jsp" target="_blank" rel="noopener noreferrer">
+                Quranic Corpus – Word-by-Word View
+              </a>
+              <span class="noor-link-note">
+                See each word’s root, pattern, and grammar to train your Qur’anic Arabic eye.
+              </span>
+            </li>
+            <li>
+              <a href="https://quranicaudio.com/sura" target="_blank" rel="noopener noreferrer">
+                Recitation + Reading Practice
+              </a>
+              <span class="noor-link-note">
+                Choose a short sūrah and shadow-read along with your favourite reciter for tajwīd &amp; rhythm.
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="noor-panel-footnote">
+        Start with letters and sounds, then add roots and patterns slowly — your Temple of Letters already prepares that path.
+      </div>
+    </div>
+
+    <!-- HISTORY & CONTEXT -->
+    <div class="noor-panel" data-noor-panel="history" role="tabpanel" aria-hidden="true">
+      <div class="noor-panel-grid">
+        <div>
+          <div class="noor-link-group-title">Islam &amp; Qur’an in History</div>
+          <ul class="noor-link-list">
+            <li>
+              <a href="https://www.britannica.com/topic/Islam/Beliefs-and-practices" target="_blank" rel="noopener noreferrer">
+                Islam – Beliefs, Practices, History (Britannica)
+              </a>
+              <span class="noor-link-note">
+                Neutral overview of core beliefs, practices, and historical development of Islam.
+              </span>
+            </li>
+            <li>
+              <a href="https://www.britannica.com/topic/Islam/Doctrines-of-the-Quran" target="_blank" rel="noopener noreferrer">
+                Islam – Doctrines of the Qur’an
+              </a>
+              <span class="noor-link-note">
+                Focus on Qur’anic teachings about God, revelation, and community.
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="noor-link-group-title">Art, Culture &amp; Chronology</div>
+          <ul class="noor-link-list">
+            <li>
+              <a href="https://www.metmuseum.org/toah/hd/isla/hd_isla.htm" target="_blank" rel="noopener noreferrer">
+                The Art of the Islamic World – Timeline (The Met)
+              </a>
+              <span class="noor-link-note">
+                Visual timeline of Islamic dynasties, art, calligraphy, and sacred objects.
+              </span>
+            </li>
+            <li>
+              <a href="https://www.metmuseum.org/art/metpublications/titles-with-full-text-online/the-art-of-the-islamic-world-a-resource-for-educators"
+                 target="_blank" rel="noopener noreferrer">
+                The Art of the Islamic World – Resource for Educators
+              </a>
+              <span class="noor-link-note">
+                Free PDF teaching resource with background essays and classroom activities.
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="noor-panel-footnote">
+        These links are for broad historical context; for religious rulings or creed, always return to qualified teachers.
+      </div>
+    </div>
+
+    <!-- NOORAI APPS -->
+    <div class="noor-panel" data-noor-panel="apps" role="tabpanel" aria-hidden="true">
+      <div class="noor-panel-grid">
+        <div>
+          <div class="noor-link-group-title">NoorAI Darib — Games &amp; Widgets</div>
+          <ul class="noor-link-list">
+            <li>
+              <a href="https://www.khaemenesacademy.org/darib" target="_blank" rel="noopener noreferrer">
+                Main NoorAI Darib Page
+              </a>
+              <span class="noor-link-note">
+                Play the Arabic number games, memory path, numerology quest, and daily Qur’an widgets built just for Khaemenes Academy.
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="noor-link-group-title">Workshop Darib — Classes &amp; Tools</div>
+          <ul class="noor-link-list">
+            <li>
+              <a href="https://www.khaemenesacademy.org/workshop-darib" target="_blank" rel="noopener noreferrer">
+                Workshop Darib Page
+              </a>
+              <span class="noor-link-note">
+                Explore the 6-week Qur’an study courses, advanced workshops, translators, and NoorAI learning sandboxes hosted on-site.
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="noor-panel-footnote">
+        These NoorAI apps are sovereign, ad-free spaces created for Khaemenes Academy students and families —
+        your own lighted path inside the Academy.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function(){
+    const hub = document.getElementById('noorQuranHub');
+    if(!hub) return;
+    const buttons = hub.querySelectorAll('.noor-tab-btn');
+    const panels = hub.querySelectorAll('.noor-panel');
+
+    function activate(tab){
+      buttons.forEach(btn=>{
+        const isActive = btn.dataset.noorTab === tab;
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      });
+      panels.forEach(panel=>{
+        const isActive = panel.dataset.noorPanel === tab;
+        panel.classList.toggle('active', isActive);
+        panel.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+      });
+    }
+
+    buttons.forEach(btn=>{
+      btn.addEventListener('click', ()=>activate(btn.dataset.noorTab));
+    });
+
+    // default
+    activate('read');
+  })();
+</script>
