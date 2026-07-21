@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>German Learning Hub — Sovereign Edition</title>
+
+<style>
+html,body{
+  margin:0;
+  padding:0;
+  font-family:system-ui,-apple-system,Segoe UI,sans-serif;
+  background:#f3f3f3;
+  color:#222;
+  text-align:center;
+}
+header{
+  padding:80px 20px;
+  background:linear-gradient(to right,#000,#dd0000,#ffcc00);
+  color:#fff;
+}
+header h1{font-size:42px;margin-bottom:10px;}
+header p{font-size:20px;}
+
+nav{
+  position:sticky;
+  top:0;
+  background:#fff;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:18px;
+  padding:12px;
+  box-shadow:0 2px 10px rgba(0,0,0,.15);
+  z-index:10;
+}
+nav a{
+  text-decoration:none;
+  font-weight:bold;
+  font-size:16px;
+  color:#000;
+}
+
+section{
+  max-width:860px;
+  margin:50px auto;
+  padding:36px;
+  background:#fff;
+  border-radius:22px;
+  box-shadow:0 12px 30px rgba(0,0,0,.15);
+  text-align:left;
+}
+
+h2{
+  font-size:30px;
+  margin-top:0;
+  text-align:center;
+}
+
+.word-box{
+  background:#ffebbb;
+  padding:24px;
+  font-size:26px;
+  border-radius:18px;
+  text-align:center;
+}
+
+.controls{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:10px;
+  margin-top:10px;
+}
+
+.controls-row{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:10px;
+  margin-top:10px;
+}
+
+button{
+  padding:12px 20px;
+  font-size:16px;
+  border-radius:14px;
+  border:none;
+  cursor:pointer;
+  background:#dd0000;
+  color:white;
+}
+button.secondary{background:#555;}
+button:hover{background:#b70000;}
+
+input,select{
+  font-size:18px;
+  padding:10px;
+  border-radius:10px;
+  border:1px solid #ccc;
+}
+
+.stats{
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  margin-top:10px;
+}
+
+.choice{
+  width:100%;
+}
+
+#letterSVG{
+  width:200px;
+  height:200px;
+  margin:20px auto;
+}
+
+footer{
+  padding:20px;
+  font-size:14px;
+  color:#555;
+}
+
+@media(max-width:600px){
+  section{padding:22px;}
+  button,input,select{width:100%;}
+}
+  
+#letterPractice{
+  text-align:center;
+}
+
+.letterRow{
+  display:flex;
+  justify-content:center;
+  gap:48px;
+  margin-bottom:10px;
+}
+
+.letterCol{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+.bigLetter{
+  font-size:96px;
+  font-weight:700;
+}
+
+.bigLetter.muted{
+  opacity:0.4;
+}
+
+.label{
+  font-size:14px;
+  opacity:0.6;
+}
+
+#letterPhonetic{
+  font-size:24px;
+  margin:10px 0 16px;
+}
+
+#traceCanvas{
+  border:2px dashed #ccc;
+  border-radius:18px;
+  margin:0 auto 12px;
+  touch-action:none;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>German Learning Hub</h1>
+  <p>Words • Verbs • Sentences • Mastery</p>
+</header>
+
+<nav>
+  <a href="#daily">Daily</a>
+  <a href="#alphabet">Alphabet</a>
+  <a href="#game">Game</a>
+  <a href="#verbs">Verbs</a>
+  <a href="#sentences">Sentences</a>
+  <a href="#tools">Tools</a>
+</nav>
+
+<section id="daily">
+  <h2>Daily Word</h2>
+  <div class="word-box" id="dailyWord">Loading…</div>
+  <div class="controls">
+    <button onclick="newDaily()">🎲 New</button>
+    <button onclick="currentDaily && speak(currentDaily.german)">🔊 Speak</button>
+  </div>
+</section>
+
+<section id="alphabet">
+  <h2>Alphabet</h2>
+  <svg id="letterSVG"></svg>
+  <div class="controls">
+    <button onclick="prevLetter()">⬅</button>
+    <button onclick="nextLetter()">➡</button>
+    <button onclick="speakLetter()">🔊</button>
+    <button onclick="playAlphabet()">▶ A–Z</button>
+  </div>
+  
+  <div id="letterPractice">
+
+    <div class="letterRow">
+      <div class="letterCol">
+        <div class="label">German</div>
+        <div id="germanLetter" class="bigLetter">A</div>
+      </div>
+
+      <div class="letterCol">
+        <div class="label">English</div>
+        <div id="englishLetter" class="bigLetter muted">A</div>
+      </div>
+    </div>
+
+    <div id="letterPhonetic">“ah”</div>
+
+    <canvas id="traceCanvas" width="280" height="280"></canvas>
+
+    <div class="controls-row">
+      <button onclick="resetTrace()">↺ Reset Trace</button>
+      <button onclick="speakLetter()">🔊 Hear Letter</button>
+    </div>
+
+  </div>
+
+</section>
+
+<section id="game">
+  <h2>Translation Game</h2>
+
+  <div class="controls">
+    <select id="mode">
+      <option value="typing">Typing</option>
+      <option value="choice">Multiple Choice</option>
+    </select>
+    <select id="filter">
+      <option value="all">All Types</option>
+      <option value="noun">Nouns</option>
+      <option value="verb">Verbs</option>
+      <option value="adj">Adjectives</option>
+    </select>
+    <select id="level">
+      <option value="all">All Levels</option>
+      <option value="A1">A1</option>
+    </select>
+  </div>
+
+  <p id="prompt" style="text-align:center;font-size:22px;"></p>
+
+  <div id="typingArea" class="controls">
+    <input id="answer" placeholder="Type German translation">
+    <button onclick="check()">Submit</button>
+  </div>
+
+  <div id="choiceArea" class="controls" style="display:none;"></div>
+
+  <p id="feedback" style="text-align:center;font-size:20px;"></p>
+
+  <div class="stats">
+    <div>🔥 <span id="streak">0</span></div>
+    <div>🏆 <span id="best">0</span></div>
+    <div>🎯 <span id="accuracy">0%</span></div>
+  </div>
+</section>
+
+<section id="verbs">
+  <h2>Verb Conjugation</h2>
+  <p id="verbPrompt" style="text-align:center;font-size:22px;"></p>
+  <div class="controls">
+    <select id="verbPerson">
+      <option>ich</option><option>du</option><option>er</option>
+      <option>wir</option><option>ihr</option><option>sie</option>
+    </select>
+  </div>
+  <input id="verbAnswer" placeholder="Type conjugated verb">
+  <div class="controls">
+    <button onclick="checkVerb()">Check</button>
+  </div>
+  <p id="verbFeedback" style="text-align:center;"></p>
+</section>
+
+<section id="sentences">
+  <h2>Sentence Builder</h2>
+  <p id="sentencePrompt" style="text-align:center;font-size:22px;"></p>
+  <div id="sentenceChoices" class="controls"></div>
+  <p id="sentenceResult" style="text-align:center;font-size:20px;"></p>
+</section>
+
+<section id="tools">
+  <h2>Tools</h2>
+  <div class="controls">
+    <button onclick="exportProgress()">⬇ Export Progress</button>
+    <button onclick="importProgress()">⬆ Import Progress</button>
+  </div>
+</section>
+
+<footer>
+  © 2026 German Learning Hub — Sovereign Vanilla JS
+</footer>
+
+<script>
+/* =====================
+   DOM HELPER
+   ===================== */
+function $(id){ return document.getElementById(id); }
+
+/* =====================
+   HELPERS
+   ===================== */
+function normalizeGerman(str){
+  return (str || "")
+    .toLowerCase()
+    .replace(/ä/g,"ae").replace(/ö/g,"oe")
+    .replace(/ü/g,"ue").replace(/ß/g,"ss")
+    .replace(/\s+/g,"").trim();
+}
+function speak(text){
+  if(!("speechSynthesis" in window)) return;
+  if(!text) return;
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang="de-DE";
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(u);
+}
+
+/* =====================
+   DATA: WORDS & SENTENCES
+   ===================== */
+const WORDS = [
+  /* ===== NOUNS (with articles) ===== */
+  {german:"der Mann",english:"man",type:"noun",level:"A1"},
+  {german:"die Frau",english:"woman",type:"noun",level:"A1"},
+  {german:"das Kind",english:"child",type:"noun",level:"A1"},
+  {german:"das Haus",english:"house",type:"noun",level:"A1"},
+  {german:"die Wohnung",english:"apartment",type:"noun",level:"A1"},
+  {german:"die Straße",english:"street",type:"noun",level:"A1"},
+  {german:"die Stadt",english:"city",type:"noun",level:"A1"},
+  {german:"das Land",english:"country",type:"noun",level:"A1"},
+  {german:"das Auto",english:"car",type:"noun",level:"A1"},
+  {german:"der Zug",english:"train",type:"noun",level:"A1"},
+  {german:"der Bus",english:"bus",type:"noun",level:"A1"},
+  {german:"das Wasser",english:"water",type:"noun",level:"A1"},
+  {german:"das Brot",english:"bread",type:"noun",level:"A1"},
+  {german:"der Apfel",english:"apple",type:"noun",level:"A1"},
+  {german:"das Essen",english:"food",type:"noun",level:"A1"},
+  {german:"der Kaffee",english:"coffee",type:"noun",level:"A1"},
+  {german:"das Bier",english:"beer",type:"noun",level:"A1"},
+  {german:"der Morgen",english:"morning",type:"noun",level:"A1"},
+  {german:"der Abend",english:"evening",type:"noun",level:"A1"},
+  {german:"der Tag",english:"day",type:"noun",level:"A1"},
+  {german:"die Woche",english:"week",type:"noun",level:"A1"},
+  {german:"das Jahr",english:"year",type:"noun",level:"A1"},
+  {german:"die Zeit",english:"time",type:"noun",level:"A1"},
+  {german:"der Freund",english:"friend",type:"noun",level:"A1"},
+  {german:"die Familie",english:"family",type:"noun",level:"A1"},
+  {german:"die Arbeit",english:"work",type:"noun",level:"A1"},
+  {german:"der Beruf",english:"job",type:"noun",level:"A1"},
+  {german:"die Schule",english:"school",type:"noun",level:"A1"},
+  {german:"der Lehrer",english:"teacher",type:"noun",level:"A1"},
+  {german:"der Schüler",english:"student",type:"noun",level:"A1"},
+  {german:"das Buch",english:"book",type:"noun",level:"A1"},
+  {german:"der Tisch",english:"table",type:"noun",level:"A1"},
+  {german:"der Stuhl",english:"chair",type:"noun",level:"A1"},
+  {german:"das Bett",english:"bed",type:"noun",level:"A1"},
+  {german:"das Zimmer",english:"room",type:"noun",level:"A1"},
+  {german:"die Tür",english:"door",type:"noun",level:"A1"},
+  {german:"das Fenster",english:"window",type:"noun",level:"A1"},
+  {german:"der Hund",english:"dog",type:"noun",level:"A1"},
+  {german:"die Katze",english:"cat",type:"noun",level:"A1"},
+
+  /* ===== VERBS (infinitive) ===== */
+  {german:"sein",english:"to be",type:"verb",level:"A1"},
+  {german:"haben",english:"to have",type:"verb",level:"A1"},
+  {german:"werden",english:"to become",type:"verb",level:"A1"},
+  {german:"gehen",english:"to go",type:"verb",level:"A1"},
+  {german:"kommen",english:"to come",type:"verb",level:"A1"},
+  {german:"machen",english:"to make",type:"verb",level:"A1"},
+  {german:"sagen",english:"to say",type:"verb",level:"A1"},
+  {german:"sehen",english:"to see",type:"verb",level:"A1"},
+  {german:"geben",english:"to give",type:"verb",level:"A1"},
+  {german:"nehmen",english:"to take",type:"verb",level:"A1"},
+  {german:"finden",english:"to find",type:"verb",level:"A1"},
+  {german:"denken",english:"to think",type:"verb",level:"A1"},
+  {german:"arbeiten",english:"to work",type:"verb",level:"A1"},
+  {german:"spielen",english:"to play",type:"verb",level:"A1"},
+  {german:"lernen",english:"to learn",type:"verb",level:"A1"},
+  {german:"essen",english:"to eat",type:"verb",level:"A1"},
+  {german:"trinken",english:"to drink",type:"verb",level:"A1"},
+  {german:"fahren",english:"to drive",type:"verb",level:"A1"},
+  {german:"schlafen",english:"to sleep",type:"verb",level:"A1"},
+  {german:"wohnen",english:"to live",type:"verb",level:"A1"},
+  {german:"heißen",english:"to be called",type:"verb",level:"A1"},
+  {german:"fragen",english:"to ask",type:"verb",level:"A1"},
+  {german:"antworten",english:"to answer",type:"verb",level:"A1"},
+  {german:"kaufen",english:"to buy",type:"verb",level:"A1"},
+  {german:"lieben",english:"to love",type:"verb",level:"A1"},
+  {german:"brauchen",english:"to need",type:"verb",level:"A1"},
+  {german:"bleiben",english:"to stay",type:"verb",level:"A1"},
+  {german:"bringen",english:"to bring",type:"verb",level:"A1"},
+  {german:"hören",english:"to hear",type:"verb",level:"A1"},
+  {german:"sprechen",english:"to speak",type:"verb",level:"A1"},
+
+  /* ===== ADJECTIVES ===== */
+  {german:"gut",english:"good",type:"adj",level:"A1"},
+  {german:"schlecht",english:"bad",type:"adj",level:"A1"},
+  {german:"groß",english:"big",type:"adj",level:"A1"},
+  {german:"klein",english:"small",type:"adj",level:"A1"},
+  {german:"alt",english:"old",type:"adj",level:"A1"},
+  {german:"jung",english:"young",type:"adj",level:"A1"},
+  {german:"neu",english:"new",type:"adj",level:"A1"},
+  {german:"viel",english:"much",type:"adj",level:"A1"},
+  {german:"wenig",english:"little",type:"adj",level:"A1"},
+  {german:"heiß",english:"hot",type:"adj",level:"A1"},
+  {german:"kalt",english:"cold",type:"adj",level:"A1"},
+  {german:"schön",english:"beautiful",type:"adj",level:"A1"},
+  {german:"einfach",english:"easy",type:"adj",level:"A1"},
+  {german:"schwer",english:"difficult",type:"adj",level:"A1"},
+
+  /* ===== PRONOUNS / FUNCTION WORDS ===== */
+  {german:"ich",english:"I",type:"other",level:"A1"},
+  {german:"du",english:"you (singular)",type:"other",level:"A1"},
+  {german:"er",english:"he",type:"other",level:"A1"},
+  {german:"sie",english:"she / they",type:"other",level:"A1"},
+  {german:"wir",english:"we",type:"other",level:"A1"},
+  {german:"nicht",english:"not",type:"other",level:"A1"},
+  {german:"und",english:"and",type:"other",level:"A1"},
+  {german:"oder",english:"or",type:"other",level:"A1"},
+  {german:"aber",english:"but",type:"other",level:"A1"},
+  {german:"mit",english:"with",type:"other",level:"A1"},
+  {german:"ohne",english:"without",type:"other",level:"A1"},
+  {german:"für",english:"for",type:"other",level:"A1"},
+  {german:"von",english:"from",type:"other",level:"A1"},
+  {german:"zu",english:"to",type:"other",level:"A1"},
+  {german:"bei",english:"at",type:"other",level:"A1"},
+  {german:"über",english:"over/about",type:"other",level:"A1"},
+  {german:"in",english:"in",type:"other",level:"A1"},
+  {german:"auf",english:"on",type:"other",level:"A1"},
+  {german:"dass",english:"that",type:"other",level:"A1"}
+];
+
+const SENTENCES = [
+  {english:"I eat bread",german:["ich","esse","brot"]},
+  {english:"The man drinks water",german:["der mann","trinkt","wasser"]}
+];
+
+/* Simple present-tense verb table */
+const VERBS = {
+  "sein":   {ich:"bin",  du:"bist",  er:"ist",   wir:"sind",  ihr:"seid",  sie:"sind"},
+  "haben":  {ich:"habe", du:"hast",  er:"hat",   wir:"haben", ihr:"habt",  sie:"haben"},
+  "gehen":  {ich:"gehe", du:"gehst", er:"geht",  wir:"gehen", ihr:"geht",  sie:"gehen"},
+  "kommen": {ich:"komme",du:"kommst",er:"kommt", wir:"kommen",ihr:"kommt", sie:"kommen"},
+  "machen": {ich:"mache",du:"machst",er:"macht", wir:"machen",ihr:"macht", sie:"machen"},
+  "sprechen":{ich:"spreche",du:"sprichst",er:"spricht",wir:"sprechen",ihr:"sprecht",sie:"sprechen"}
+};
+
+/* =====================
+   ALPHABET DATA
+   ===================== */
+const letterInfo = {
+  A:{en:"A",phon:"ah"},
+  B:{en:"B",phon:"bay"},
+  C:{en:"C",phon:"tsay"},
+  D:{en:"D",phon:"day"},
+  E:{en:"E",phon:"ay"},
+  F:{en:"F",phon:"eff"},
+  G:{en:"G",phon:"gay"},
+  H:{en:"H",phon:"hah"},
+  I:{en:"I",phon:"ee"},
+  J:{en:"J",phon:"yot"},
+  K:{en:"K",phon:"kah"},
+  L:{en:"L",phon:"ell"},
+  M:{en:"M",phon:"em"},
+  N:{en:"N",phon:"en"},
+  O:{en:"O",phon:"oh"},
+  P:{en:"P",phon:"pay"},
+  Q:{en:"Q",phon:"koo"},
+  R:{en:"R",phon:"air"},
+  S:{en:"S",phon:"es"},
+  T:{en:"T",phon:"tay"},
+  U:{en:"U",phon:"ooh"},
+  V:{en:"V",phon:"fow"},
+  W:{en:"W",phon:"vay"},
+  X:{en:"X",phon:"iks"},
+  Y:{en:"Y",phon:"oopsilohn"},
+  Z:{en:"Z",phon:"tset"}
+};
+
+const letters = Object.keys(letterInfo);
+let currentLetterIndex = parseInt(localStorage.getItem("de_currentLetterIndex") || "0",10);
+if(isNaN(currentLetterIndex) || currentLetterIndex < 0 || currentLetterIndex >= letters.length){
+  currentLetterIndex = 0;
+}
+
+/* =====================
+   DOM REFERENCES
+   ===================== */
+const dailyWordEl = $("dailyWord");
+const modeEl = $("mode");
+const filterEl = $("filter");
+const levelEl = $("level");
+const promptEl = $("prompt");
+const typingAreaEl = $("typingArea");
+const choiceAreaEl = $("choiceArea");
+const answerEl = $("answer");
+const feedbackEl = $("feedback");
+const streakEl = $("streak");
+const bestEl = $("best");
+const accuracyEl = $("accuracy");
+const verbPromptEl = $("verbPrompt");
+const verbPersonEl = $("verbPerson");
+const verbAnswerEl = $("verbAnswer");
+const verbFeedbackEl = $("verbFeedback");
+const sentencePromptEl = $("sentencePrompt");
+const sentenceChoicesEl = $("sentenceChoices");
+const sentenceResultEl = $("sentenceResult");
+const germanLetterEl = $("germanLetter");
+const englishLetterEl = $("englishLetter");
+const letterPhoneticEl = $("letterPhonetic");
+const letterSVG = $("letterSVG");
+const canvas = $("traceCanvas");
+const ctx = canvas.getContext("2d");
+
+/* =====================
+   DAILY WORD
+   ===================== */
+let currentDaily = null;
+function newDaily(){
+  if(!WORDS.length) return;
+  currentDaily = WORDS[Math.floor(Math.random()*WORDS.length)];
+  dailyWordEl.textContent = currentDaily.german + " — " + currentDaily.english;
+}
+
+/* =====================
+   LETTER SVG + TRACE
+   ===================== */
+
+/* Simple stroke paths for A–Z */
+const letterPaths = {
+  "A":"M50,150 L100,50 L150,150 M70,110 L130,110",
+  "B":"M50,50 L50,150 L100,150 Q120,150 120,130 Q120,110 100,110 L50,110",
+  "C":"M130,50 Q50,50 50,150 Q130,150 130,100",
+  "D":"M50,50 L50,150 Q120,150 120,100 Q120,50 50,50",
+  "E":"M120,50 L50,50 L50,150 L120,150 M50,100 L100,100",
+  "F":"M50,50 L50,150 L120,150 M50,100 L100,100",
+  "G":"M130,100 Q130,150 50,150 Q50,50 120,50 L120,100",
+  "H":"M50,50 L50,150 M120,50 L120,150 M50,100 L120,100",
+  "I":"M85,50 L115,50 L100,50 L100,150 L85,150 L115,150",
+  "J":"M120,50 L120,120 Q120,150 100,150 Q80,150 80,130",
+  "K":"M50,50 L50,150 M120,50 L50,100 L120,150",
+  "L":"M50,50 L50,150 L120,150",
+  "M":"M50,150 L50,50 L100,100 L150,50 L150,150",
+  "N":"M50,150 L50,50 L150,150 L150,50",
+  "O":"M75,50 Q150,100 75,150 Q0,100 75,50",
+  "P":"M50,150 L50,50 L100,50 Q120,50 120,70 Q120,90 100,90 L50,90",
+  "Q":"M75,50 Q150,100 75,150 Q0,100 75,50 M100,130 L150,180",
+  "R":"M50,150 L50,50 L100,50 Q120,50 120,70 Q120,90 100,90 L50,90 M100,90 L150,150",
+  "S":"M120,50 Q50,50 50,90 Q50,130 120,150",
+  "T":"M50,50 L150,50 M100,50 L100,150",
+  "U":"M50,50 L50,120 Q50,150 100,150 Q150,150 150,120 L150,50",
+  "V":"M50,50 L100,150 L150,50",
+  "W":"M50,50 L75,150 L125,150 L150,50",
+  "X":"M50,50 L150,150 M150,50 L50,150",
+  "Y":"M50,50 L100,100 L150,50 M100,100 L100,150",
+  "Z":"M50,50 L150,50 L50,150 L150,150"
+};
+
+function updateLetterVisual(letter){
+  const info = letterInfo[letter];
+  germanLetterEl.textContent = letter;
+  englishLetterEl.textContent = info.en;
+  letterPhoneticEl.textContent = "“" + info.phon + "”";
+
+  // SVG stroke
+  if(letterSVG){
+    letterSVG.setAttribute("viewBox","0 0 200 200");
+    const pathData = letterPaths[letter] || "";
+    letterSVG.innerHTML = pathData ? "<path d='" + pathData + "' />" : "";
+    const path = letterSVG.querySelector("path");
+    if(path){
+      path.style.strokeDasharray = 1000;
+      path.style.strokeDashoffset = 1000;
+      setTimeout(()=>{ path.style.strokeDashoffset = 0; },50);
+    }
+  }
+
+  // Canvas guide
+  drawGuideLetter(letter);
+}
+
+let drawing = false;
+let lastX = 0;
+let lastY = 0;
+
+function drawGuideLetter(letter){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.globalAlpha = 0.15;
+  ctx.font = "200px Segoe UI";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillStyle = "#000";
+  ctx.fillText(letter, canvas.width/2, canvas.height/2);
+  ctx.globalAlpha = 1;
+}
+
+function startDraw(x,y){
+  drawing = true;
+  lastX = x;
+  lastY = y;
+}
+
+function drawStroke(x,y){
+  if(!drawing) return;
+  ctx.strokeStyle = "#dd0000";
+  ctx.lineWidth = 6;
+  ctx.lineCap = "round";
+  ctx.beginPath();
+  ctx.moveTo(lastX,lastY);
+  ctx.lineTo(x,y);
+  ctx.stroke();
+  lastX = x;
+  lastY = y;
+}
+
+function stopDraw(){
+  drawing = false;
+}
+
+function resetTrace(){
+  const letter = letters[currentLetterIndex];
+  drawGuideLetter(letter);
+}
+
+canvas.addEventListener("mousedown",e=>{
+  startDraw(e.offsetX,e.offsetY);
+});
+canvas.addEventListener("mousemove",e=>{
+  drawStroke(e.offsetX,e.offsetY);
+});
+canvas.addEventListener("mouseup",stopDraw);
+canvas.addEventListener("mouseleave",stopDraw);
+
+canvas.addEventListener("touchstart",e=>{
+  const r=canvas.getBoundingClientRect();
+  const t=e.touches[0];
+  startDraw(t.clientX-r.left,t.clientY-r.top);
+});
+canvas.addEventListener("touchmove",e=>{
+  e.preventDefault();
+  const r=canvas.getBoundingClientRect();
+  const t=e.touches[0];
+  drawStroke(t.clientX-r.left,t.clientY-r.top);
+});
+canvas.addEventListener("touchend",stopDraw);
+
+function drawLetter(){
+  const letter = letters[currentLetterIndex];
+  updateLetterVisual(letter);
+  localStorage.setItem("de_currentLetterIndex", String(currentLetterIndex));
+}
+function nextLetter(){
+  currentLetterIndex = (currentLetterIndex + 1) % letters.length;
+  drawLetter();
+}
+function prevLetter(){
+  currentLetterIndex = (currentLetterIndex - 1 + letters.length) % letters.length;
+  drawLetter();
+}
+function speakLetter(){
+  const letter = letters[currentLetterIndex];
+  const info = letterInfo[letter];
+  speak(info.phon || letter);
+}
+function playAlphabet(){
+  const seq = letters.map(l => letterInfo[l].phon || l).join(", ");
+  speak(seq);
+}
+
+/* =====================
+   GAME
+   ===================== */
+let streak = +localStorage.getItem("streak") || 0;
+let best   = +localStorage.getItem("best")   || 0;
+let correct= +localStorage.getItem("correct")|| 0;
+let total  = +localStorage.getItem("total")  || 0;
+let currentWord = null;
+
+function getFiltered(){
+  return WORDS.filter(w =>
+    (filterEl.value === "all" || w.type === filterEl.value) &&
+    (levelEl.value === "all" || w.level === levelEl.value)
+  );
+}
+
+function renderChoices(){
+  choiceAreaEl.innerHTML = "";
+  const opts = [currentWord.german];
+  while(opts.length < 4){
+    const rand = WORDS[Math.floor(Math.random()*WORDS.length)].german;
+    if(!opts.includes(rand)) opts.push(rand);
+  }
+  opts.sort(()=>Math.random()-0.5);
+  opts.forEach(o=>{
+    const b = document.createElement("button");
+    b.className = "choice";
+    b.textContent = o;
+    b.onclick = ()=>{ answerEl.value = o; check(); };
+    choiceAreaEl.appendChild(b);
+  });
+}
+
+function nextWord(){
+  const pool = getFiltered();
+  if(!pool.length) return;
+  currentWord = pool[Math.floor(Math.random()*pool.length)];
+  promptEl.textContent = "Translate: " + currentWord.english;
+  feedbackEl.textContent = "";
+  answerEl.value = "";
+  if(modeEl.value === "choice") renderChoices();
+  typingAreaEl.style.display = (modeEl.value === "typing" ? "flex" : "none");
+  choiceAreaEl.style.display = (modeEl.value === "choice" ? "flex" : "none");
+  speak(currentWord.german);
+}
+
+function saveStats(){
+  localStorage.setItem("streak", streak);
+  localStorage.setItem("best",   best);
+  localStorage.setItem("correct",correct);
+  localStorage.setItem("total",  total);
+}
+function updateStats(){
+  streakEl.textContent = streak;
+  bestEl.textContent   = best;
+  accuracyEl.textContent = total ? Math.round(correct/total*100) + "%" : "0%";
+}
+
+function check(){
+  total++;
+  if(normalizeGerman(answerEl.value) === normalizeGerman(currentWord.german)){
+    streak++;
+    correct++;
+    if(streak > best) best = streak;
+    feedbackEl.textContent = "✅ Correct!";
+    saveStats(); updateStats();
+    setTimeout(nextWord,800);
+  }else{
+    streak = 0;
+    feedbackEl.textContent = "❌ " + currentWord.german;
+    saveStats(); updateStats();
+  }
+}
+
+/* =====================
+   VERB CONJUGATION
+   ===================== */
+let currentVerb = null;
+function newVerb(){
+  const keys = Object.keys(VERBS);
+  if(!keys.length) return;
+  currentVerb = keys[Math.floor(Math.random()*keys.length)];
+  verbPromptEl.textContent = "Conjugate: " + currentVerb;
+  verbAnswerEl.value = "";
+  verbFeedbackEl.textContent = "";
+}
+function checkVerb(){
+  if(!currentVerb) return;
+  const person = verbPersonEl.value;
+  const target = VERBS[currentVerb][person];
+  if(!target){
+    verbFeedbackEl.textContent = "No data for this person yet.";
+    return;
+  }
+  if(normalizeGerman(verbAnswerEl.value) === normalizeGerman(target)){
+    verbFeedbackEl.textContent = "✅ Correct!";
+  }else{
+    verbFeedbackEl.textContent = "❌ " + person + " " + target;
+  }
+}
+
+/* =====================
+   SENTENCE BUILDER
+   ===================== */
+let currentSentence = null;
+let built = [];
+
+function newSentence(){
+  if(!SENTENCES.length) return;
+  currentSentence = SENTENCES[Math.floor(Math.random()*SENTENCES.length)];
+  built = [];
+  sentencePromptEl.textContent = 'Build: "' + currentSentence.english + '"';
+  sentenceResultEl.textContent = "";
+  sentenceChoicesEl.innerHTML = "";
+
+  const pieces = currentSentence.german.slice().sort(()=>Math.random()-0.5);
+  pieces.forEach(word=>{
+    const b = document.createElement("button");
+    b.textContent = word;
+    b.onclick = ()=>{
+      built.push(word);
+      sentenceResultEl.textContent = built.join(" ");
+      if(built.length === currentSentence.german.length){
+        const builtStr = built.join(" ");
+        const targetStr = currentSentence.german.join(" ");
+        if(normalizeGerman(builtStr) === normalizeGerman(targetStr)){
+          sentenceResultEl.textContent = "✅ " + targetStr;
+        }else{
+          sentenceResultEl.textContent = "❌ " + targetStr;
+        }
+      }
+    };
+    sentenceChoicesEl.appendChild(b);
+  });
+}
+
+/* =====================
+   EXPORT / IMPORT
+   ===================== */
+function exportProgress(){
+  const data = {
+    streak,
+    best,
+    correct,
+    total,
+    letterIndex: currentLetterIndex
+  };
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="german-progress.json";
+  a.click();
+}
+function importProgress(){
+  const i=document.createElement("input");
+  i.type="file"; i.accept=".json,application/json";
+  i.onchange=e=>{
+    const file = e.target.files && e.target.files[0];
+    if(!file) return;
+    const r=new FileReader();
+    r.onload=()=>{
+      try{
+        const data = JSON.parse(r.result);
+        if(typeof data.streak === "number") streak = data.streak;
+        if(typeof data.best === "number") best = data.best;
+        if(typeof data.correct === "number") correct = data.correct;
+        if(typeof data.total === "number") total = data.total;
+        if(typeof data.letterIndex === "number"){
+          currentLetterIndex = Math.max(0, Math.min(letters.length-1, data.letterIndex));
+        }
+        saveStats();
+        updateStats();
+        drawLetter();
+      }catch(err){
+        alert("Could not read progress file.");
+      }
+    };
+    r.readAsText(file);
+  };
+  i.click();
+}
+
+/* =====================
+   EVENT WIRING & INIT
+   ===================== */
+modeEl.addEventListener("change", nextWord);
+filterEl.addEventListener("change", nextWord);
+levelEl.addEventListener("change", nextWord);
+
+newDaily();
+drawLetter();
+updateStats();
+nextWord();
+newVerb();
+newSentence();
+</script>
+
+</body>
+</html>
