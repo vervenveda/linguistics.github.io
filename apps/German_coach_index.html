@@ -1,0 +1,1137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>German Traveler Phrase Coach — 365-Day Trainer</title>
+<style>
+  :root{
+    --bg:#f4f6f8;
+    --card:#ffffff;
+    --muted:#58606b;
+    --accent1:#000000; /* black */
+    --accent2:#dd0000; /* red */
+    --accent3:#ffcc00; /* gold */
+    --success:#087f5b;
+    --danger:#c92a2a;
+  }
+  * , *::before, *::after{ box-sizing:border-box; }
+
+  html,body{
+    height:100%;
+    margin:0;
+    background:var(--bg);
+    font-family:Inter, "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    color:#0f1724;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  header.hero{
+    width:100%;
+    background:linear-gradient(90deg,var(--accent1) 33%, var(--accent2) 66%, var(--accent3) 100%);
+    color:white;
+    padding:24px 16px 28px;
+    box-shadow:0 10px 40px rgba(2,6,23,0.16);
+  }
+  header.hero-inner{
+    max-width:1100px;
+    margin:0 auto;
+  }
+  header.hero h1{
+    margin:0;
+    font-size:24px;
+    letter-spacing:0.2px;
+  }
+  header.hero p{
+    margin:8px 0 0;
+    color:rgba(255,255,255,0.92);
+    font-size:14px;
+  }
+  nav.topnav{
+    display:flex;
+    gap:8px;
+    margin-top:12px;
+    flex-wrap:wrap;
+  }
+  nav.topnav button{
+    background:rgba(0,0,0,0.12);
+    border:1px solid rgba(255,255,255,0.25);
+    color:white;
+    padding:6px 10px;
+    border-radius:999px;
+    cursor:pointer;
+    font-weight:600;
+    font-size:13px;
+  }
+  nav.topnav button:hover{
+    background:rgba(0,0,0,0.2);
+  }
+
+  .wrap{
+    max-width:1100px;
+    margin:18px auto 32px;
+    padding:0 12px 24px;
+    display:flex;
+    gap:18px;
+    align-items:flex-start;
+  }
+  .column{
+    background:var(--card);
+    border-radius:12px;
+    box-shadow:0 8px 20px rgba(15,23,36,0.06);
+    padding:16px;
+    flex:1;
+    min-width:0;
+  }
+  .sidebar{
+    width:320px;
+    flex:0 0 320px;
+    position:sticky;
+    top:12px;
+  }
+
+  h2{
+    margin:0 0 10px 0;
+    font-size:18px;
+  }
+  .lesson-title{
+    font-weight:700;
+    font-size:20px;
+    margin-bottom:4px;
+  }
+  .muted{ color:var(--muted); font-size:14px; }
+  .small{ font-size:13px; color:var(--muted); }
+  .small-muted{ font-size:12px; color:#6b7280; }
+
+  .controls{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin:10px 0;
+  }
+  button.btn{
+    background:linear-gradient(90deg,var(--accent2),var(--accent3));
+    border:none;
+    color:#080808;
+    padding:8px 12px;
+    border-radius:999px;
+    cursor:pointer;
+    font-weight:700;
+    font-size:13px;
+    white-space:nowrap;
+  }
+  button.ghost{
+    background:transparent;
+    border:1px solid #e6e9ee;
+    color:#0f1724;
+    padding:6px 10px;
+    border-radius:999px;
+    cursor:pointer;
+    font-size:13px;
+    white-space:nowrap;
+  }
+  button.btn:active, button.ghost:active{
+    transform:translateY(1px);
+  }
+
+  .lesson-card{
+    padding:14px;
+    border-radius:10px;
+    background:linear-gradient(180deg,#fff,#fbfdff);
+    margin-bottom:12px;
+    border:1px solid #eef2f7;
+  }
+  .lesson-body{
+    margin-top:8px;
+  }
+  #lessonGerman{
+    font-size:22px;
+    font-weight:700;
+  }
+
+  textarea.notes{
+    width:100%;
+    min-height:80px;
+    border-radius:8px;
+    padding:8px;
+    border:1px solid #e6e9ee;
+    resize:vertical;
+    font-family:inherit;
+    font-size:14px;
+  }
+
+  .progress{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-top:8px;
+  }
+  .progress .bar{
+    height:10px;
+    background:#e6eef6;
+    border-radius:999px;
+    width:100%;
+    overflow:hidden;
+  }
+  .progress .bar > i{
+    display:block;
+    height:100%;
+    background:linear-gradient(90deg,var(--accent2),var(--accent3));
+    width:0%;
+    transition:width .25s ease-out;
+  }
+
+  table{ width:100%; border-collapse:collapse; font-size:14px; }
+  table td,table th{
+    padding:8px;
+    border-bottom:1px solid #f2f4f7;
+    text-align:left;
+  }
+
+  .question{
+    margin:10px 0;
+    padding:10px;
+    border-radius:8px;
+    background:#fbfdff;
+    border:1px solid #eef2f7;
+  }
+  .mc-option{
+    display:block;
+    margin:6px 0;
+    padding:6px 8px;
+    border-radius:8px;
+    border:1px solid #e6eef6;
+    cursor:pointer;
+    background:white;
+    font-size:13px;
+    text-align:left;
+  }
+  .mc-option.selected{
+    border-color:var(--accent2);
+    background:linear-gradient(90deg,rgba(221,0,0,0.05),transparent);
+  }
+  .result{
+    font-size:18px;
+    font-weight:700;
+  }
+
+  .certificate{
+    padding:10px;
+    border-radius:8px;
+    background:linear-gradient(180deg,#fffef6,#fff7e6);
+    border:1px dashed #ffd76b;
+    margin-top:12px;
+  }
+
+  .center{text-align:center;}
+
+  #lessonIndex{
+    max-height:260px;
+    overflow:auto;
+    border-radius:8px;
+    border:1px solid #eef2f7;
+    padding:6px;
+    font-size:13px;
+  }
+
+  @media(max-width:980px){
+    .wrap{
+      flex-direction:column;
+      padding:0 8px 18px;
+    }
+    .sidebar{
+      position:static;
+      width:auto;
+      flex:1;
+    }
+  }
+
+  @media(max-width:640px){
+    header.hero{
+      padding:18px 12px 22px;
+    }
+    header.hero h1{
+      font-size:20px;
+    }
+    .column{
+      padding:12px;
+    }
+    #lessonGerman{
+      font-size:20px;
+    }
+    .controls{
+      justify-content:flex-start;
+    }
+    button.btn,button.ghost{
+      width:auto;
+      font-size:12px;
+      padding:6px 10px;
+    }
+  }
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="hero-inner">
+    <h1>German Traveler Phrase Coach</h1>
+    <p>Practice 365 essential travel phrases with quick quizzes and a final review exam. Everything is saved locally in your browser.</p>
+    <nav class="topnav">
+      <button onclick="showPanel('curriculum')">Curriculum</button>
+      <button onclick="showPanel('quiz')">Range Quiz</button>
+      <button onclick="showPanel('final')">Final Review</button>
+      <button onclick="showPanel('progress')">Progress</button>
+      <button onclick="showPanel('settings')">Settings</button>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <!-- MAIN COLUMN -->
+  <div class="column" id="mainColumn">
+
+    <!-- CURRICULUM PANEL -->
+    <div id="panel-curriculum">
+      <h2>365-Day Travel Phrase Track</h2>
+      <div class="lesson-card">
+        <div class="lesson-title" id="lessonTitle">Day 1</div>
+        <div class="muted" id="lessonMeta">Travel phrase • Basic</div>
+
+        <div class="lesson-body">
+          <div id="lessonGerman">—</div>
+          <div id="lessonEnglish" class="small-muted" style="margin-top:4px;">—</div>
+        </div>
+
+        <div class="controls">
+          <button class="btn" onclick="prevLesson()">⬅ Prev</button>
+          <button class="btn" onclick="nextLesson()">Next ➡</button>
+          <button class="ghost" onclick="toggleComplete()">Mark Complete</button>
+          <button class="ghost" onclick="speakCurrent()">🔊 Speak</button>
+          <button class="ghost" onclick="openMiniQuiz()">Quick Quiz</button>
+        </div>
+
+        <div style="margin-top:8px;">
+          <label class="small-muted">Notes (saved locally)</label>
+          <textarea id="notes" class="notes" placeholder="Your practice notes…"></textarea>
+        </div>
+
+        <div class="progress">
+          <div class="small-muted">Overall Progress</div>
+          <div class="bar"><i id="progressFill"></i></div>
+          <div class="small-muted" id="progressPct">0%</div>
+        </div>
+      </div>
+
+      <div style="margin-top:10px;">
+        <label class="small-muted">Jump to day</label>
+        <input type="number" id="jumpDay" min="1" max="365"
+               style="width:100px;padding:6px;border-radius:8px;border:1px solid #e6eef6;font-size:13px;">
+        <button class="ghost" onclick="jumpToDay()">Go</button>
+      </div>
+
+      <div style="margin-top:14px;">
+        <h2 class="small">Lesson Index (tap to open)</h2>
+        <div id="lessonIndex"></div>
+      </div>
+    </div>
+
+    <!-- QUIZ BUILDER PANEL -->
+    <div id="panel-quiz" style="display:none;">
+      <h2>Range Quiz</h2>
+      <p class="muted">Build a quiz from any day range (e.g., week 1 is days 1–7). All questions are German → English.</p>
+
+      <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:10px; font-size:13px;">
+        <label class="small-muted">From</label>
+        <input type="number" id="quizFrom" min="1" max="365" value="1"
+               style="width:80px;padding:6px;border-radius:8px;border:1px solid #e6eef6;">
+        <label class="small-muted">To</label>
+        <input type="number" id="quizTo" min="1" max="365" value="7"
+               style="width:80px;padding:6px;border-radius:8px;border:1px solid #e6eef6;">
+        <label class="small-muted">Questions</label>
+        <input type="number" id="quizLen" min="3" max="40" value="10"
+               style="width:80px;padding:6px;border-radius:8px;border:1px solid #e6eef6;">
+        <button class="btn" onclick="buildQuiz()">Build Quiz</button>
+      </div>
+
+      <div id="quizArea" style="margin-top:14px;"></div>
+      <div id="quizResult" style="margin-top:10px;"></div>
+    </div>
+
+    <!-- FINAL EXAM PANEL -->
+    <div id="panel-final" style="display:none;">
+      <h2>Final Travel Review</h2>
+      <p class="muted">Take a mixed multiple-choice + short answer review based on the whole phrase deck. Passing threshold is set in Settings.</p>
+
+      <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:10px; font-size:13px;">
+        <label class="small-muted">Questions</label>
+        <input type="number" id="finalLen" value="30" min="10" max="100"
+               style="width:90px;padding:6px;border-radius:8px;border:1px solid #e6eef6;">
+        <button class="btn" onclick="startFinal()">Start Final Review</button>
+      </div>
+
+      <div id="finalArea" style="margin-top:14px;"></div>
+      <div id="finalResult" style="margin-top:10px;"></div>
+    </div>
+
+    <!-- PROGRESS PANEL -->
+    <div id="panel-progress" style="display:none;">
+      <h2>Progress & History</h2>
+      <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center;">
+        <div>
+          <div class="small-muted">Lessons Completed</div>
+          <div id="completedCount" style="font-size:20px;font-weight:700;">0 / 365</div>
+        </div>
+        <div>
+          <div class="small-muted">Range Quiz Attempts</div>
+          <div id="quizCount" style="font-size:20px;font-weight:700;">0</div>
+        </div>
+        <div>
+          <div class="small-muted">Final Reviews Taken</div>
+          <div id="examCount" style="font-size:20px;font-weight:700;">0</div>
+        </div>
+      </div>
+
+      <div style="margin-top:16px;">
+        <h2 class="small">Final Review History</h2>
+        <div id="examHistory"
+             style="max-height:260px; overflow:auto; border-radius:8px; border:1px solid #eef2f7; padding:6px;font-size:13px;"></div>
+      </div>
+
+      <div style="margin-top:16px; display:flex; flex-wrap:wrap; gap:8px;">
+        <button class="btn" onclick="exportProgress()">Export Progress (JSON)</button>
+        <button class="ghost" onclick="resetAll()">Reset All (local data)</button>
+      </div>
+    </div>
+
+    <!-- SETTINGS PANEL -->
+    <div id="panel-settings" style="display:none;">
+      <h2>Settings</h2>
+      <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center; font-size:13px;">
+        <label class="small-muted">Final pass threshold (%)</label>
+        <input type="number" id="passThreshold" value="70" min="40" max="100"
+               style="width:90px;padding:6px;border-radius:8px;border:1px solid #e6eef6;">
+      </div>
+      <div style="margin-top:10px; font-size:13px;">
+        <label class="small-muted">
+          <input type="checkbox" id="autoSpeak" style="margin-right:4px;">
+          Auto-speak phrase when a lesson opens
+        </label>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar column">
+    <div>
+      <h2>Quick Controls</h2>
+      <div class="small-muted">Jump, search & snack-size quiz</div>
+      <div style="margin-top:10px;">
+        <input type="text" id="searchBox" placeholder="Search German or English…"
+               style="width:100%;padding:6px;border-radius:8px;border:1px solid #eef2f7;font-size:13px;">
+        <button class="ghost" style="width:100%; margin-top:6px;" onclick="searchLessons()">Search</button>
+      </div>
+
+      <div style="margin-top:14px;">
+        <h2>Badge</h2>
+        <div class="small-muted">Travel rank</div>
+        <div class="lesson-card center" style="padding:10px;">
+          <div id="badgeArea"><strong>Traveler Novice</strong></div>
+          <div class="small-muted" style="margin-top:4px;">Complete more days to level up</div>
+        </div>
+      </div>
+
+      <div style="margin-top:12px;">
+        <h2>Quick 5 Qs</h2>
+        <div class="small-muted">Random mini quiz</div>
+        <button class="btn" style="margin-top:6px;" onclick="quickRandomQuiz()">Start 5-Question Quiz</button>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<script>
+/* ==============================
+   Phrase curriculum generator (365 days)
+   ============================== */
+
+const days = 365;
+let lessons = []; // array of {day, german, english, tags}
+
+(function buildLessons(){
+  const greetings = [
+    ["Hallo","Hello"],
+    ["Guten Morgen","Good morning"],
+    ["Guten Abend","Good evening"],
+    ["Gute Nacht","Good night"],
+    ["Tschüss","Bye"],
+    ["Auf Wiedersehen","Goodbye (formal)"]
+  ];
+  const polite = [
+    ["Bitte","Please / You're welcome"],
+    ["Danke","Thank you"],
+    ["Entschuldigung","Excuse me / Sorry"],
+    ["Sprechen Sie Englisch?","Do you speak English?"],
+    ["Ich verstehe nicht","I don't understand"]
+  ];
+  const directions = [
+    ["Wo ist der Bahnhof?","Where is the train station?"],
+    ["Links","Left"],
+    ["Rechts","Right"],
+    ["Geradeaus","Straight ahead"],
+    ["Wie komme ich zum Flughafen?","How do I get to the airport?"]
+  ];
+  const food = [
+    ["Ich möchte bestellen","I would like to order"],
+    ["Die Speisekarte bitte","The menu, please"],
+    ["Ich bin allergisch gegen ...","I am allergic to ..."],
+    ["Die Rechnung bitte","The bill, please"],
+    ["Ein Tisch für zwei, bitte","A table for two, please"]
+  ];
+  const accommodation = [
+    ["Ich habe eine Reservierung","I have a reservation"],
+    ["Wo ist mein Zimmer?","Where is my room?"],
+    ["Haben Sie ein freies Zimmer?","Do you have a free room?"],
+    ["Kann ich auschecken?","Can I check out?"]
+  ];
+  const shopping = [
+    ["Wie viel kostet das?","How much does that cost?"],
+    ["Haben Sie das in einer anderen Größe?","Do you have this in another size?"],
+    ["Kann ich mit Karte bezahlen?","Can I pay by card?"],
+    ["Ich schaue nur, danke","I'm just looking, thanks"]
+  ];
+  const emergency = [
+    ["Hilfe!","Help!"],
+    ["Rufen Sie die Polizei!","Call the police!"],
+    ["Ich brauche einen Arzt","I need a doctor"],
+    ["Wo ist das Krankenhaus?","Where is the hospital?"],
+    ["Ich habe meinen Pass verloren","I lost my passport"]
+  ];
+  const transit = [
+    ["Wann fährt der nächste Zug?","When does the next train leave?"],
+    ["Ein Ticket nach Berlin, bitte","A ticket to Berlin, please"],
+    ["Gleis Nummer 4","Platform number 4"],
+    ["Ist dieser Sitz frei?","Is this seat free?"]
+  ];
+  const numbers = [
+    ["Eins","One"],["Zwei","Two"],["Drei","Three"],["Vier","Four"],["Fünf","Five"],
+    ["Sechs","Six"],["Sieben","Seven"],["Acht","Eight"],["Neun","Nine"],["Zehn","Ten"]
+  ];
+  const misc = [
+    ["Ich hätte gern Wasser","I'd like some water"],
+    ["Wo ist die Toilette?","Where is the restroom?"],
+    ["Können Sie das wiederholen?","Can you repeat that?"],
+    ["Ein Foto, bitte","A photo, please"]
+  ];
+
+  const pool = [].concat(
+    greetings, polite, directions, food, accommodation,
+    shopping, emergency, transit, numbers, misc
+  );
+
+  let i = 1, idx = 0;
+  while(i <= days){
+    let base = pool[idx % pool.length]; // [german, english]
+    let pair = base.slice();
+
+    // Light variations to avoid feeling too repetitive
+    if(i % 7 === 0){
+      pair[0] += " bitte";
+      if(!pair[1].includes("please")) {
+        pair[1] = pair[1].replace(/\?$/,'') + " please";
+      }
+    } else if(i % 5 === 0){
+      pair[0] += " (langsam, bitte)";
+      if(!pair[1].includes("slowly")) {
+        pair[1] += " (slowly, please)";
+      }
+    }
+
+    lessons.push({
+      day: i,
+      german: pair[0],
+      english: pair[1],
+      tags: [] // reserved for future (e.g., greetings, food, emergency)
+    });
+    i++; idx++;
+  }
+})();
+
+/* ==============================
+   Persistence
+   ============================== */
+const storage = {
+  save(key,val){ localStorage.setItem(key, JSON.stringify(val)); },
+  load(key, fallback){
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : fallback;
+  }
+};
+
+let completed     = new Set(storage.load('gt_trav_completed', []));
+let notes         = storage.load('gt_trav_notes', {});
+let quizHistory   = storage.load('gt_trav_quizHistory', []);
+let examHistory   = storage.load('gt_trav_examHistory', []);
+let currentDay    = storage.load('gt_trav_currentDay', 1);
+
+/* ==============================
+   Speaking (TTS)
+   ============================== */
+function speakText(text){
+  if(!('speechSynthesis' in window)){ return; }
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'de-DE';
+  u.rate = 0.95;
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(u);
+}
+function speakCurrent(){
+  const L = lessons[currentDay-1];
+  if(L) speakText(L.german);
+}
+
+/* ==============================
+   UI: Lesson rendering & navigation
+   ============================== */
+function renderLesson(day){
+  const L = lessons[day-1];
+  if(!L) return;
+  document.getElementById('lessonTitle').innerText = `Day ${L.day}`;
+  document.getElementById('lessonMeta').innerText = 'Travel phrase • Core deck';
+  document.getElementById('lessonGerman').innerText = L.german;
+  document.getElementById('lessonEnglish').innerText = L.english;
+  document.getElementById('notes').value = notes[day] || '';
+
+  updateProgressUI();
+  const autoSpeak = storage.load('gt_trav_autoSpeak', false);
+  const autoSpeakCheckbox = document.getElementById('autoSpeak');
+  if(autoSpeakCheckbox) autoSpeakCheckbox.checked = autoSpeak;
+  if(autoSpeak) speakText(L.german);
+}
+
+function nextLesson(){
+  if(currentDay < lessons.length){
+    currentDay++;
+    storage.save('gt_trav_currentDay', currentDay);
+    document.getElementById('jumpDay').value = currentDay;
+    renderLesson(currentDay);
+  }
+}
+function prevLesson(){
+  if(currentDay > 1){
+    currentDay--;
+    storage.save('gt_trav_currentDay', currentDay);
+    document.getElementById('jumpDay').value = currentDay;
+    renderLesson(currentDay);
+  }
+}
+
+function toggleComplete(){
+  if(completed.has(currentDay)){
+    completed.delete(currentDay);
+  } else {
+    completed.add(currentDay);
+  }
+  persistCompleted();
+  updateProgressUI();
+}
+
+function persistCompleted(){
+  storage.save('gt_trav_completed', Array.from(completed));
+  updateBadge();
+}
+
+function jumpToDay(){
+  const input = document.getElementById('jumpDay');
+  const val = Number(input.value);
+  if(!Number.isFinite(val)) return;
+  if(val >= 1 && val <= lessons.length){
+    currentDay = val;
+    storage.save('gt_trav_currentDay', currentDay);
+    renderLesson(currentDay);
+  }
+}
+
+function updateProgressUI(){
+  const pct = Math.round((completed.size / lessons.length) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').innerText = pct + '%';
+  document.getElementById('completedCount').innerText = `${completed.size} / ${lessons.length}`;
+}
+
+/* Save notes live */
+document.addEventListener('input', (e)=>{
+  if(e.target && e.target.id === 'notes'){
+    notes[currentDay] = e.target.value;
+    storage.save('gt_trav_notes', notes);
+  }
+});
+
+/* Build lesson index */
+function buildLessonIndex(){
+  const container = document.getElementById('lessonIndex');
+  container.innerHTML = '';
+  lessons.forEach(L=>{
+    const row = document.createElement('div');
+    row.style.display = 'flex';
+    row.style.justifyContent = 'space-between';
+    row.style.alignItems = 'center';
+    row.style.padding = '4px 6px';
+    row.style.borderBottom = '1px solid #f3f6f9';
+    row.innerHTML =
+      `<div style="cursor:pointer;flex:1;min-width:0;" onclick="openDay(${L.day})">
+         <strong>Day ${L.day}:</strong> ${L.german}
+       </div>
+       <div style="min-width:80px;text-align:right;">
+         <span class="small-muted">${L.english}</span>
+       </div>`;
+    container.appendChild(row);
+  });
+}
+function openDay(d){
+  currentDay = d;
+  storage.save('gt_trav_currentDay', currentDay);
+  document.getElementById('jumpDay').value = currentDay;
+  renderLesson(currentDay);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* Search lessons */
+function searchLessons(){
+  const q = document.getElementById('searchBox').value.trim().toLowerCase();
+  const results = lessons.filter(l =>
+    l.german.toLowerCase().includes(q) ||
+    l.english.toLowerCase().includes(q)
+  );
+  const container = document.getElementById('lessonIndex');
+  container.innerHTML =
+    `<div style="padding:6px;" class="small-muted">Search results: ${results.length}</div>`;
+  results.slice(0,200).forEach(L=>{
+    const row = document.createElement('div');
+    row.style.padding = '4px 6px';
+    row.style.borderBottom = '1px solid #f3f6f9';
+    row.innerHTML =
+      `<div style="cursor:pointer;" onclick="openDay(${L.day})">
+         <strong>Day ${L.day}:</strong> ${L.german}
+       </div>
+       <div class="small-muted">${L.english}</div>`;
+    container.appendChild(row);
+  });
+}
+
+/* ==============================
+   Shuffle, escape utilities
+   ============================== */
+function shuffleArray(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+function escapeHtml(s){
+  return (s+'').replace(/[&<>"']/g, c => (
+    {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]
+  ));
+}
+
+/* ==============================
+   Quiz Builder
+   ============================== */
+function buildQuiz(){
+  const from = Number(document.getElementById('quizFrom').value || 1);
+  const to   = Math.min(Number(document.getElementById('quizTo').value || from), lessons.length);
+  const len  = Math.min(Number(document.getElementById('quizLen').value || 10), 40);
+  const pool = lessons.slice(from-1, to);
+  if(pool.length === 0){
+    alert('No lessons in the selected range.');
+    return;
+  }
+  const questions = shuffleArray(pool).slice(0,len).map(q=>{
+    const wrongs = shuffleArray(pool.filter(p=>p.day !== q.day))
+                     .slice(0,3).map(w=>w.english);
+    const options = shuffleArray([q.english, ...wrongs]);
+    return {prompt:q.german, answer:q.english, opts:options};
+  });
+  renderQuiz(questions, {from,to});
+}
+
+function renderQuiz(questions, meta){
+  const area = document.getElementById('quizArea');
+  area.innerHTML = '';
+  const form = document.createElement('div');
+
+  questions.forEach((q,qi)=>{
+    const qdiv = document.createElement('div');
+    qdiv.className = 'question';
+    qdiv.innerHTML = `<div><strong>Q${qi+1}:</strong> ${q.prompt}</div>`;
+    q.opts.forEach(opt=>{
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'mc-option';
+      btn.innerText = opt;
+      btn.onclick = ()=>{
+        q._selected = opt;
+        [...qdiv.querySelectorAll('.mc-option')]
+          .forEach(b=>b.classList.remove('selected'));
+        btn.classList.add('selected');
+      };
+      qdiv.appendChild(btn);
+    });
+    form.appendChild(qdiv);
+  });
+
+  const submit = document.createElement('button');
+  submit.className = 'btn';
+  submit.type = 'button';
+  submit.innerText = 'Submit Quiz';
+  submit.onclick = ()=>{
+    let score = 0;
+    questions.forEach(q=>{
+      if(q._selected === q.answer) score++;
+    });
+    const percent = Math.round((score/questions.length)*100);
+    quizHistory.push({
+      timestamp:Date.now(),
+      score,
+      total:questions.length,
+      from:meta.from,
+      to:meta.to
+    });
+    storage.save('gt_trav_quizHistory', quizHistory);
+    document.getElementById('quizResult').innerHTML =
+      `<div class="result">Score: ${score} / ${questions.length} (${percent}%)</div>`;
+    document.getElementById('quizCount').innerText = quizHistory.length;
+  };
+
+  area.appendChild(form);
+  area.appendChild(submit);
+}
+
+/* Quick 5-question random quiz */
+function quickRandomQuiz(){
+  const pool = lessons;
+  const questions = shuffleArray(pool).slice(0,5).map(q=>{
+    const wrongs = shuffleArray(pool.filter(p=>p.day !== q.day))
+                     .slice(0,3).map(w=>w.english);
+    const opts = shuffleArray([q.english, ...wrongs]);
+    return {prompt:q.german, answer:q.english, opts};
+  });
+  renderQuiz(questions, {from:1,to:lessons.length});
+}
+
+/* ==============================
+   Final Review (Exam)
+   ============================== */
+function startFinal(){
+  const len = Number(document.getElementById('finalLen').value || 30);
+  const pool = lessons;
+  const chosen = shuffleArray(pool).slice(0,len);
+
+  const questions = chosen.map(q=>{
+    if(Math.random() < 0.70){
+      const wrongs = shuffleArray(pool.filter(p=>p.day !== q.day))
+                       .slice(0,3).map(w=>w.english);
+      const opts = shuffleArray([q.english, ...wrongs]);
+      return {type:'mc', prompt:q.german, answer:q.english, opts};
+    } else {
+      return {type:'sa', prompt:q.german, answer:q.english};
+    }
+  });
+  renderFinalExam(questions);
+}
+
+function renderFinalExam(questions){
+  const area = document.getElementById('finalArea');
+  area.innerHTML = '';
+  questions.forEach((q,idx)=>{
+    const qdiv = document.createElement('div');
+    qdiv.className = 'question';
+    qdiv.id = `finalq_${idx}`;
+    qdiv.innerHTML = `<div><strong>Q${idx+1}:</strong> ${q.prompt}</div>`;
+    if(q.type === 'mc'){
+      q.opts.forEach(opt=>{
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'mc-option';
+        btn.innerText = opt;
+        btn.onclick = ()=>{
+          q._selected = opt;
+          [...qdiv.querySelectorAll('.mc-option')]
+            .forEach(b=>b.classList.remove('selected'));
+          btn.classList.add('selected');
+        };
+        qdiv.appendChild(btn);
+      });
+    } else {
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.style.width = '100%';
+      input.style.padding = '6px';
+      input.style.marginTop = '6px';
+      input.oninput = (e)=> q._answer = e.target.value;
+      qdiv.appendChild(input);
+    }
+    area.appendChild(qdiv);
+  });
+
+  const submit = document.createElement('button');
+  submit.className = 'btn';
+  submit.type = 'button';
+  submit.innerText = 'Submit Final Review';
+  submit.onclick = ()=> gradeFinal(questions);
+  area.appendChild(submit);
+}
+
+function gradeFinal(questions){
+  let correct = 0;
+  const details = [];
+  questions.forEach((q,idx)=>{
+    if(q.type === 'mc'){
+      const sel = q._selected || '';
+      const right = q.answer;
+      const ok = sel === right;
+      details.push({idx:idx+1, prompt:q.prompt, selected:sel, correct:right, ok});
+      if(ok) correct++;
+    } else {
+      const ans   = (q._answer || '').trim().toLowerCase();
+      const right = q.answer.toLowerCase();
+      const ok = (ans === right) || (right.includes(ans) && ans.length > 2);
+      details.push({idx:idx+1, prompt:q.prompt, answer:ans, correct:right, ok});
+      if(ok) correct++;
+    }
+  });
+  const total = questions.length;
+  const pct   = Math.round((correct/total)*100);
+  const passThreshold = storage.load('gt_trav_passThreshold', 70);
+  const passed = pct >= passThreshold;
+
+  const result = {timestamp:Date.now(), correct, total, pct, passed, details};
+  examHistory.push(result);
+  storage.save('gt_trav_examHistory', examHistory);
+
+  const out = document.getElementById('finalResult');
+  out.innerHTML =
+    `<div class="result">Final Score: ${correct} / ${total} — ${pct}% — 
+       <span style="color:${passed? 'var(--success)':'var(--danger)'}">
+         ${passed? 'PASSED':'NOT PASSED'}
+       </span>
+     </div>`;
+
+  const dlist = details.map(d=>{
+    if(d.selected !== undefined){
+      return `<div class="small">
+        ${d.idx}. ${escapeHtml(d.prompt)} — 
+        Your answer: <strong>${escapeHtml(d.selected||'')}</strong> — 
+        Correct: <strong>${escapeHtml(d.correct)}</strong> — ${d.ok ? '✅' : '❌'}
+      </div>`;
+    } else {
+      return `<div class="small">
+        ${d.idx}. ${escapeHtml(d.prompt)} — 
+        Your answer: <strong>${escapeHtml(d.answer||'')}</strong> — 
+        Correct: <strong>${escapeHtml(d.correct)}</strong> — ${d.ok ? '✅' : '❌'}
+      </div>`;
+    }
+  }).join('');
+  out.innerHTML += `<div style="margin-top:10px; max-height:260px; overflow:auto; text-align:left;">${dlist}</div>`;
+
+  document.getElementById('examCount').innerText = examHistory.length;
+
+  if(passed){
+    const certHtml =
+      `<div class="certificate center">
+        <div style="font-size:16px;font-weight:800;">Traveler Phrase Coach — Certificate</div>
+        <div style="margin-top:6px;">You passed the German Traveler Final Review.</div>
+        <div style="margin-top:6px;">Score: ${pct}% (${correct}/${total})</div>
+        <div style="margin-top:6px;">Date: ${new Date(result.timestamp).toLocaleString()}</div>
+        <div style="margin-top:10px;">
+          <button class="ghost" onclick="window.print()">Print Certificate</button>
+        </div>
+      </div>`;
+    out.innerHTML += certHtml;
+  }
+}
+
+/* ==============================
+   Progress / History / Badge
+   ============================== */
+function renderProgressPanel(){
+  document.getElementById('completedCount').innerText =
+    `${completed.size} / ${lessons.length}`;
+  document.getElementById('quizCount').innerText  = quizHistory.length;
+  document.getElementById('examCount').innerText  = examHistory.length;
+
+  const hist = document.getElementById('examHistory');
+  hist.innerHTML = '';
+  examHistory.slice().reverse().forEach(e=>{
+    const div = document.createElement('div');
+    div.style.padding = '6px';
+    div.style.borderBottom = '1px solid #f3f6f9';
+    div.innerHTML =
+      `<div><strong>${new Date(e.timestamp).toLocaleString()}</strong> — ${e.pct}% — ${e.passed? 'PASSED':'NOT PASSED'}</div>`;
+    hist.appendChild(div);
+  });
+}
+
+function updateBadge(){
+  const pct = Math.round((completed.size / lessons.length) * 100);
+  let badge = 'Traveler Novice';
+  if(pct >= 80)      badge = 'Traveler Expert';
+  else if(pct >= 50) badge = 'Traveler Pro';
+  else if(pct >= 20) badge = 'Traveler Apprentice';
+
+  document.getElementById('badgeArea').innerHTML =
+    `<strong>${badge}</strong>
+     <div class="small-muted">${pct}% of phrase track completed</div>`;
+}
+
+/* ==============================
+   Export / Reset
+   ============================== */
+function exportProgress(){
+  const obj = {
+    completed:Array.from(completed),
+    notes,
+    quizHistory,
+    examHistory,
+    passThreshold: storage.load('gt_trav_passThreshold', 70),
+    autoSpeak:     storage.load('gt_trav_autoSpeak', false)
+  };
+  const blob = new Blob([JSON.stringify(obj, null, 2)], {type:'application/json'});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url;
+  a.download = 'german-traveler-progress.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function resetAll(){
+  if(!confirm('Reset all progress and local data? This cannot be undone.')) return;
+  localStorage.removeItem('gt_trav_completed');
+  localStorage.removeItem('gt_trav_notes');
+  localStorage.removeItem('gt_trav_quizHistory');
+  localStorage.removeItem('gt_trav_examHistory');
+  localStorage.removeItem('gt_trav_currentDay');
+  localStorage.removeItem('gt_trav_passThreshold');
+  localStorage.removeItem('gt_trav_autoSpeak');
+  completed   = new Set();
+  notes       = {};
+  quizHistory = [];
+  examHistory = [];
+  currentDay  = 1;
+  location.reload();
+}
+
+/* ==============================
+   Panel switching
+   ============================== */
+function showPanel(name){
+  const panels = {
+    curriculum:'panel-curriculum',
+    quiz:'panel-quiz',
+    final:'panel-final',
+    progress:'panel-progress',
+    settings:'panel-settings'
+  };
+  for(const k in panels){
+    const el = document.getElementById(panels[k]);
+    if(el) el.style.display = 'none';
+  }
+  const active = document.getElementById(panels[name]);
+  if(active) active.style.display = 'block';
+
+  if(name === 'progress') renderProgressPanel();
+}
+
+/* ==============================
+   Mini quiz on current lesson
+   ============================== */
+function openMiniQuiz(){
+  const L = lessons[currentDay-1];
+  if(!L) return;
+  const pool  = lessons.filter(p=>p.day !== L.day);
+  const wrongs = shuffleArray(pool).slice(0,3).map(p=>p.english);
+  const opts   = shuffleArray([L.english, ...wrongs]);
+
+  const area = document.createElement('div');
+  area.className = 'question';
+  area.innerHTML = `<div><strong>Quick:</strong> ${L.german}</div>`;
+
+  opts.forEach(opt=>{
+    const b = document.createElement('button');
+    b.type  = 'button';
+    b.className = 'mc-option';
+    b.innerText = opt;
+    b.onclick = ()=>{
+      if(opt === L.english){
+        alert('✅ Correct');
+        completed.add(currentDay);
+        persistCompleted();
+        updateProgressUI();
+      } else {
+        alert('❌ Correct answer: ' + L.english);
+      }
+      area.remove();
+    };
+    area.appendChild(b);
+  });
+
+  document.getElementById('panel-curriculum').appendChild(area);
+}
+
+/* ==============================
+   Keyboard helpers (Left/Right)
+   ============================== */
+document.addEventListener('keydown',(e)=>{
+  if(e.key === 'ArrowRight') nextLesson();
+  if(e.key === 'ArrowLeft')  prevLesson();
+});
+
+/* ==============================
+   Settings persistence
+   ============================== */
+function initSettingsPersistence(){
+  const thresholdInput = document.getElementById('passThreshold');
+  const autoSpeakInput = document.getElementById('autoSpeak');
+
+  const savedThreshold = storage.load('gt_trav_passThreshold', 70);
+  thresholdInput.value = savedThreshold;
+
+  const savedAutoSpeak = storage.load('gt_trav_autoSpeak', false);
+  autoSpeakInput.checked = savedAutoSpeak;
+
+  thresholdInput.addEventListener('input', e=>{
+    const v = Number(e.target.value);
+    if(Number.isFinite(v)){
+      storage.save('gt_trav_passThreshold', v);
+    }
+  });
+  autoSpeakInput.addEventListener('change', e=>{
+    storage.save('gt_trav_autoSpeak', e.target.checked);
+  });
+}
+
+/* ==============================
+   Init
+   ============================== */
+(function init(){
+  // load persisted main data
+  completed   = new Set(storage.load('gt_trav_completed', []));
+  notes       = storage.load('gt_trav_notes', {});
+  quizHistory = storage.load('gt_trav_quizHistory', []);
+  examHistory = storage.load('gt_trav_examHistory', []);
+  currentDay  = storage.load('gt_trav_currentDay', currentDay);
+
+  document.getElementById('jumpDay').value = currentDay;
+
+  buildLessonIndex();
+  renderLesson(currentDay);
+  updateProgressUI();
+  updateBadge();
+  initSettingsPersistence();
+  showPanel('curriculum');
+})();
+</script>
+</body>
+</html>
