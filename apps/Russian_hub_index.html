@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>место для учебы — Russian Hub v1.0</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<style>
+:root{
+  --bg: #05060a;
+  --bg-soft: #070b12;
+  --card: #0c1017;
+  --card-soft: #101621;
+  --border-soft: rgba(255,255,255,0.08);
+  --text-main: #f9fafb;
+  --text-muted: #cbd5f5;
+  --accent-flag-1: #ffffff;
+  --accent-flag-2: #0b4b9b; /* blue */
+  --accent-flag-3: #d32f2f; /* red */
+  --accent-pill: #ffcc00;
+  --success: #22c55e;
+  --danger: #f97373;
+  --radius-lg: 22px;
+  --radius-md: 16px;
+}
+
+/* Reset-ish */
+*{box-sizing:border-box;}
+html,body{
+  margin:0;
+  padding:0;
+  background:
+    radial-gradient(circle at 10% 0%, #101524, #020308 55%),
+    radial-gradient(circle at 90% 100%, #182437, #020308 55%);
+  color:var(--text-main);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+/* Layout */
+.app-shell{
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 20px 16px 40px;
+}
+
+/* Hero */
+.hero{
+  position:relative;
+  overflow:hidden;
+  border-radius: var(--radius-lg);
+  padding: 28px 18px 26px;
+  margin-bottom: 20px;
+  background: radial-gradient(circle at 15% 0%, rgba(255,255,255,0.08), transparent 55%),
+              linear-gradient(120deg, #020308, #050814, #050814);
+  box-shadow: 0 22px 60px rgba(0,0,0,0.75);
+}
+.hero-flag{
+  position:absolute;
+  inset:0;
+  height:10px;
+  background: linear-gradient(90deg, var(--accent-flag-1), var(--accent-flag-2), var(--accent-flag-3));
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  opacity:0.95;
+}
+.hero-inner{
+  position:relative;
+  padding-top: 16px;
+}
+.hero-title{
+  font-size: 32px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.hero-subtitle{
+  margin-top:6px;
+  font-size:14px;
+  color: var(--text-muted);
+}
+.hero-tagline{
+  margin-top:10px;
+  font-size:16px;
+}
+.hero-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:18px;
+  margin-top:18px;
+}
+.hero-col{
+  flex:1 1 260px;
+}
+.hero-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 10px;
+  border-radius:999px;
+  background: rgba(255,255,255,0.06);
+  font-size:13px;
+  color: var(--accent-pill);
+  margin-bottom:8px;
+}
+.hero-bullets{
+  list-style:none;
+  padding:0;
+  margin:0;
+  font-size:13px;
+  color: var(--text-muted);
+}
+.hero-bullets li{
+  display:flex;
+  align-items:flex-start;
+  gap:6px;
+  margin:3px 0;
+}
+.hero-bullets span.bullet-icon{
+  font-size:14px;
+}
+.hero-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:12px;
+}
+
+/* Buttons */
+.btn{
+  border:none;
+  cursor:pointer;
+  font-weight:600;
+  font-size:14px;
+  border-radius:999px;
+  padding:9px 16px;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  transition: transform 0.08s ease, box-shadow 0.1s ease, background 0.15s ease;
+}
+.btn-primary{
+  background: linear-gradient(120deg, var(--accent-flag-2), var(--accent-flag-3));
+  color:#ffffff;
+  box-shadow:0 12px 30px rgba(0,0,0,0.7);
+}
+.btn-primary:hover{
+  transform:translateY(-1px);
+  box-shadow:0 16px 40px rgba(0,0,0,0.85);
+}
+.btn-ghost{
+  background: transparent;
+  border:1px solid var(--border-soft);
+  color: var(--text-muted);
+}
+.btn-ghost:hover{
+  background: rgba(255,255,255,0.03);
+}
+.btn-small{
+  font-size:12px;
+  padding:6px 12px;
+}
+
+/* Cards / Sections */
+.section{
+  margin-top:18px;
+}
+.card{
+  border-radius: var(--radius-md);
+  background: radial-gradient(circle at 0 0, rgba(255,255,255,0.03), transparent 55%),
+              linear-gradient(180deg, var(--card), var(--card-soft));
+  border:1px solid var(--border-soft);
+  padding:16px 14px;
+  box-shadow:0 14px 40px rgba(0,0,0,0.6);
+  margin-bottom:18px;
+}
+.section-title{
+  font-size:20px;
+  margin-bottom:4px;
+}
+.section-sub{
+  font-size:13px;
+  color: var(--text-muted);
+}
+
+/* Start Here Layout */
+.start-grid{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:10px;
+}
+.start-block{
+  flex:1 1 220px;
+  border-radius:14px;
+  padding:10px 10px;
+  background: rgba(255,255,255,0.02);
+  border:1px solid rgba(255,255,255,0.05);
+  font-size:13px;
+}
+.start-block strong{
+  font-size:14px;
+}
+
+/* Daily word / phrase */
+.daily-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:10px;
+}
+.daily-card{
+  flex:1 1 260px;
+  border-radius:14px;
+  padding:10px;
+  background: rgba(255,255,255,0.02);
+  border:1px solid rgba(255,255,255,0.05);
+}
+.daily-word-ru{
+  font-size:22px;
+  font-weight:700;
+}
+.daily-word-en{
+  margin-top:4px;
+  font-size:13px;
+  color:var(--text-muted);
+}
+
+/* Alphabet Lab */
+.alpha-layout{
+  display:flex;
+  flex-wrap:wrap;
+  gap:14px;
+  margin-top:10px;
+}
+.alpha-grid{
+  flex:2 1 260px;
+  display:grid;
+  grid-template-columns: repeat(8,minmax(32px,1fr));
+  gap:6px;
+}
+.alpha-cell{
+  border-radius:10px;
+  background:#111826;
+  border:1px solid rgba(255,255,255,0.08);
+  padding:6px 0;
+  font-size:18px;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+}
+.alpha-cell.practiced{
+  background: linear-gradient(135deg, rgba(34,197,94,0.14), rgba(34,197,94,0.02));
+  border-color: rgba(34,197,94,0.8);
+}
+.alpha-info{
+  flex:1 1 220px;
+  border-radius:14px;
+  background:#111726;
+  border:1px solid rgba(255,255,255,0.1);
+  padding:10px 10px 12px;
+  font-size:13px;
+}
+.alpha-main-letter{
+  font-size:40px;
+  font-weight:800;
+}
+.alpha-meta{
+  margin-top:6px;
+}
+.alpha-meta div{
+  margin-top:2px;
+}
+.alpha-progress{
+  margin-top:8px;
+  font-size:12px;
+  color:var(--text-muted);
+}
+
+/* Tracing canvas */
+.trace-wrap{
+  margin-top:10px;
+}
+.trace-label{
+  font-size:12px;
+  color:var(--text-muted);
+  margin-bottom:4px;
+}
+#traceCanvas{
+  width:100%;
+  max-width:420px;
+  height:220px;
+  border-radius:18px;
+  display:block;
+  background: radial-gradient(circle at 0 0, rgba(255,255,255,0.02), transparent 60%),
+              #05070c;
+  border:1px dashed rgba(255,255,255,0.16);
+  margin:0 auto;
+  touch-action:none;
+}
+.trace-actions{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin-top:8px;
+}
+
+/* Word Lab */
+.word-layout{
+  margin-top:8px;
+}
+.word-top{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  align-items:center;
+  justify-content:space-between;
+  font-size:12px;
+  color:var(--text-muted);
+}
+.word-current{
+  font-size:24px;
+  font-weight:700;
+  margin:14px 0 8px;
+  text-align:center;
+}
+.word-input{
+  width:100%;
+  padding:10px 12px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.1);
+  background:#050811;
+  color:var(--text-main);
+  font-size:14px;
+}
+.word-feedback{
+  font-size:13px;
+  margin-top:6px;
+  text-align:center;
+}
+.word-stats{
+  margin-top:8px;
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  font-size:12px;
+  color:var(--text-muted);
+}
+
+/* Progress summary */
+.progress-summary{
+  margin-top:6px;
+  font-size:13px;
+  color:var(--text-muted);
+}
+.progress-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:4px 10px;
+  border-radius:999px;
+  background:rgba(255,255,255,0.06);
+  margin-top:6px;
+  font-size:11px;
+}
+
+/* Utility */
+.mono{font-family: "SF Mono", ui-monospace, Menlo, monospace;}
+@media(max-width:700px){
+  .hero{
+    padding:22px 14px 18px;
+  }
+  .hero-title{
+    font-size:24px;
+  }
+  .hero-row{
+    flex-direction:column;
+  }
+}
+</style>
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-flag" aria-hidden="true"></div>
+    <div class="hero-inner">
+      <div class="hero-pill">
+        <span>место для учебы</span>
+        <span class="mono">/ mesto dlya uchyoby /</span>
+      </div>
+      <h1 class="hero-title">Russian Hub v1.0</h1>
+      <p class="hero-subtitle">
+        русский • russkiy • Russian — a calm, ad-free place to practice letters, words, and phrases.
+      </p>
+      <p class="hero-tagline">
+        Free • No accounts • No tracking • Everything saved only in your browser.
+      </p>
+      <div class="hero-row">
+        <div class="hero-col">
+          <ul class="hero-bullets">
+            <li><span class="bullet-icon">✅</span><span>Alphabet Lab with tap-to-hear + tracing canvas</span></li>
+            <li><span class="bullet-icon">✅</span><span>Daily word & phrase with one-click audio</span></li>
+            <li><span class="bullet-icon">✅</span><span>Level 1 word challenge (travel & survival words)</span></li>
+          </ul>
+          <div class="hero-actions">
+            <button class="btn btn-primary" onclick="scrollToSection('startHere')">Start here</button>
+            <button class="btn btn-ghost btn-small" onclick="scrollToSection('alphabetLab')">Go to Alphabet Lab</button>
+          </div>
+        </div>
+        <div class="hero-col">
+          <div class="start-block">
+            <strong>Today’s Quick Path</strong>
+            <div style="margin-top:4px;">
+              1) Learn the <span class="mono">Daily Word</span><br/>
+              2) Tap one Russian letter & trace it<br/>
+              3) Beat one round in the Word Challenge
+            </div>
+            <div class="progress-summary">
+              Letters practiced: <span id="summaryLetters">0 / 33</span><br/>
+              Word game attempts: <span id="summaryAttempts">0</span>
+              <div class="progress-badge" id="summaryBadge">
+                🌱 Calm Beginner
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- START HERE -->
+  <section class="section" id="startHere">
+    <div class="card">
+      <div class="section-title">Start Here – How to Use This Hub</div>
+      <div class="section-sub">
+        Choose the path that fits your energy today. Everything is self-paced and stored only on this device.
+      </div>
+
+      <div class="start-grid">
+        <div class="start-block">
+          <strong>⏱ 5-minute Warmup</strong>
+          <ul style="margin:6px 0 0 0; padding-left:16px; font-size:13px;">
+            <li>Check the Daily Word & Phrase</li>
+            <li>Tap 🔊 and repeat out loud</li>
+            <li>Tap one letter in Alphabet Lab</li>
+          </ul>
+        </div>
+        <div class="start-block">
+          <strong>🎯 15–20 minutes</strong>
+          <ul style="margin:6px 0 0 0; padding-left:16px; font-size:13px;">
+            <li>Daily Word + Phrase</li>
+            <li>Practice tracing 2–3 letters</li>
+            <li>Play the Level 1 Word Challenge for 10–15 words</li>
+          </ul>
+        </div>
+        <div class="start-block">
+          <strong>🌊 Deep Practice</strong>
+          <ul style="margin:6px 0 0 0; padding-left:16px; font-size:13px;">
+            <li>Cycle through several letters</li>
+            <li>Say the daily phrase from memory</li>
+            <li>Come back tomorrow – small steps, often</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DAILY WORD + PHRASE -->
+  <section class="section">
+    <div class="card">
+      <div class="section-title">Daily Word & Phrase</div>
+      <div class="section-sub">
+        One tiny piece of Russian each day. Tap the audio and echo it back out loud.
+      </div>
+
+      <div class="daily-row" style="margin-top:12px;">
+        <div class="daily-card">
+          <div style="font-size:12px; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-muted);">Daily word</div>
+          <div class="daily-word-ru" id="dailyWordRu">—</div>
+          <div class="daily-word-en" id="dailyWordEn">—</div>
+          <div style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;">
+            <button class="btn btn-primary btn-small" onclick="speakText(currentDailyWord.ru)">🔊 Say it</button>
+            <button class="btn btn-ghost btn-small" onclick="pickDailyWord()">New word</button>
+          </div>
+        </div>
+
+        <div class="daily-card">
+          <div style="font-size:12px; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-muted);">Daily phrase</div>
+          <div class="daily-word-ru" id="dailyPhraseRu">—</div>
+          <div class="daily-word-en" id="dailyPhraseEn">—</div>
+          <div style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;">
+            <button class="btn btn-primary btn-small" onclick="speakText(currentDailyPhrase.ru)">🔊 Say it</button>
+            <button class="btn btn-ghost btn-small" onclick="pickDailyPhrase()">New phrase</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ALPHABET LAB -->
+  <section class="section" id="alphabetLab">
+    <div class="card">
+      <div class="section-title">Alphabet Lab — Алфавит</div>
+      <div class="section-sub">
+        Tap a letter to see its name, approximate sound, and an example. Then practice tracing it on the canvas.
+      </div>
+
+      <div class="alpha-layout">
+        <div class="alpha-grid" id="alphabetGrid"></div>
+
+        <div class="alpha-info">
+          <div style="font-size:12px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em;">Selected letter</div>
+          <div class="alpha-main-letter" id="letterMain">А</div>
+          <div class="alpha-meta">
+            <div><strong>Name:</strong> <span id="letterName">a</span></div>
+            <div><strong>Sound:</strong> <span id="letterSound">ah</span></div>
+            <div><strong>Example:</strong> <span id="letterExample">Арбуз — watermelon</span></div>
+          </div>
+          <div style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;">
+            <button class="btn btn-primary btn-small" onclick="speakText(currentLetterData ? currentLetterData.exampleRu : 'А')">🔊 Say example</button>
+            <button class="btn btn-ghost btn-small" onclick="markCurrentLetterPracticed()">✓ Mark practiced</button>
+          </div>
+          <div class="alpha-progress" id="alphaProgressLabel">
+            Letters practiced: 0 / 33
+          </div>
+        </div>
+      </div>
+
+      <div class="trace-wrap">
+        <div class="trace-label">Tracing canvas (mouse or touch). Draw over the faint letter.</div>
+        <canvas id="traceCanvas"></canvas>
+        <div class="trace-actions">
+          <button class="btn btn-ghost btn-small" onclick="clearTrace()">Clear</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORD CHALLENGE -->
+  <section class="section" id="wordLab">
+    <div class="card">
+      <div class="section-title">Word Challenge — Level 1 (Travel & Survival)</div>
+      <div class="section-sub">
+        You’ll see either the Russian word or the English meaning. Type the translation in the other language to earn points.
+      </div>
+
+      <div class="word-layout">
+        <div class="word-top">
+          <div>Mode: <span class="mono">RU ⇄ EN</span></div>
+          <div>Level: <span class="mono">1</span> (Greetings & travel)</div>
+        </div>
+
+        <div class="word-current" id="currentWordDisplay">—</div>
+
+        <input id="wordInput" class="word-input" placeholder="Type the translation here…" />
+
+        <div style="margin-top:8px; display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
+          <button class="btn btn-primary btn-small" onclick="checkWord()">Check</button>
+          <button class="btn btn-ghost btn-small" onclick="nextWord()">Skip</button>
+          <button class="btn btn-ghost btn-small" onclick="speakCurrentWord()">🔊 Say word</button>
+        </div>
+
+        <div class="word-feedback" id="wordFeedback">Tip: Answers are not case-sensitive. English or Russian keyboard both welcome.</div>
+
+        <div class="word-stats">
+          <div>Score: <span id="statScore">0</span></div>
+          <div>Attempts: <span id="statAttempts">0</span></div>
+          <div>Accuracy: <span id="statAccuracy">0%</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* =========================
+   DATA
+   ========================= */
+
+// Alphabet data
+const RU_ALPHABET = [
+  { l:"А", name:"a",        sound:"ah",                 type:"vowel",     exampleRu:"арбуз", exampleEn:"watermelon" },
+  { l:"Б", name:"be",       sound:"b",                  type:"consonant", exampleRu:"брат", exampleEn:"brother" },
+  { l:"В", name:"ve",       sound:"v",                  type:"consonant", exampleRu:"вода", exampleEn:"water" },
+  { l:"Г", name:"ge",       sound:"g",                  type:"consonant", exampleRu:"город", exampleEn:"city" },
+  { l:"Д", name:"de",       sound:"d",                  type:"consonant", exampleRu:"дом", exampleEn:"house" },
+  { l:"Е", name:"ye",       sound:"ye / e",             type:"vowel",     exampleRu:"еда", exampleEn:"food" },
+  { l:"Ё", name:"yo",       sound:"yo",                 type:"vowel",     exampleRu:"ёлка", exampleEn:"fir tree" },
+  { l:"Ж", name:"zhe",      sound:"zh (measure)",       type:"consonant", exampleRu:"жара", exampleEn:"heat" },
+  { l:"З", name:"ze",       sound:"z",                  type:"consonant", exampleRu:"зима", exampleEn:"winter" },
+  { l:"И", name:"i",        sound:"ee",                 type:"vowel",     exampleRu:"игра", exampleEn:"game" },
+  { l:"Й", name:"i kratkoye", sound:"y",                type:"consonant", exampleRu:"йога", exampleEn:"yoga" },
+  { l:"К", name:"ka",       sound:"k",                  type:"consonant", exampleRu:"кино", exampleEn:"cinema" },
+  { l:"Л", name:"el",       sound:"l",                  type:"consonant", exampleRu:"лес", exampleEn:"forest" },
+  { l:"М", name:"em",       sound:"m",                  type:"consonant", exampleRu:"море", exampleEn:"sea" },
+  { l:"Н", name:"en",       sound:"n",                  type:"consonant", exampleRu:"ночь", exampleEn:"night" },
+  { l:"О", name:"o",        sound:"oh",                 type:"vowel",     exampleRu:"окно", exampleEn:"window" },
+  { l:"П", name:"pe",       sound:"p",                  type:"consonant", exampleRu:"поезд", exampleEn:"train" },
+  { l:"Р", name:"er",       sound:"rolled r",           type:"consonant", exampleRu:"река", exampleEn:"river" },
+  { l:"С", name:"es",       sound:"s",                  type:"consonant", exampleRu:"солнце", exampleEn:"sun" },
+  { l:"Т", name:"te",       sound:"t",                  type:"consonant", exampleRu:"трамвай", exampleEn:"tram" },
+  { l:"У", name:"u",        sound:"oo",                 type:"vowel",     exampleRu:"улица", exampleEn:"street" },
+  { l:"Ф", name:"ef",       sound:"f",                  type:"consonant", exampleRu:"фото", exampleEn:"photo" },
+  { l:"Х", name:"kha",      sound:"kh (loch)",          type:"consonant", exampleRu:"хлеб", exampleEn:"bread" },
+  { l:"Ц", name:"tse",      sound:"ts",                 type:"consonant", exampleRu:"цирк", exampleEn:"circus" },
+  { l:"Ч", name:"che",      sound:"ch",                 type:"consonant", exampleRu:"чай", exampleEn:"tea" },
+  { l:"Ш", name:"sha",      sound:"sh",                 type:"consonant", exampleRu:"школа", exampleEn:"school" },
+  { l:"Щ", name:"shcha",    sound:"long sh",            type:"consonant", exampleRu:"щука", exampleEn:"pike (fish)" },
+  { l:"Ъ", name:"hard sign",sound:"— (hard sign)",      type:"sign",      exampleRu:"объезд", exampleEn:"detour" },
+  { l:"Ы", name:"yery",     sound:"ih (back)",          type:"vowel",     exampleRu:"сыр", exampleEn:"cheese" },
+  { l:"Ь", name:"soft sign",sound:"— (soft sign)",      type:"sign",      exampleRu:"день", exampleEn:"day" },
+  { l:"Э", name:"e",        sound:"eh",                 type:"vowel",     exampleRu:"это", exampleEn:"this/it" },
+  { l:"Ю", name:"yu",       sound:"yu",                 type:"vowel",     exampleRu:"юг", exampleEn:"south" },
+  { l:"Я", name:"ya",       sound:"ya",                 type:"vowel",     exampleRu:"яблоко", exampleEn:"apple" }
+];
+
+// Level 1 word list (travel + survival)
+const WORDS_L1 = [
+  { ru:"Привет", en:"Hi" },
+  { ru:"Здравствуйте", en:"Hello (formal)" },
+  { ru:"Пока", en:"Bye" },
+  { ru:"До свидания", en:"Goodbye" },
+  { ru:"Пожалуйста", en:"Please / You are welcome" },
+  { ru:"Спасибо", en:"Thank you" },
+  { ru:"Извините", en:"Excuse me / Sorry" },
+  { ru:"Да", en:"Yes" },
+  { ru:"Нет", en:"No" },
+  { ru:"Где туалет?", en:"Where is the bathroom?" },
+  { ru:"Вы говорите по-английски?", en:"Do you speak English?" },
+  { ru:"Я не понимаю", en:"I do not understand" },
+  { ru:"Помогите, пожалуйста", en:"Help, please" },
+  { ru:"Сколько это стоит?", en:"How much does this cost?" },
+  { ru:"Где метро?", en:"Where is the metro?" },
+  { ru:"Налево", en:"Left" },
+  { ru:"Направо", en:"Right" },
+  { ru:"Прямо", en:"Straight ahead" },
+  { ru:"Отель", en:"Hotel" },
+  { ru:"Билет", en:"Ticket" },
+  { ru:"Аэропорт", en:"Airport" },
+  { ru:"Вокзал", en:"Train station" },
+  { ru:"Такси", en:"Taxi" },
+  { ru:"Ресторан", en:"Restaurant" },
+  { ru:"Меню, пожалуйста", en:"The menu, please" },
+  { ru:"Счёт, пожалуйста", en:"The bill, please" }
+];
+
+// Daily phrases
+const PHRASES = [
+  { ru:"Меня зовут...", en:"My name is..." },
+  { ru:"Я из США", en:"I am from the USA" },
+  { ru:"Я турист", en:"I am a tourist" },
+  { ru:"Я учу русский язык", en:"I am learning Russian" },
+  { ru:"Мне нужен такси", en:"I need a taxi" },
+  { ru:"Я немного говорю по-русски", en:"I speak a little Russian" },
+  { ru:"Можете говорить медленнее?", en:"Can you speak more slowly?" },
+  { ru:"Повторите, пожалуйста", en:"Repeat, please" },
+  { ru:"Где хороший ресторан поблизости?", en:"Where is a good restaurant nearby?" },
+  { ru:"У меня аллергия на...", en:"I am allergic to..." }
+];
+
+/* =========================
+   STATE
+   ========================= */
+let currentLetterIndex = 0;
+let practicedLetters = new Set();
+let currentLetterData = RU_ALPHABET[0];
+
+let currentDailyWord = WORDS_L1[0];
+let currentDailyPhrase = PHRASES[0];
+
+let wordState = {
+  card: null,
+  showRu: true,
+  score: 0,
+  attempts: 0
+};
+
+/* LocalStorage keys */
+const LS_LETTERS = "russian_hub_letters_practiced";
+const LS_WORD_STATS = "russian_hub_word_stats";
+
+/* =========================
+   HELPERS
+   ========================= */
+
+function scrollToSection(id){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+function speakText(text){
+  if(!("speechSynthesis" in window) || !text) return;
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "ru-RU";
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(u);
+}
+
+function randItem(arr){
+  return arr[Math.floor(Math.random()*arr.length)];
+}
+
+// Normalize for comparison
+function normalizeEn(str){
+  return (str || "")
+    .toLowerCase()
+    .replace(/[.,!?]/g,"")
+    .trim();
+}
+function normalizeRu(str){
+  return (str || "")
+    .toLowerCase()
+    .replace(/ё/g,"е")
+    .replace(/[.,!?]/g,"")
+    .trim();
+}
+
+// Comparison that allows partial matches for multi-word English definitions
+function matchesEn(input, expected){
+  const inNorm = normalizeEn(input);
+  const expNorm = normalizeEn(expected);
+  if(!inNorm || !expNorm) return false;
+
+  // Split expected on slash / parentheses / commas to allow main pieces
+  const parts = expNorm.split(/[\/,(]/).map(p=>p.trim()).filter(Boolean);
+  if(parts.length === 0) parts.push(expNorm);
+  return parts.some(p => p === inNorm);
+}
+
+/* =========================
+   LOCAL STORAGE
+   ========================= */
+function loadProgress(){
+  try{
+    const rawL = localStorage.getItem(LS_LETTERS);
+    if(rawL){
+      const arr = JSON.parse(rawL);
+      if(Array.isArray(arr)) practicedLetters = new Set(arr);
+    }
+  }catch(e){}
+
+  try{
+    const rawW = localStorage.getItem(LS_WORD_STATS);
+    if(rawW){
+      const obj = JSON.parse(rawW);
+      if(obj && typeof obj.score === "number" && typeof obj.attempts === "number"){
+        wordState.score = obj.score;
+        wordState.attempts = obj.attempts;
+      }
+    }
+  }catch(e){}
+}
+
+function saveLetters(){
+  try{
+    localStorage.setItem(LS_LETTERS, JSON.stringify(Array.from(practicedLetters)));
+  }catch(e){}
+}
+
+function saveWordStats(){
+  try{
+    localStorage.setItem(LS_WORD_STATS, JSON.stringify({score:wordState.score, attempts:wordState.attempts}));
+  }catch(e){}
+}
+
+/* =========================
+   DAILY WORD & PHRASE
+   ========================= */
+function pickDailyWord(){
+  currentDailyWord = randItem(WORDS_L1);
+  const ruEl = document.getElementById("dailyWordRu");
+  const enEl = document.getElementById("dailyWordEn");
+  if(ruEl) ruEl.textContent = currentDailyWord.ru;
+  if(enEl) enEl.textContent = currentDailyWord.en;
+}
+function pickDailyPhrase(){
+  currentDailyPhrase = randItem(PHRASES);
+  const ruEl = document.getElementById("dailyPhraseRu");
+  const enEl = document.getElementById("dailyPhraseEn");
+  if(ruEl) ruEl.textContent = currentDailyPhrase.ru;
+  if(enEl) enEl.textContent = currentDailyPhrase.en;
+}
+
+/* =========================
+   ALPHABET LAB
+   ========================= */
+function buildAlphabetGrid(){
+  const grid = document.getElementById("alphabetGrid");
+  if(!grid) return;
+  grid.innerHTML = "";
+  RU_ALPHABET.forEach((letter, idx)=>{
+    const div = document.createElement("button");
+    div.type = "button";
+    div.className = "alpha-cell";
+    div.textContent = letter.l;
+    if(practicedLetters.has(letter.l)) div.classList.add("practiced");
+    div.onclick = ()=> {
+      setCurrentLetter(idx);
+      practicedLetters.add(letter.l);
+      saveLetters();
+      updateAlphabetProgress();
+      updateAlphabetGridClasses();
+      drawGuideLetter();
+    };
+    grid.appendChild(div);
+  });
+}
+
+function updateAlphabetGridClasses(){
+  const grid = document.getElementById("alphabetGrid");
+  if(!grid) return;
+  const cells = grid.querySelectorAll(".alpha-cell");
+  cells.forEach((cell, idx)=>{
+    const l = RU_ALPHABET[idx].l;
+    if(practicedLetters.has(l)) cell.classList.add("practiced");
+    else cell.classList.remove("practiced");
+  });
+}
+
+function setCurrentLetter(idx){
+  currentLetterIndex = idx;
+  currentLetterData = RU_ALPHABET[idx];
+  const letterMain = document.getElementById("letterMain");
+  const letterName = document.getElementById("letterName");
+  const letterSound = document.getElementById("letterSound");
+  const letterExample = document.getElementById("letterExample");
+  if(letterMain) letterMain.textContent = currentLetterData.l;
+  if(letterName) letterName.textContent = currentLetterData.name;
+  if(letterSound) letterSound.textContent = currentLetterData.sound;
+  if(letterExample) letterExample.textContent = `${capitalize(currentLetterData.exampleRu)} — ${currentLetterData.exampleEn}`;
+}
+
+function markCurrentLetterPracticed(){
+  if(!currentLetterData) return;
+  practicedLetters.add(currentLetterData.l);
+  saveLetters();
+  updateAlphabetProgress();
+  updateAlphabetGridClasses();
+}
+
+function updateAlphabetProgress(){
+  const total = RU_ALPHABET.length;
+  const done = practicedLetters.size;
+  const label = document.getElementById("alphaProgressLabel");
+  if(label) label.textContent = `Letters practiced: ${done} / ${total}`;
+  const summaryLetters = document.getElementById("summaryLetters");
+  if(summaryLetters) summaryLetters.textContent = `${done} / ${total}`;
+  updateBadge();
+}
+
+/* =========================
+   TRACING CANVAS
+   ========================= */
+let traceCanvas, traceCtx;
+let tracing = false;
+let lastX = 0, lastY = 0;
+
+function initTraceCanvas(){
+  traceCanvas = document.getElementById("traceCanvas");
+  if(!traceCanvas) return;
+  traceCtx = traceCanvas.getContext("2d");
+
+  function startDraw(x,y){
+    tracing = true;
+    lastX = x; lastY = y;
+  }
+  function draw(x,y){
+    if(!tracing || !traceCtx) return;
+    traceCtx.strokeStyle = "#ffcc00";
+    traceCtx.lineWidth = 4;
+    traceCtx.lineCap = "round";
+    traceCtx.beginPath();
+    traceCtx.moveTo(lastX,lastY);
+    traceCtx.lineTo(x,y);
+    traceCtx.stroke();
+    lastX = x; lastY = y;
+  }
+  function stopDraw(){
+    tracing = false;
+  }
+
+  traceCanvas.addEventListener("mousedown", e=>{
+    const rect = traceCanvas.getBoundingClientRect();
+    startDraw(e.clientX - rect.left, e.clientY - rect.top);
+  });
+  traceCanvas.addEventListener("mousemove", e=>{
+    const rect = traceCanvas.getBoundingClientRect();
+    draw(e.clientX - rect.left, e.clientY - rect.top);
+  });
+  traceCanvas.addEventListener("mouseup", stopDraw);
+  traceCanvas.addEventListener("mouseleave", stopDraw);
+
+  traceCanvas.addEventListener("touchstart", e=>{
+    e.preventDefault();
+    const rect = traceCanvas.getBoundingClientRect();
+    const t = e.touches[0];
+    startDraw(t.clientX - rect.left, t.clientY - rect.top);
+  }, {passive:false});
+  traceCanvas.addEventListener("touchmove", e=>{
+    e.preventDefault();
+    const rect = traceCanvas.getBoundingClientRect();
+    const t = e.touches[0];
+    draw(t.clientX - rect.left, t.clientY - rect.top);
+  }, {passive:false});
+  traceCanvas.addEventListener("touchend", stopDraw);
+
+  drawGuideLetter();
+}
+
+function drawGuideLetter(){
+  if(!traceCtx || !traceCanvas || !currentLetterData) return;
+  const w = traceCanvas.width;
+  const h = traceCanvas.height;
+  traceCtx.clearRect(0,0,w,h);
+
+  // Faint letter as guide
+  traceCtx.save();
+  traceCtx.globalAlpha = 0.15;
+  traceCtx.fillStyle = "#ffffff";
+  // Scale font size based on canvas
+  const size = Math.min(w,h) * 0.7;
+  traceCtx.font = `${size}px system-ui`;
+  traceCtx.textAlign = "center";
+  traceCtx.textBaseline = "middle";
+  traceCtx.fillText(currentLetterData.l, w/2, h/2);
+  traceCtx.restore();
+}
+
+function clearTrace(){
+  if(!traceCtx || !traceCanvas) return;
+  traceCtx.clearRect(0,0,traceCanvas.width, traceCanvas.height);
+  drawGuideLetter();
+}
+
+/* =========================
+   WORD CHALLENGE
+   ========================= */
+function updateWordStatsUI(){
+  const sEl = document.getElementById("statScore");
+  const aEl = document.getElementById("statAttempts");
+  const pEl = document.getElementById("statAccuracy");
+  if(sEl) sEl.textContent = wordState.score.toString();
+  if(aEl) aEl.textContent = wordState.attempts.toString();
+  const pct = wordState.attempts ? Math.round(wordState.score/wordState.attempts*100) : 0;
+  if(pEl) pEl.textContent = pct + "%";
+
+  const summaryAttempts = document.getElementById("summaryAttempts");
+  if(summaryAttempts) summaryAttempts.textContent = wordState.attempts.toString();
+
+  updateBadge();
+}
+
+function nextWord(){
+  const card = randItem(WORDS_L1);
+  const showRu = Math.random() > 0.5;
+  wordState.card = card;
+  wordState.showRu = showRu;
+  const disp = document.getElementById("currentWordDisplay");
+  const input = document.getElementById("wordInput");
+  const fb = document.getElementById("wordFeedback");
+  if(disp) disp.textContent = showRu ? card.ru : card.en;
+  if(input){
+    input.value = "";
+    input.focus();
+  }
+  if(fb) fb.textContent = "Type the translation in the other language, then press Check.";
+}
+
+function checkWord(){
+  const inputEl = document.getElementById("wordInput");
+  const fb = document.getElementById("wordFeedback");
+  if(!wordState.card || !inputEl){
+    alert("Press Skip or Check again to generate a word.");
+    return;
+  }
+  const raw = inputEl.value || "";
+  if(!raw.trim()){
+    if(fb) fb.textContent = "Type something first.";
+    return;
+  }
+
+  const expectedRu = wordState.card.ru;
+  const expectedEn = wordState.card.en;
+  let correct = false;
+
+  if(wordState.showRu){
+    // Russian is visible; expect English
+    correct = matchesEn(raw, expectedEn);
+  }else{
+    // English visible; expect Russian
+    correct = normalizeRu(raw) === normalizeRu(expectedRu);
+  }
+
+  wordState.attempts++;
+  if(correct) wordState.score++;
+
+  saveWordStats();
+  updateWordStatsUI();
+
+  if(fb){
+    if(correct){
+      fb.textContent = "✅ Correct!";
+      fb.style.color = "var(--success)";
+    }else{
+      fb.textContent = `❌ Correct: ${expectedRu} — ${expectedEn}`;
+      fb.style.color = "var(--danger)";
+    }
+  }
+
+  // Next card after a short pause
+  setTimeout(nextWord, 600);
+}
+
+function speakCurrentWord(){
+  if(!wordState.card) return;
+  const text = wordState.showRu ? wordState.card.ru : wordState.card.ru;
+  speakText(text);
+}
+
+/* =========================
+   PROGRESS BADGE
+   ========================= */
+function updateBadge(){
+  const lettersCount = practicedLetters.size;
+  const attempts = wordState.attempts;
+  const pctLetters = lettersCount / RU_ALPHABET.length;
+
+  let label = "Calm Beginner";
+  let icon = "🌱";
+
+  if(pctLetters > 0.3 || attempts >= 40){
+    label = "Steady Explorer";
+    icon = "🚶‍♀️";
+  }
+  if(pctLetters > 0.6 || attempts >= 100){
+    label = "Town Traveler";
+    icon = "🧭";
+  }
+  if(pctLetters > 0.9 && attempts >= 200){
+    label = "Quiet Polyglot";
+    icon = "🌌";
+  }
+
+  const badge = document.getElementById("summaryBadge");
+  if(badge) badge.innerHTML = `${icon} ${label}`;
+}
+
+/* =========================
+   UTIL
+   ========================= */
+function capitalize(str){
+  if(!str) return "";
+  return str[0].toUpperCase() + str.slice(1);
+}
+
+/* =========================
+   INIT
+   ========================= */
+(function init(){
+  loadProgress();
+
+  // Daily items
+  pickDailyWord();
+  pickDailyPhrase();
+
+  // Alphabet
+  buildAlphabetGrid();
+  setCurrentLetter(0);
+
+  // Tracing
+  // Defer to ensure canvas has layout
+  setTimeout(initTraceCanvas, 50);
+
+  // Word game
+  updateWordStatsUI();
+  nextWord();
+
+  // Enter key triggers check
+  const input = document.getElementById("wordInput");
+  if(input){
+    input.addEventListener("keydown", e=>{
+      if(e.key === "Enter"){
+        e.preventDefault();
+        checkWord();
+      }
+    });
+  }
+
+  // Initial badge + progress
+  updateAlphabetProgress();
+})();
+</script>
+</body>
+</html>
