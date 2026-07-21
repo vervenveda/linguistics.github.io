@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>NoorAI Lighted Path — Arabic Quest</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Scheherazade+New:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --midnight:#0b1020;
+    --midnight-soft:#14182a;
+    --panel:#101424;
+    --gold:#d9b878;
+    --gold-deep:#b89252;
+    --ink:#FFFDF5;
+    --ink-soft:#f0e9dc;
+    --accent:#e8d5a4;
+    --radius-main:21px;
+    --radius-soft:14px;
+    --shadow-main:0 18px 72px rgba(0,0,0,0.55);
+  }
+
+  *{box-sizing:border-box;}
+
+  body{
+    margin:0;
+    min-height:100vh;
+    background:radial-gradient(circle at top,#1c2342 0%,var(--midnight) 52%,#050713 100%);
+    color:var(--ink);
+    font-family:'Poppins',system-ui,-apple-system,'Segoe UI',sans-serif;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:18px 10px 24px;
+  }
+
+  .noor-game-wrap{
+    max-width:960px;
+    width:100%;
+  }
+
+  .noor-game-title{
+    text-align:center;
+    margin-bottom:8px;
+  }
+
+  .noor-game-title h1{
+    margin:0;
+    font-family:'Cinzel','Times New Roman',serif;
+    font-size:28px;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--gold);
+  }
+
+  .noor-game-sub{
+    margin:4px auto 0;
+    max-width:640px;
+    font-size:13px;
+    line-height:1.7;
+    color:var(--ink-soft);
+    text-align:center;
+  }
+
+  .game-shell{
+    margin-top:18px;
+    background:rgba(8,12,26,0.96);
+    border-radius:var(--radius-main);
+    border:1px solid rgba(217,184,120,0.7);
+    box-shadow:var(--shadow-main);
+    padding:18px 14px 16px;
+  }
+
+  .game-top{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:10px;
+  }
+
+  .mode-row{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:6px;
+  }
+
+  .mode-label{
+    font-size:11px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--accent);
+  }
+
+  .mode-btn{
+    border-radius:999px;
+    border:1px solid rgba(217,184,120,0.4);
+    background:rgba(5,9,22,0.9);
+    color:var(--ink-soft);
+    padding:6px 11px;
+    font-size:11px;
+    letter-spacing:0.09em;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition:background .18s,transform .18s,box-shadow .18s,color .18s;
+  }
+
+  .mode-btn.active{
+    background:linear-gradient(135deg,var(--gold),var(--gold-deep));
+    color:#0b1020;
+    box-shadow:0 6px 18px rgba(0,0,0,0.5);
+    transform:translateY(-1px);
+  }
+
+  .lantern-row{
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+
+  .lantern-label{
+    font-size:11px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--accent);
+  }
+
+  .lanterns{
+    display:flex;
+    gap:4px;
+    margin-top:3px;
+  }
+
+  .lantern{
+    width:14px;
+    height:14px;
+    border-radius:50%;
+    border:1px solid rgba(217,184,120,0.6);
+    background:rgba(8,10,20,0.9);
+    box-shadow:0 0 0 rgba(217,184,120,0);
+    transition:background .18s,box-shadow .18s,transform .18s,border-color .18s;
+  }
+
+  .lantern.current{
+    box-shadow:0 0 12px rgba(217,184,120,0.85);
+    border-color:var(--gold);
+    transform:translateY(-1px);
+  }
+
+  .lantern.correct{
+    background:var(--gold);
+    border-color:var(--gold-deep);
+    box-shadow:0 0 10px rgba(217,184,120,0.85);
+  }
+
+  .lantern.wrong{
+    background:rgba(245,101,101,0.85);
+    border-color:#f56565;
+    box-shadow:0 0 8px rgba(245,101,101,0.8);
+  }
+
+  .game-main{
+    margin-top:16px;
+    padding:14px 12px 14px;
+    border-radius:var(--radius-soft);
+    background:radial-gradient(circle at top left,#1b2238 0%,#050813 65%);
+    border:1px solid rgba(255,255,255,0.08);
+  }
+
+  .prompt-label{
+    font-size:11px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:6px;
+  }
+
+  .prompt-text{
+    font-size:15px;
+    color:var(--ink);
+    margin-bottom:10px;
+  }
+
+  .focus-arabic{
+    font-family:'Scheherazade New','Amiri',serif;
+    font-size:40px;
+    color:var(--gold);
+    margin-bottom:4px;
+  }
+
+  .focus-extra{
+    font-size:13px;
+    color:var(--ink-soft);
+    margin-bottom:10px;
+  }
+
+  .answers{
+    margin-top:6px;
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
+  }
+
+  .answer-btn{
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,0.14);
+    background:rgba(5,9,20,0.9);
+    color:var(--ink-soft);
+    padding:7px 10px;
+    font-size:13px;
+    text-align:left;
+    cursor:pointer;
+    transition:background .18s,transform .18s,box-shadow .18s,border-color .18s,color .18s;
+  }
+
+  .answer-btn:hover{
+    background:rgba(22,28,52,0.95);
+    transform:translateY(-1px);
+    box-shadow:0 6px 16px rgba(0,0,0,0.4);
+  }
+
+  .answer-btn.correct{
+    background:rgba(111,241,178,0.16);
+    border-color:#6ff1b2;
+    color:#e5fff4;
+  }
+
+  .answer-btn.wrong{
+    background:rgba(245,101,101,0.18);
+    border-color:#f56565;
+    color:#fed7d7;
+  }
+
+  .game-bottom{
+    margin-top:12px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+
+  .score-line{
+    font-size:12px;
+    color:var(--ink-soft);
+  }
+
+  .bottom-buttons{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    justify-content:space-between;
+  }
+
+  .pill-btn{
+    border-radius:999px;
+    border:1px solid rgba(217,184,120,0.7);
+    padding:7px 14px;
+    font-size:12px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    background:transparent;
+    color:var(--ink-soft);
+    cursor:pointer;
+    transition:background .18s,transform .18s,box-shadow .18s,color .18s;
+  }
+
+  .pill-btn.primary{
+    background:linear-gradient(135deg,var(--gold),var(--gold-deep));
+    color:#0b1020;
+  }
+
+  .pill-btn:hover{
+    transform:translateY(-1px);
+    box-shadow:0 6px 16px rgba(0,0,0,0.45);
+  }
+
+  .whisper{
+    font-size:11px;
+    color:var(--ink-soft);
+    opacity:0.8;
+  }
+
+  @media (max-width:720px){
+    .answers{grid-template-columns:minmax(0,1fr);}
+    .game-top{flex-direction:column;}
+  }
+</style>
+</head>
+<body>
+<div class="noor-game-wrap">
+  <div class="noor-game-title">
+    <h1>NoorAI Lighted Path</h1>
+    <p class="noor-game-sub">
+      Walk a path of nine lanterns. Each question is a small remembrance:
+      Arabic letters, numbers, Qur’anic words, and roots — all gently woven into play.
+    </p>
+  </div>
+
+  <div class="game-shell">
+    <div class="game-top">
+      <div class="mode-row">
+        <span class="mode-label">Focus</span>
+        <button class="mode-btn active" data-mode="mixed">Mixed</button>
+        <button class="mode-btn" data-mode="letters">Letters</button>
+        <button class="mode-btn" data-mode="numbers">Numbers</button>
+        <button class="mode-btn" data-mode="words">Words</button>
+        <button class="mode-btn" data-mode="roots">Roots</button>
+      </div>
+      <div class="lantern-row">
+        <div class="lantern-label">Lantern Path</div>
+        <div class="lanterns" id="lanternRow"></div>
+      </div>
+    </div>
+
+    <div class="game-main">
+      <div id="promptCategory" class="prompt-label">Letters · Lantern 1 of 9</div>
+      <div id="promptText" class="prompt-text">Tap an answer to begin the journey.</div>
+      <div id="focusArabic" class="focus-arabic"></div>
+      <div id="focusExtra" class="focus-extra"></div>
+      <div id="answers" class="answers"></div>
+    </div>
+
+    <div class="game-bottom">
+      <div class="score-line">
+        Score: <span id="scoreVal">0</span> · Streak: <span id="streakVal">0</span>
+        <span style="margin-left:8px;">· Best Path: <span id="bestVal">0</span></span>
+      </div>
+      <div class="bottom-buttons">
+        <button id="speakBtn" class="pill-btn">🔊 Hear Arabic</button>
+        <button id="nextBtn" class="pill-btn primary">Next Lantern ▶</button>
+      </div>
+      <div id="whisperText" class="whisper">
+        Tap an answer to light the first lantern. You can always move slowly and repeat.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ============================
+     Data Sets (from today’s work)
+     ============================ */
+
+  const alphabetData = [
+    {ch:'ا', name:'alif',   keyword:'Opening, beginning, “A” sound.'},
+    {ch:'ب', name:'bāʾ',   keyword:'House (bayt), door (bāb).'},
+    {ch:'ت', name:'tāʾ',   keyword:'Soft “t” as in “two”.'},
+    {ch:'ث', name:'thāʾ',  keyword:'“Th” as in “three”.'},
+    {ch:'ج', name:'jīm',   keyword:'“j” as in “gentle”.'},
+    {ch:'ح', name:'ḥāʾ',   keyword:'Deep breathy “h” from the throat.'},
+    {ch:'خ', name:'khāʾ',  keyword:'“kh” like in “Khalid”.'},
+    {ch:'د', name:'dāl',   keyword:'Clear “d” sound.'},
+    {ch:'ذ', name:'dhāl',  keyword:'“th” as in “this”.'},
+    {ch:'ر', name:'rāʾ',   keyword:'Rolled “r” sound.'},
+    {ch:'ز', name:'zāy',   keyword:'“z” as in “zuh”.'},
+    {ch:'س', name:'sīn',   keyword:'Soft “s” sound.'},
+    {ch:'ش', name:'shīn',  keyword:'“sh” as in “shine”.'},
+    {ch:'ص', name:'ṣād',   keyword:'Heavy emphatic “s”.'},
+    {ch:'ض', name:'ḍād',   keyword:'The unique heavy “ḍ” of Arabic.'},
+    {ch:'ط', name:'ṭāʾ',   keyword:'Heavy emphatic “t”.'},
+    {ch:'ظ', name:'ẓāʾ',   keyword:'Heavy “z/th” sound.'},
+    {ch:'ع', name:'ʿayn',  keyword:'Deep throat letter, a gentle squeeze.'},
+    {ch:'غ', name:'ghayn', keyword:'“gh” like a soft gargle.'},
+    {ch:'ف', name:'fāʾ',   keyword:'“f” as in “faith”.'},
+    {ch:'ق', name:'qāf',   keyword:'Deep “q” from the back of the tongue.'},
+    {ch:'ك', name:'kāf',   keyword:'“k” as in “kind”.'},
+    {ch:'ل', name:'lām',   keyword:'“l” as in “light”.'},
+    {ch:'م', name:'mīm',   keyword:'“m” as in “mercy”.'},
+    {ch:'ن', name:'nūn',   keyword:'“n” as in “nūr” (light).'},
+    {ch:'ه', name:'hāʾ',   keyword:'Soft “h” breath.'},
+    {ch:'و', name:'wāw',   keyword:'“w” as in “wonder”.'},
+    {ch:'ي', name:'yāʾ',   keyword:'“y” as in “you”.'}
+  ];
+
+  const sanctuaryNumbers = [
+    {digit:'٠',english:'0',translit:'ṣifr',      arabicWord:'صفر'},
+    {digit:'١',english:'1',translit:'wāḥid',    arabicWord:'واحد'},
+    {digit:'٢',english:'2',translit:'ithnān',   arabicWord:'اثنان'},
+    {digit:'٣',english:'3',translit:'thalātha', arabicWord:'ثلاثة'},
+    {digit:'٤',english:'4',translit:'arbaʿa',   arabicWord:'أربعة'},
+    {digit:'٥',english:'5',translit:'khamsa',   arabicWord:'خمسة'},
+    {digit:'٦',english:'6',translit:'sitta',    arabicWord:'ستة'},
+    {digit:'٧',english:'7',translit:'sabʿa',    arabicWord:'سبعة'},
+    {digit:'٨',english:'8',translit:'thamāniya',arabicWord:'ثمانية'},
+    {digit:'٩',english:'9',translit:'tisʿa',    arabicWord:'تسعة'}
+  ];
+
+  const lexiconWords = [
+    {ar:'اللّٰه',    tr:'allāh',      en:'Allah, the One worthy of all worship'},
+    {ar:'رَبّ',      tr:'rabb',       en:'Lord, caretaker, nurturer'},
+    {ar:'الرَّحْمٰن', tr:'ar-raḥmān', en:'The Extremely Merciful'},
+    {ar:'الرَّحِيم', tr:'ar-raḥīm',   en:'The Especially Merciful'},
+    {ar:'هُدًى',     tr:'hudā',       en:'guidance'},
+    {ar:'نُور',      tr:'nūr',        en:'light'},
+    {ar:'إِيمَان',   tr:'īmān',       en:'faith, deep trust'},
+    {ar:'جَنَّة',    tr:'jannah',     en:'garden, Paradise'},
+    {ar:'رَحْمَة',   tr:'raḥmah',     en:'mercy, loving care'},
+    {ar:'عِلْم',     tr:'ʿilm',       en:'knowledge'},
+    {ar:'قَلْب',     tr:'qalb',       en:'heart, inner self'},
+    {ar:'سَلَام',    tr:'salām',      en:'peace, wholeness'}
+  ];
+
+  const rootDataset = [
+    {
+      root:'كتب',
+      tr:'k-t-b',
+      meaning:'to write; book family (kitāb, maktūb)',
+    },
+    {
+      root:'علم',
+      tr:'ʿ-l-m',
+      meaning:'to know; knowledge (ʿilm), to teach (ʿallama)',
+    },
+    {
+      root:'رحم',
+      tr:'r-ḥ-m',
+      meaning:'mercy, tenderness, womb-like care (raḥmah, raḥmān, raḥīm)',
+    }
+  ];
+
+  /* ============================
+     Helpers
+     ============================ */
+
+  function randFrom(arr){
+    return arr[Math.floor(Math.random()*arr.length)];
+  }
+
+  function shuffle(arr){
+    return arr.slice().sort(()=>Math.random()-0.5);
+  }
+
+  function speakArabic(text){
+    if(!('speechSynthesis' in window)) return;
+    if(!text) return;
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'ar-SA';
+    u.rate = 0.9;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(u);
+  }
+
+  function burstConfetti(count=27){
+    for(let i=0;i<count;i++){
+      const d = document.createElement('div');
+      d.style.cssText = `
+        position:fixed;
+        width:7px;height:7px;
+        top:${Math.random()*100}vh;
+        left:${Math.random()*100}vw;
+        background:hsl(${Math.random()*360},80%,60%);
+        border-radius:50%;
+        opacity:1;
+        z-index:9999;
+        pointer-events:none;
+        transition:transform 1s ease-out,opacity 1s ease-out;
+      `;
+      document.body.appendChild(d);
+      requestAnimationFrame(()=>{
+        d.style.transform = `translateY(${72+Math.random()*72}px)`;
+        d.style.opacity = '0';
+      });
+      setTimeout(()=>d.remove(),1100);
+    }
+  }
+
+  /* ============================
+     Question Generators
+     ============================ */
+
+  function makeLetterQuestion(){
+    const correct = randFrom(alphabetData);
+    let pool = shuffle(alphabetData).slice(0,4);
+    if(!pool.includes(correct)){
+      pool[0] = correct;
+      pool = shuffle(pool);
+    }
+    return {
+      type:'letters',
+      categoryLabel:'Letters',
+      focusArabic:correct.ch,
+      focusExtra:correct.keyword,
+      speakText:correct.ch,
+      prompt:'Which name belongs to this letter?',
+      answers:pool.map(item => item.name),
+      correctIndex:pool.findIndex(item => item === correct)
+    };
+  }
+
+  function makeNumberQuestion(){
+    const correct = randFrom(sanctuaryNumbers);
+    let pool = shuffle(sanctuaryNumbers).slice(0,4);
+    if(!pool.includes(correct)){
+      pool[0] = correct;
+      pool = shuffle(pool);
+    }
+    return {
+      type:'numbers',
+      categoryLabel:'Numbers',
+      focusArabic:correct.english, // show English digit big
+      focusExtra:`Tap the Arabic numeral for “${correct.english}” — ${correct.translit}.`,
+      speakText:correct.arabicWord,
+      prompt:'Which Arabic numeral matches this number?',
+      answers:pool.map(item => item.digit),
+      correctIndex:pool.findIndex(item => item === correct)
+    };
+  }
+
+  function makeWordQuestion(){
+    const correct = randFrom(lexiconWords);
+    let pool = shuffle(lexiconWords).slice(0,4);
+    if(!pool.includes(correct)){
+      pool[0] = correct;
+      pool = shuffle(pool);
+    }
+    return {
+      type:'words',
+      categoryLabel:'Qur’anic Words',
+      focusArabic:correct.ar,
+      focusExtra:correct.tr,
+      speakText:correct.ar,
+      prompt:'Which meaning is closest to this word?',
+      answers:pool.map(item => item.en),
+      correctIndex:pool.findIndex(item => item === correct)
+    };
+  }
+
+  function makeRootQuestion(){
+    const correct = randFrom(rootDataset);
+    let pool = shuffle(rootDataset).slice(0,4);
+    if(!pool.includes(correct)){
+      pool[0] = correct;
+      pool = shuffle(pool);
+    }
+    return {
+      type:'roots',
+      categoryLabel:'Roots',
+      focusArabic:correct.root,
+      focusExtra:correct.tr,
+      speakText:correct.root,
+      prompt:'Which description best fits this triliteral root?',
+      answers:pool.map(item => item.meaning),
+      correctIndex:pool.findIndex(item => item === correct)
+    };
+  }
+
+  function makeQuestionForMode(mode){
+    if(mode === 'letters') return makeLetterQuestion();
+    if(mode === 'numbers') return makeNumberQuestion();
+    if(mode === 'words')   return makeWordQuestion();
+    if(mode === 'roots')   return makeRootQuestion();
+    // mixed
+    const modes = ['letters','numbers','words','roots'];
+    return makeQuestionForMode(randFrom(modes));
+  }
+
+  /* ============================
+     Game State & UI
+     ============================ */
+
+  (function initGame(){
+    const MAX_LANTERNS = 9;
+
+    const lanternRow = document.getElementById('lanternRow');
+    const promptCategoryEl = document.getElementById('promptCategory');
+    const promptTextEl = document.getElementById('promptText');
+    const focusArabicEl = document.getElementById('focusArabic');
+    const focusExtraEl = document.getElementById('focusExtra');
+    const answersEl = document.getElementById('answers');
+    const scoreValEl = document.getElementById('scoreVal');
+    const streakValEl = document.getElementById('streakVal');
+    const bestValEl = document.getElementById('bestVal');
+    const whisperEl = document.getElementById('whisperText');
+    const speakBtn = document.getElementById('speakBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const modeButtons = document.querySelectorAll('.mode-btn');
+
+    let currentMode = 'mixed';
+    let currentQuestion = null;
+    let currentLanternIndex = 0;
+    let score = 0;
+    let streak = 0;
+    let answered = false;
+    let lastPathScore = 0;
+
+    const BEST_KEY = 'noorai_lighted_path_best';
+
+    function loadBest(){
+      try{
+        const v = localStorage.getItem(BEST_KEY);
+        if(v !== null){
+          bestValEl.textContent = String(v);
+        }
+      }catch(e){}
+    }
+
+    function saveBest(){
+      try{
+        const curBest = Number(bestValEl.textContent || '0') || 0;
+        if(score > curBest){
+          localStorage.setItem(BEST_KEY, String(score));
+          bestValEl.textContent = String(score);
+        }
+      }catch(e){}
+    }
+
+    // build lanterns
+    function buildLanterns(){
+      lanternRow.innerHTML = '';
+      for(let i=0;i<MAX_LANTERNS;i++){
+        const d = document.createElement('div');
+        d.className = 'lantern' + (i===0 ? ' current' : '');
+        lanternRow.appendChild(d);
+      }
+      currentLanternIndex = 0;
+    }
+
+    function updateScoreUI(){
+      scoreValEl.textContent = String(score);
+      streakValEl.textContent = String(streak);
+    }
+
+    function setWhisper(msg){
+      whisperEl.textContent = msg;
+    }
+
+    function setLanternState(index,state){
+      const items = lanternRow.querySelectorAll('.lantern');
+      if(index < 0 || index >= items.length) return;
+      const el = items[index];
+      el.classList.remove('correct','wrong','current');
+      if(state){
+        el.classList.add(state);
+      }
+    }
+
+    function moveToNextLantern(){
+      const items = lanternRow.querySelectorAll('.lantern');
+      if(currentLanternIndex < items.length){
+        // clear current glow
+        items[currentLanternIndex].classList.remove('current');
+      }
+      currentLanternIndex++;
+      if(currentLanternIndex >= items.length){
+        // path complete
+        saveBest();
+        setWhisper(`Path complete. You lit ${score} points of light. Press “Next Lantern” to begin a new path.`);
+        currentLanternIndex = items.length - 1;
+        return;
+      }
+      items[currentLanternIndex].classList.add('current');
+    }
+
+    function renderQuestion(){
+      const q = currentQuestion;
+      if(!q){
+        promptCategoryEl.textContent = 'Choose a focus to begin.';
+        promptTextEl.textContent = '';
+        focusArabicEl.textContent = '';
+        focusExtraEl.textContent = '';
+        answersEl.innerHTML = '';
+        return;
+      }
+
+      promptCategoryEl.textContent = `${q.categoryLabel} · Lantern ${currentLanternIndex+1} of ${MAX_LANTERNS}`;
+      promptTextEl.textContent = q.prompt;
+      focusArabicEl.textContent = q.focusArabic || '';
+      focusExtraEl.textContent = q.focusExtra || '';
+      answersEl.innerHTML = '';
+
+      q.answers.forEach((ans,idx)=>{
+        const btn = document.createElement('button');
+        btn.className = 'answer-btn';
+        btn.textContent = ans;
+        btn.addEventListener('click', ()=>{
+          if(answered) return;
+          answered = true;
+          const buttons = answersEl.querySelectorAll('.answer-btn');
+          buttons.forEach((b,bIndex)=>{
+            if(bIndex === q.correctIndex){
+              b.classList.add('correct');
+            }
+          });
+          if(idx === q.correctIndex){
+            score += 10;
+            streak += 1;
+            updateScoreUI();
+            setLanternState(currentLanternIndex,'correct');
+            burstConfetti(21);
+            setWhisper('Beautiful. Let this settle in your memory, then walk to the next lantern.');
+          }else{
+            streak = 0;
+            updateScoreUI();
+            setLanternState(currentLanternIndex,'wrong');
+            setWhisper('Not this time. Notice the shapes and meanings, then gently try the next lantern.');
+            btn.classList.add('wrong');
+          }
+        });
+        answersEl.appendChild(btn);
+      });
+    }
+
+    function newQuestion(){
+      // if path is complete, reset everything
+      if(currentLanternIndex === MAX_LANTERNS-1 && answered){
+        // new path
+        score = 0;
+        streak = 0;
+        updateScoreUI();
+        buildLanterns();
+        setWhisper('New path. Each answer lights a lantern; take your time.');
+      }
+      answered = false;
+      currentQuestion = makeQuestionForMode(currentMode);
+      renderQuestion();
+    }
+
+    // Button handlers
+    speakBtn.addEventListener('click', ()=>{
+      if(currentQuestion && currentQuestion.speakText){
+        speakArabic(currentQuestion.speakText);
+      }else if(currentQuestion && currentQuestion.focusArabic){
+        speakArabic(currentQuestion.focusArabic);
+      }
+    });
+
+    nextBtn.addEventListener('click', ()=>{
+      if(!answered){
+        // gentle skip
+        setLanternState(currentLanternIndex,'wrong');
+        streak = 0;
+        updateScoreUI();
+      }
+      moveToNextLantern();
+      newQuestion();
+    });
+
+    modeButtons.forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        modeButtons.forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        currentMode = btn.dataset.mode || 'mixed';
+        setWhisper(`Focus set to ${currentMode}. Lanterns stay, questions change.`);
+        // start a fresh path when mode changes
+        score = 0;
+        streak = 0;
+        updateScoreUI();
+        buildLanterns();
+        newQuestion();
+      });
+    });
+
+    // init
+    buildLanterns();
+    loadBest();
+    currentQuestion = makeQuestionForMode(currentMode);
+    renderQuestion();
+  })();
+</script>
+</body>
+</html>
